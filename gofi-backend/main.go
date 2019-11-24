@@ -13,8 +13,10 @@ import (
 )
 
 func main() {
+	util.ParseArgs()
+	logrus.Infof("Gofi is running on %v \n", util.GetLocalAddress())
 	app := newApp()
-	_ = app.Run(iris.Addr(":8080"), iris.WithoutServerError(iris.ErrServerClosed))
+	_ = app.Run(iris.Addr(":"+util.GetPort()), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
 func newApp() (app *iris.Application) {

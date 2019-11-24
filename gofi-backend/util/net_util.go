@@ -26,6 +26,6 @@ func getLocalIp() string {
 	return "127.0.0.1"
 }
 
-func getLocalAddress() string {
-	return getLocalIp() + ":8080"
+func GetLocalAddress() string {
+	return getLocalIp() + ":" + GetPort()
 }
