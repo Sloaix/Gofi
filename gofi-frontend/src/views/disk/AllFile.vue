@@ -135,9 +135,8 @@ export default {
     }
   },
   methods: {
-    uploadUrl (file) {
-      return `${process.env.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(this.parentDirectoryPath)}`
-      // return encodeURI(`api/test?path=${this.parentDirectoryPath}`)
+    uploadUrl () {
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(this.parentDirectoryPath)}`
     },
     backParentDirectory () {
       // 导航到上级目录
@@ -148,7 +147,7 @@ export default {
       this.$router.push({ path: '' })
     },
     generateDownloadUrl (filePath) {
-      return `${process.env.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(filePath)}`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(filePath)}`
     },
     uploadChange (item) {
       const file = item.file

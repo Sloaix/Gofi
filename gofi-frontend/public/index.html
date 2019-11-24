@@ -14,7 +14,8 @@
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but vue-antd-pro doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but Gofi doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>非常抱歉，犹豫JavaScript被关闭，导致Gofi不能正常工作，如果想要继续使用Gofi，请打开JavaScript</strong>
     </noscript>
     <div id="app">
       <div id="loading-mask">
@@ -23,6 +24,11 @@
           </div>
         </div>
     </div>
+    <script>
+      window.GOFI_MANIFEST = {
+        VUE_APP_API_BASE_URL: 'http://127.0.0.1:8080/api/'
+      }
+    </script>
     <!-- require cdn assets js -->
     <% for (var i in htmlWebpackPlugin.options.cdn && htmlWebpackPlugin.options.cdn.js) { %>
     <script type="text/javascript" src="<%= htmlWebpackPlugin.options.cdn.js[i] %>"></script>

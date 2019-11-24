@@ -8,7 +8,7 @@ function bindata() {
     if ! [ -x "$(command -v $go_bin_dir/go-bindata)" ]; then
         go install github.com/go-bindata/go-bindata/...
     fi
-    $go_bin_dir/go-bindata -pkg binary -o $server_dir/binary/assets.go $1
+    $go_bin_dir/go-bindata -nocompress -pkg binary -o $server_dir/binary/assets.go $1
 }
 
 function beforeBuild() {

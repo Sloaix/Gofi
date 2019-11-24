@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gofi/binary"
 	"gofi/controllers"
+	"gofi/util"
 )
 
 func main() {
@@ -41,12 +42,12 @@ func setup(app *iris.Application) {
 // single page application
 func spa(app *iris.Application) {
 	// set static assets
-	app.RegisterView(iris.HTML("./public", ".html").Binary(binary.Asset, binary.AssetNames))
+	app.RegisterView(iris.HTML("./public", ".html").Binary(util.AssetProxy, binary.AssetNames))
 	app.HandleDir("/", "./public", router.DirOptions{
-		Asset:      binary.Asset,
+		Asset:      util.AssetProxy,
 		AssetInfo:  binary.AssetInfo,
 		AssetNames: binary.AssetNames,
-		Gzip:       false,
+		Gzip:       true,
 	})
 
 	// spa route 404 handle
