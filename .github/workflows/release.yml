@@ -2,6 +2,8 @@ name: Gofi Release
 
 on:
   create:
+    branches:
+     - master
     tags:
       - "v*.*.*"
 
