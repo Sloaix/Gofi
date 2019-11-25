@@ -34,6 +34,21 @@ export default {
     action: 'Action',
     download: 'Download'
   },
+  upload: {
+    failed: 'upload failed',
+    success: 'upload success',
+    fileUploading: '{0} uploading...',
+    uploadFailed: '{0} upload failed',
+    uploadSuccess: '{0} upload success'
+  },
+  fallback: {
+    saveSuccess: 'save success',
+    saveFailed: 'save failed',
+    submitSuccess: 'submit success',
+    submitFailed: 'submit failed',
+    error: 'error',
+    installFailed: 'install failed'
+  },
   setting: {
     baseSetting: 'Base',
     customSetting: 'Custom'

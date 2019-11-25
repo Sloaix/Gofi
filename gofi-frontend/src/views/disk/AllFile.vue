@@ -152,35 +152,37 @@ export default {
     uploadChange (item) {
       const file = item.file
       const status = item.file.status
+      const that = this
       switch (status) {
         case 'uploading':
           this.fileList = item.fileList
           this.$notification.info({
             key: file.name,
             duration: null,
-            message: `${file.name} 上传中...`
+            message: that.$t('upload.fileUploading', [file.name])
           })
           break
         case 'removed':
         case 'error':
           this.$notification.error({
             key: file.name,
-            message: `${file.name} 上传失败`
+            message: that.$t('upload.failed'),
+            description: that.$t('upload.uploadFailed', [file.name])
           })
           break
         case 'done':
           if (file.response.success) {
             this.$notification.success({
               key: file.name,
-              message: `${file.name} 上传成功`,
-              description: ''
+              message: that.$t('upload.success'),
+              description: that.$t('upload.uploadSuccess', [file.name])
             })
             // 刷新列表
             this.fetch(this.$route.query.path)
           } else {
             this.$notification.error({
               key: file.name,
-              message: `${file.name} 上传失败`,
+              message: that.$t('upload.failed'),
               description: file.response.message
             })
           }

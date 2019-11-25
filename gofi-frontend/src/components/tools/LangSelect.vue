@@ -48,7 +48,7 @@ export default {
         }).catch((e) => {
           hideMessage()
           that.$notification.error({
-            message: '错误',
+            message: i18n.t('fallback.error'),
             description: e
           })
         })

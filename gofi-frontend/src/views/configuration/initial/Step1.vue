@@ -181,7 +181,7 @@ export default {
             that.$emit('nextStep')
           }).catch((err) => {
             that.$notification.error({
-              message: '安装失败',
+              message: that.$t('fallback.installFailed'),
               description: err
             })
             that.loading = false

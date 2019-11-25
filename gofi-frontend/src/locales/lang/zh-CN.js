@@ -34,6 +34,21 @@ export default {
     action: '操作',
     download: '下载'
   },
+  upload: {
+    failed: '上传失败',
+    success: '上传成功',
+    fileUploading: '{0} 上传中...',
+    uploadFailed: '{0} 上传失败',
+    uploadSuccess: '{0} 上传成功'
+  },
+  fallback: {
+    saveSuccess: '保存成功',
+    saveFailed: '保存失败',
+    submitSuccess: '提交成功',
+    submitFailed: '提交失败',
+    error: '错误',
+    installFailed: '安装失败'
+  },
   setting: {
     baseSetting: '基本设置',
     customSetting: '个性化'

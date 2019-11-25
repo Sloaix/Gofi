@@ -62,12 +62,12 @@ export default {
           this.$store.dispatch('UpdateStoragePath', fields.customStoragePath)
             .then(() => {
               that.$notification.success({
-                message: '保存成功'
+                message: that.$t('fallback.saveSuccess')
               })
               setTimeout(() => { that.loading = false }, 300)
             }).catch((err) => {
               that.$notification.error({
-                message: '保存失败',
+                message: that.$t('fallback.saveFailed'),
                 description: err
               })
               that.loading = false

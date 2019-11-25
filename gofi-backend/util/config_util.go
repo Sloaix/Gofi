@@ -7,11 +7,11 @@ import (
 )
 
 func GetAppSettings() models.Settings {
-	var appInfo models.Settings
+	var settings models.Settings
 	//获取第一条记录,
-	if has, _ := GetDB().Get(&appInfo); !has {
+	if has, _ := GetDB().Get(&settings); !has {
 		// 如果不存在就重新创建
-		appInfo = models.Settings{
+		settings = models.Settings{
 			AppPath:            GetWorkDirectoryPath(),
 			Initialized:        false,
 			CustomStoragePath:  "",
@@ -26,11 +26,11 @@ func GetAppSettings() models.Settings {
 			Updated:            time.Time{},
 		}
 
-		if _, err := GetDB().InsertOne(&appInfo); err != nil {
+		if _, err := GetDB().InsertOne(&settings); err != nil {
 			logrus.Error(err)
 		}
 	}
-	return appInfo
+	return settings
 }
 
 func GetAppName() string {

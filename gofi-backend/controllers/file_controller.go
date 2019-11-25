@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
+	"gofi/i18n"
 	"gofi/models"
 	"gofi/util"
 	"io/ioutil"
@@ -27,13 +28,13 @@ func ListFiles(ctx iris.Context) {
 
 	if !util.FileExist(path) {
 		ctx.StatusCode(iris.StatusNotFound)
-		ctx.JSON(ResponseFailWithMessage("找不到 " + path))
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.DirIsNotExist, path)))
 		return
 	}
 
 	if !util.IsDirectory(path) {
 		ctx.StatusCode(iris.StatusBadRequest)
-		ctx.JSON(ResponseFailWithMessage(path + " 不是文件夹"))
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotDir, path)))
 		return
 	}
 
@@ -96,7 +97,7 @@ func Upload(ctx iris.Context) {
 
 	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
-		ctx.JSON(ResponseFailWithMessage("上传失败"))
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.UploadFailed)))
 		return
 	}
 
@@ -106,13 +107,13 @@ func Upload(ctx iris.Context) {
 				for _, file := range files {
 
 					if util.FileExist(filepath.Join(destDirectory, file.Filename)) {
-						ctx.JSON(ResponseFailWithMessage(file.Filename + " 已存在,请更改文件名后重试"))
+						ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)))
 						return
 					}
 
 					_, err := util.UploadFileTo(file, destDirectory)
 					if err != nil {
-						ctx.JSON(ResponseFailWithMessage("上传失败"))
+						ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.UploadFailed)))
 						return
 					}
 				}
@@ -136,18 +137,13 @@ func Download(ctx iris.Context) {
 
 	path := filepath.Join(rootPath, relativePath)
 
-	// 确保路径一定是以/开头的绝对路径
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-
 	if !util.FileExist(path) {
-		ctx.JSON(ResponseFailWithMessage("找不到 " + path))
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.FileIsNotExist, path)))
 		return
 	}
 
 	if util.IsDirectory(path) {
-		ctx.JSON(ResponseFailWithMessage(path + " 不是单个文件"))
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotFile, path)))
 		return
 	}
 
