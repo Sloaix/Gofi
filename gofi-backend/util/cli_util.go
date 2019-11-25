@@ -2,16 +2,16 @@ package util
 
 import "flag"
 
-var port string
-
 const (
-	defaultPort = "8080"
+	DefaultPort = "8080"
 	portUsage   = "port to expose web services"
 )
 
+var port = DefaultPort
+
 func init() {
-	flag.StringVar(&port, "port", defaultPort, portUsage)
-	flag.StringVar(&port, "p", defaultPort, portUsage+" (shorthand)")
+	flag.StringVar(&port, "port", DefaultPort, portUsage)
+	flag.StringVar(&port, "p", DefaultPort, portUsage+" (shorthand)")
 }
 
 func ParseArgs() {
@@ -20,4 +20,8 @@ func ParseArgs() {
 
 func GetPort() string {
 	return port
+}
+
+func ResetPort() {
+	port = DefaultPort
 }

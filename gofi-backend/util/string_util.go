@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+const AdiIpAddressInFrontend = "127.0.0.1:8080"
+
 func IsHiddenFile(name string) bool {
 	if strings.TrimSpace(name) == "" {
 		return false
@@ -23,7 +25,7 @@ func AssetProxy(name string) ([]byte, error) {
 	}
 
 	if indexHtmlName := "public/index.html"; name == indexHtmlName {
-		indexHtmlString := strings.Replace(string(assetsBytes[:]), "127.0.0.1:8080", GetLocalAddress(), -1)
+		indexHtmlString := strings.Replace(string(assetsBytes[:]), AdiIpAddressInFrontend, GetLocalAddress(), -1)
 		assetsBytes = []byte(indexHtmlString)
 		logrus.Info("server ip address replace success")
 	}

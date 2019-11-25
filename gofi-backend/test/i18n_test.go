@@ -4,9 +4,14 @@ import (
 	"fmt"
 	"gofi/i18n"
 	"golang.org/x/text/language"
+	"os"
 	"strings"
 	"testing"
 )
+
+func init() {
+	fmt.Println(os.Args)
+}
 
 func TestLanguageTagParse(t *testing.T) {
 	ChineseTag, _ := language.Parse("zh-CN")

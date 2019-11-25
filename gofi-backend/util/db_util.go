@@ -18,9 +18,10 @@ func init() {
 	}
 
 	// 自动迁移表结构,自动增加缺失的字段或者表
-
-	if err := engine.Sync2(new(models.Settings)); err != nil {
-		logrus.Error(err)
+	if !IsTestEnvironment() {
+		if err := engine.Sync2(new(models.Settings)); err != nil {
+			logrus.Error(err)
+		}
 	}
 
 	engineInstance = engine

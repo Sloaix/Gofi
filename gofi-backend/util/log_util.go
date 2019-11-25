@@ -11,6 +11,4 @@ func init() {
 	})
 	logrus.SetOutput(os.Stdout)
 	logrus.SetLevel(logrus.InfoLevel)
-
-	logrus.Info("logrus init success.")
 }
