@@ -1,7 +1,6 @@
 const getters = {
   device: state => state.app.device,
   theme: state => state.app.theme,
-  color: state => state.app.color,
   settings: state => state.app.settings,
   language: state => state.app.language,
   storagePath: state => {

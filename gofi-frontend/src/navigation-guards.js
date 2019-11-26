@@ -6,7 +6,6 @@ import '@/components/NProgress/nprogress.less' // progress bar custom style
 import notification from 'ant-design-vue/es/notification'
 import { defaultValue } from '@/utils/util'
 import config from '@/config/defaultSettings'
-import themeColor from '@/components/SettingDrawer/themeColor'
 
 NProgress.configure({ showSpinner: false })
 
@@ -43,12 +42,6 @@ function applySettingFromServer (settings) {
     defaultValue(settings.themeStyle, config.navTheme))
   store.commit('TOGGLE_NAV_MODE',
     defaultValue(settings.navMode, config.navMode))
-  store.commit('TOGGLE_COLOR',
-    defaultValue(settings.themeColor, config.primaryColor))
-  // init theme color
-  if (store.getters.color) {
-    themeColor.changeColor(store.getters.color)
-  }
 }
 
 function fetchSettingsIfNotExist (next, to) {

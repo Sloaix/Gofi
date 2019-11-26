@@ -136,7 +136,7 @@ export default {
   },
   methods: {
     uploadUrl () {
-      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(this.parentDirectoryPath)}`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(this.currentDirectory)}`
     },
     backParentDirectory () {
       // 导航到上级目录

@@ -89,22 +89,6 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <!--主题色-->
-      <a-form-item :label="$t('form.input.themeColor.name')" :labelCol="labelCol" :wrapperCol="wrapperCol">
-        <a-select
-          @select="onThemeColorSelect"
-          v-decorator="[
-            'themeColor',
-            { initialValue: colorList[0].color, rules: [{ required: true,message:'请选择主题色'}] }
-          ]"
-        >
-          <a-select-option :value="item.color" v-for="(item,index) in colorList" :key="index">
-            <a-tag :color="item.color">
-              <span>{{ item.color }}</span>
-            </a-tag>
-          </a-select-option>
-        </a-select>
-      </a-form-item>
       <a-form-item :wrapperCol="{ span: 19, offset: 5 }">
         <a-button :loading="loading" type="primary" @click="nextStep">{{ $t('form.button.submit.name') }}</a-button>
       </a-form-item>
@@ -123,13 +107,11 @@
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
-import { colorList, updateTheme } from '@/components/SettingDrawer/settingConfig'
 
 export default {
   name: 'SetupStep1',
   data () {
     return {
-      colorList,
       storageType: 'default',
       labelCol: { lg: { span: 5 }, sm: { span: 5 } },
       wrapperCol: { lg: { span: 19 }, sm: { span: 19 } },
@@ -160,9 +142,6 @@ export default {
     },
     onLanguageSelect (language) {
       this.switchLanguage(language)
-    },
-    onThemeColorSelect (color) {
-      updateTheme(color)
     },
     onThemeStyleSelect (theme) {
       this.$store.dispatch('ToggleTheme', theme)

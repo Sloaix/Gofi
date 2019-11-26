@@ -51,22 +51,6 @@
           </a-select-option>
         </a-select>
       </a-form-item>
-      <!--主题色-->
-      <a-form-item :label="$t('form.input.themeColor.name')">
-        <a-select
-          @select="onThemeColorSelect"
-          v-decorator="[
-            'themeColor',
-            { initialValue: settings.themeColor, rules: [{ required: true,message:'请选择主题色'}] }
-          ]"
-        >
-          <a-select-option :value="item.color" v-for="(item,index) in colorList" :key="index">
-            <a-tag :color="item.color">
-              <span>{{ item.color }}</span>
-            </a-tag>
-          </a-select-option>
-        </a-select>
-      </a-form-item>
       <a-form-item >
         <a-button :loading="loading" type="primary" @click="onSaveButtonClick">{{ $t('form.button.save.name') }}</a-button>
       </a-form-item>
@@ -74,7 +58,6 @@
   </div>
 </template>
 <script>
-import { colorList, updateTheme } from '@/components/SettingDrawer/settingConfig'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -85,7 +68,6 @@ export default {
   },
   data () {
     return {
-      colorList,
       form: this.$form.createForm(this),
       loading: false
     }
@@ -97,10 +79,6 @@ export default {
     resetIfNotSave () {
       this.$store.dispatch('ToggleTheme', this.settings.themeStyle)
       this.$store.dispatch('ToggleLayoutMode', this.settings.navMode)
-      updateTheme(this.settings.themeColor)
-    },
-    onThemeColorSelect (color) {
-      updateTheme(color)
     },
     onThemeStyleSelect (theme) {
       this.$store.dispatch('ToggleTheme', theme)

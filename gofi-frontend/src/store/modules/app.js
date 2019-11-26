@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import {
-  DEFAULT_COLOR,
   DEFAULT_LANGUAGE,
   DEFAULT_NAV_MODE,
   DEFAULT_THEME
@@ -20,7 +19,6 @@ const app = {
     device: 'desktop',
     theme: '',
     navMode: '',
-    color: null,
     language: 'zh-CN',
     settings: {}
   },
@@ -38,10 +36,6 @@ const app = {
     TOGGLE_NAV_MODE: (state, navMode) => {
       Vue.ls.set(DEFAULT_NAV_MODE, navMode)
       state.navMode = navMode
-    },
-    TOGGLE_COLOR: (state, color) => {
-      Vue.ls.set(DEFAULT_COLOR, color)
-      state.color = color
     },
     SWITCH_LANGUAGE: (state, language) => {
       Vue.ls.set(DEFAULT_LANGUAGE, language)
@@ -113,9 +107,6 @@ const app = {
     },
     ToggleLayoutMode ({ commit }, mode) {
       commit('TOGGLE_NAV_MODE', mode)
-    },
-    ToggleColor ({ commit }, color) {
-      commit('TOGGLE_COLOR', color)
     }
   }
 }

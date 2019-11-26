@@ -90,9 +90,6 @@ export default {
         name: 'Theme Style',
         light: 'Light',
         dark: 'Dark'
-      },
-      themeColor: {
-        name: 'Theme Color'
       }
     }
   }

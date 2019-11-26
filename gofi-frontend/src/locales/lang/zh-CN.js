@@ -90,9 +90,6 @@ export default {
         name: '主题风格',
         light: '亮色风格菜单',
         dark: '暗色风格菜单'
-      },
-      themeColor: {
-        name: '主题色'
       }
     }
   }

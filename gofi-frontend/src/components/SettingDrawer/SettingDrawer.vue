@@ -44,24 +44,6 @@
           </div>
         </div>
 
-        <div :style="{ marginBottom: '24px' }">
-          <h3 class="setting-drawer-index-title">主题色</h3>
-
-          <div style="height: 20px">
-            <a-tooltip
-              class="setting-drawer-theme-color-colorBlock"
-              v-for="(item, index) in colorList"
-              :key="index">
-              <template slot="title">
-                {{ item.key }}
-              </template>
-              <a-tag :color="item.color" @click="changeColor(item.color)">
-                <a-icon type="check" v-if="item.color === primaryColor"></a-icon>
-              </a-tag>
-            </a-tooltip>
-
-          </div>
-        </div>
         <a-divider/>
 
         <div :style="{ marginBottom: '24px' }">
@@ -120,8 +102,6 @@
 <script>
 import { DetailList } from '@/components'
 import SettingItem from './SettingItem'
-import config from '@/config/defaultSettings'
-import { colorList, updateTheme } from './settingConfig'
 import { mixin, mixinDevice } from '@/utils/mixin'
 
 export default {
@@ -133,16 +113,10 @@ export default {
   data () {
     return {
       visible: false,
-      colorList,
       handle: <div />
     }
   },
   watch: {},
-  mounted () {
-    if (this.primaryColor !== config.primaryColor) {
-      updateTheme(this.primaryColor)
-    }
-  },
   methods: {
     showDrawer () {
       this.visible = true
@@ -158,12 +132,6 @@ export default {
     },
     handleLayout (mode) {
       this.$store.dispatch('ToggleLayoutMode', mode)
-    },
-    changeColor (color) {
-      if (this.primaryColor !== color) {
-        this.$store.dispatch('ToggleColor', color)
-        updateTheme(color)
-      }
     }
   }
 }
