@@ -31,34 +31,6 @@ func IsFile(filename string) bool {
 	return !info.IsDir()
 }
 
-// 获取工作目录
-func GetWorkDirectoryPath() string {
-	dir, err := os.Getwd()
-	if err != nil {
-		return ""
-	}
-	return dir
-}
-
-// 返回默认的文件目录
-func GetDefaultStoragePath() string {
-	return filepath.Join(GetWorkDirectoryPath(), "storage")
-}
-
-// 获取log目录路径
-func GetLogDirectoryPath() string {
-	return filepath.Join(GetWorkDirectoryPath(), "log")
-}
-
-// 获取database 文件路径
-func GetDataBaseFilePath() string {
-	return filepath.Join(GetWorkDirectoryPath(), GetDatabaseName())
-}
-
-// 获取文件仓库目录
-func GetCustomStoragePath() string {
-	return GetAppSettings().CustomStoragePath
-}
 
 // 创建文件夹如果不存在
 func MkdirIfNotExist(path string) {

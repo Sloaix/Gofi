@@ -8,15 +8,19 @@ import (
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/sirupsen/logrus"
 	"gofi/binary"
+	"gofi/context"
 	"gofi/controllers"
 	"gofi/util"
 )
 
+func init() {
+	context.InitContext()
+}
+
 func main() {
-	util.ParseArgs()
-	logrus.Infof("Gofi is running on %v \n", util.GetLocalAddress())
+	logrus.Infof("Gofi is running on %v \n", context.Get().LocalAddress)
 	app := newApp()
-	_ = app.Run(iris.Addr(":"+util.GetPort()), iris.WithoutServerError(iris.ErrServerClosed))
+	_ = app.Run(iris.Addr(":"+context.Get().Port), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
 func newApp() (app *iris.Application) {

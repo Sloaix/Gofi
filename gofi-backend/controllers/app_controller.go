@@ -3,13 +3,14 @@ package controllers
 import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
+	"gofi/context"
 	"gofi/i18n"
 	"gofi/util"
 	"path/filepath"
 )
 
 func UpdateSetting(ctx iris.Context) {
-	appSettings := util.GetAppSettings()
+	appSettings := context.Get().GetSettings()
 	appSettings.Initialized = true
 
 	// 用客户端给定的AppInfo覆盖数据库持久化的AppInfo
@@ -20,29 +21,29 @@ func UpdateSetting(ctx iris.Context) {
 	}
 
 	path := filepath.Clean(appSettings.CustomStoragePath)
-	workDir := util.GetWorkDirectoryPath()
-	defaultStoragePath := util.GetDefaultStoragePath()
+	workDir := context.Get().WorkDir
+	defaultStorageDir := context.Get().DefaultStorageDir
 
 	// 是否使用默认地址
-	useDefaultDir := path == "" || path == defaultStoragePath
+	useDefaultDir := path == "" || path == defaultStorageDir
 
 	logrus.Printf("工作目录是%v \n", workDir)
 	logrus.Printf("dir目录是%v \n", path)
 
 	// xorm 默认不回更新bool字段，这里需要使用UseBool方法
-	db := util.GetDB().UseBool()
+	db := context.Get().Orm.UseBool()
 
 	if useDefaultDir {
 		// 如果文件夹不存在，创建文件夹
-		util.MkdirIfNotExist(defaultStoragePath)
+		util.MkdirIfNotExist(defaultStorageDir)
 
 		// 写入到配置文件
-		_, _ = db.Update(&appSettings)
+		_, _ = db.After(context.Get().AfterUpdateSettings).Update(&appSettings)
 
 		// 变更语言
 		i18n.SwitchLanguage(appSettings.DefaultLanguage)
 
-		logrus.Infof("use default path %s, setup success", defaultStoragePath)
+		logrus.Infof("use default path %s, setup success", defaultStorageDir)
 
 		GetSetting(ctx)
 	} else {
@@ -62,7 +63,7 @@ func UpdateSetting(ctx iris.Context) {
 		appSettings.CustomStoragePath = path
 
 		// 写入到配置文件
-		_, _ = db.Update(&appSettings)
+		_, _ = db.After(context.Get().AfterUpdateSettings).Update(&appSettings)
 
 		// 变更语言
 		i18n.SwitchLanguage(appSettings.DefaultLanguage)
@@ -77,7 +78,7 @@ func UpdateSetting(ctx iris.Context) {
 // 初始化
 func Setup(ctx iris.Context) {
 	// 已经初始化过
-	if util.GetAppSettings().Initialized {
+	if context.Get().GetSettings().Initialized {
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.GofiIsAlreadyInitialized)))
 		return
 	}
@@ -86,6 +87,6 @@ func Setup(ctx iris.Context) {
 }
 
 func GetSetting(ctx iris.Context) {
-	settings := util.GetAppSettings()
+	settings := context.Get().GetSettings()
 	ctx.JSON(ResponseSuccess(settings))
 }

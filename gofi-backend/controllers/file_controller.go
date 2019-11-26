@@ -3,6 +3,7 @@ package controllers
 import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
+	"gofi/context"
 	"gofi/i18n"
 	"gofi/models"
 	"gofi/util"
@@ -15,7 +16,7 @@ func ListFiles(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	storagePath := util.GetCustomStoragePath()
+	storagePath := context.Get().GetStorageDir()
 
 	logrus.Printf("root path is %v \n", storagePath)
 
@@ -87,13 +88,15 @@ func Upload(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	storagePath := util.GetCustomStoragePath()
+	logrus.Infof("relativePath path is %v \n", relativePath)
 
-	logrus.Printf("root path is %v \n", storagePath)
+	storageDir := context.Get().GetStorageDir()
 
-	destDirectory := filepath.Join(storagePath, relativePath)
+	logrus.Infof("root path is %v \n", storageDir)
 
-	logrus.Printf("destPath path is %v \n", destDirectory)
+	destDirectory := filepath.Join(storageDir, relativePath)
+
+	logrus.Infof("destPath path is %v \n", destDirectory)
 
 	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
@@ -131,11 +134,11 @@ func Download(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	rootPath := util.GetCustomStoragePath()
+	storageDir := context.Get().GetStorageDir()
 
-	logrus.Printf("root path is %v \n", rootPath)
+	logrus.Printf("root path is %v \n", storageDir)
 
-	path := filepath.Join(rootPath, relativePath)
+	path := filepath.Join(storageDir, relativePath)
 
 	if !util.FileExist(path) {
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.FileIsNotExist, path)))
