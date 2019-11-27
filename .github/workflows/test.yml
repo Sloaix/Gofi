@@ -1,0 +1,18 @@
+name: Gofi Test
+
+on:[push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      # 安装go
+      - name: Setup Golang
+        uses: actions/setup-go@v1
+        with:
+          go-version: 1.13
+
+      # 执行构建脚本
+      - name: Excute Unit Test
+        run: ./test.sh
