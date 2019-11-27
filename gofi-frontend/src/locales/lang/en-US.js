@@ -23,7 +23,8 @@ export default {
   },
   footer: {
     aboutMe: 'About me',
-    copyRight: 'Copyright © 2019 Sloaix'
+    copyRight: 'Copyright © 2019 Sloaix',
+    version: 'Version'
   },
   allFile: {
     rootDir: 'Root Directory',

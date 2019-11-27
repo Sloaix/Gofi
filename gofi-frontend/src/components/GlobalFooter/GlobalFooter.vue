@@ -16,16 +16,20 @@
       </a>
     </div>
     <div class="copyright">
-      {{ $t('footer.copyRight') }}
+      {{ $t('footer.version') }} {{ settings.version }} | {{ $t('footer.copyRight') }}
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'GlobalFooter',
   data () {
     return {}
+  },
+  computed: {
+    ...mapGetters(['settings'])
   }
 }
 </script>

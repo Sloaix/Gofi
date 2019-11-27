@@ -23,7 +23,8 @@ export default {
   },
   footer: {
     aboutMe: '关于我',
-    copyRight: 'Copyright © 2019 Sloaix'
+    copyRight: 'Copyright © 2019 Sloaix',
+    version: '当前版本'
   },
   allFile: {
     rootDir: '根目录',

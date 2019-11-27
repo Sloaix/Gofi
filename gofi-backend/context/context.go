@@ -15,11 +15,13 @@ import (
 )
 
 const (
+	Version     = "v0.3.0"
 	DefaultPort = "8080"
 	portUsage   = "port to expose web services"
 )
 
 type Context struct {
+	Version           string
 	Port              string
 	DatabaseName      string
 	AppName           string
@@ -44,6 +46,7 @@ func InitContext() {
 	flag.StringVar(&instance.Port, "port", DefaultPort, portUsage)
 	flag.StringVar(&instance.Port, "p", DefaultPort, portUsage+" (shorthand)")
 	flag.Parse()
+	instance.Version = Version
 	instance.AppName = "gofi"
 	instance.WorkDir = instance.getWorkDirectoryPath()
 	instance.DatabaseName = instance.AppName + ".db"
@@ -116,6 +119,9 @@ func (context *Context) queryAppSettings() *models.Settings {
 			logrus.Error(err)
 		}
 	}
+
+	pSettings.Version = context.Version
+	
 	return pSettings
 }
 
