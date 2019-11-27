@@ -1,6 +1,6 @@
 name: Gofi Test
 
-on:[push]
+on: [push]
 
 jobs:
   build:
