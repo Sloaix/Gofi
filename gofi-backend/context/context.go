@@ -37,6 +37,9 @@ type Context struct {
 var instance *Context
 
 func InitContext() {
+	if instance != nil {
+		return
+	}
 	instance = new(Context)
 	flag.StringVar(&instance.Port, "port", DefaultPort, portUsage)
 	flag.StringVar(&instance.Port, "p", DefaultPort, portUsage+" (shorthand)")

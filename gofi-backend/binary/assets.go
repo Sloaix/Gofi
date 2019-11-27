@@ -152,7 +152,7 @@ func publicAssetsBackground5825f033Svg() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/assets/background.5825f033.svg", size: 8925, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/assets/background.5825f033.svg", size: 8925, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -169,7 +169,7 @@ func publicAssetsLogoBc60d6cdSvg() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/assets/logo.bc60d6cd.svg", size: 8757, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/assets/logo.bc60d6cd.svg", size: 8757, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -186,7 +186,7 @@ func publicCssApp7d90a591Css() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/css/app.7d90a591.css", size: 329949, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/css/app.7d90a591.css", size: 329949, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -203,7 +203,7 @@ func publicCssChunk3e3728708cbd7fe1Css() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/css/chunk-3e372870.8cbd7fe1.css", size: 1047, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/css/chunk-3e372870.8cbd7fe1.css", size: 1047, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -220,7 +220,7 @@ func publicCssChunk5bc260cd9459a659Css() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/css/chunk-5bc260cd.9459a659.css", size: 678, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/css/chunk-5bc260cd.9459a659.css", size: 678, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -237,7 +237,7 @@ func publicCssChunkVendors2fda31dfCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/css/chunk-vendors.2fda31df.css", size: 453936, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/css/chunk-vendors.2fda31df.css", size: 453936, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -256,7 +256,7 @@ func publicIndexHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/index.html", size: 3112, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/index.html", size: 3112, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -273,7 +273,7 @@ func publicJsAppEc08b434Js() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/app.ec08b434.js", size: 87382, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/app.ec08b434.js", size: 87382, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -290,7 +290,7 @@ func publicJsChunk2d0aec8b04e5e745Js() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/chunk-2d0aec8b.04e5e745.js", size: 3345, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/chunk-2d0aec8b.04e5e745.js", size: 3345, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -307,7 +307,7 @@ func publicJsChunk2d0c9aea570f4adbJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/chunk-2d0c9aea.570f4adb.js", size: 2678, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/chunk-2d0c9aea.570f4adb.js", size: 2678, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -324,7 +324,7 @@ func publicJsChunk3e372870F2b4b65eJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/chunk-3e372870.f2b4b65e.js", size: 1969, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/chunk-3e372870.f2b4b65e.js", size: 1969, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -341,7 +341,7 @@ func publicJsChunk5bc260cd87947b9bJs() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/chunk-5bc260cd.87947b9b.js", size: 9274, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/chunk-5bc260cd.87947b9b.js", size: 9274, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -421,7 +421,7 @@ func publicJsChunkVendorsE8938488Js() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/chunk-vendors.e8938488.js", size: 2976314, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/chunk-vendors.e8938488.js", size: 2976314, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -438,7 +438,7 @@ func publicJsFailF4c18720Js() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/js/fail.f4c18720.js", size: 367, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/js/fail.f4c18720.js", size: 367, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -455,7 +455,7 @@ func publicLoadingLoadingCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/loading/loading.css", size: 1655, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/loading/loading.css", size: 1655, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -472,7 +472,7 @@ func publicLoadingLoadingHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/loading/loading.html", size: 186, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/loading/loading.html", size: 186, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -493,7 +493,7 @@ func publicLoadingOption2Html_code_segmentHtml() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/loading/option2/html_code_segment.html", size: 2235, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/loading/option2/html_code_segment.html", size: 2235, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -510,7 +510,7 @@ func publicLoadingOption2LoadingCss() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/loading/option2/loading.css", size: 307, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/loading/option2/loading.css", size: 307, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -527,7 +527,7 @@ func publicLoadingOption2LoadingSvg() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/loading/option2/loading.svg", size: 2147, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/loading/option2/loading.svg", size: 2147, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
@@ -544,7 +544,7 @@ func publicLogoPng() (*asset, error) {
 		return nil, err
 	}
 
-	info := bindataFileInfo{name: "public/logo.png", size: 9865, mode: os.FileMode(420), modTime: time.Unix(1574767892, 0)}
+	info := bindataFileInfo{name: "public/logo.png", size: 9865, mode: os.FileMode(420), modTime: time.Unix(1574779971, 0)}
 	a := &asset{bytes: bytes, info: info}
 	return a, nil
 }
