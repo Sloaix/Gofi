@@ -19,7 +19,6 @@ require (
 	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/juju/errors v0.0.0-20190930114154-d42613fe1ab9 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
-	github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7 // indirect
 	github.com/kataras/golog v0.0.9 // indirect
 	github.com/kataras/iris v0.0.0-20191006184023-c8e73f4f4df2
 	github.com/klauspost/compress v1.8.6 // indirect
@@ -52,4 +51,5 @@ require (
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.30.0
 	gopkg.in/yaml.v2 v2.2.4 // indirect
+	src.techknowlogick.com/xgo v0.0.0-20191106201509-8f7d703e28a9 // indirect
 )

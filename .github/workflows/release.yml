@@ -3,29 +3,15 @@ name: Gofi Release
 on:
   create:
     branches:
-     - master
+      - master
     tags:
       - "v*.*.*"
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
-      # 安装Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-
-      # 安装Yarn
-      - name: Setup Yarn
-        run: npm install -g yarn
-
-      # 安装go
-      - name: Setup Golang
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.13
-
       # 获取触发TAG
       - name: Obtain Trigger Tag
         id: tag
@@ -34,6 +20,10 @@ jobs:
       # 打印触发TAG
       - name: Echo Trigger Tag
         run: echo Trigger tag is ${{ steps.tag.outputs.VERSION }}
+
+      # 拉取xgo docker镜像
+      - name: Pull xgo docker image
+        run: docker pull techknowlogick/xgo:latest
 
       # 检出对应TAG的代码
       - name: Checkout Trigger Branch
@@ -60,18 +50,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            # linux
-            ./output/gofi-linux-amd64
-            ./output/gofi-linux-386
-            ./output/gofi-linux-arm
-            # macOS
-            ./output/gofi-macOS-amd64
-            ./output/gofi-macOS-386
-            # freebsd
-            ./output/gofi-freebsd-amd64
-            ./output/gofi-freebsd-386
-            # windows
-            ./output/gofi-windows-amd64.exe
-            ./output/gofi-windows-386.exe
+            ./output/gofi-${{ steps.tag.outputs.VERSION }}-android-16-arm
+            ./output/gofi-${{ steps.tag.outputs.VERSION }}-darwin-10.6-amd64
+            ./output/gofi-${{ steps.tag.outputs.VERSION }}-linux-amd64
+            ./output/gofi-${{ steps.tag.outputs.VERSION }}-linux-arm-5
+            ./output/gofi-${{ steps.tag.outputs.VERSION }}-windows-4.0-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

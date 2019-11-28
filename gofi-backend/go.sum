@@ -159,8 +159,6 @@ github.com/juju/testing v0.0.0-20180920084828-472a3e8b2073/go.mod h1:63prj8cnj0t
 github.com/julienschmidt/httprouter v1.2.0/go.mod h1:SYymIcj16QtmaHHD7aYtjjsJG7VTCxuUUipMqKk8s4w=
 github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 h1:uC1QfSlInpQF+M0ao65imhwqKnz3Q2z/d8PWZRMQvDM=
 github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88/go.mod h1:3w7q1U84EfirKl04SVQ/s7nPm1ZPhiXd34z40TNz36k=
-github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7 h1:AYzjK/SHz6m6mg5iuFwkrAhCc14jvCpW9d6frC9iDPE=
-github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7/go.mod h1:iYGcTYIPUvEWhFo6aKUuLchs+AV4ssYdyuBbQJZGcBk=
 github.com/kataras/golog v0.0.0-20190624001437-99c81de45f40 h1:Q/QxpyNBtfkhXE68tnEA4yyqm77eh/3YOjOw875VbBY=
 github.com/kataras/golog v0.0.0-20190624001437-99c81de45f40/go.mod h1:PcaEvfvhGsqwXZ6S3CgCbmjcp+4UDUh2MIfF2ZEul8M=
 github.com/kataras/golog v0.0.9 h1:J7Dl82843nbKQDrQM/abbNJZvQjS6PfmkkffhOTXEpM=
@@ -438,6 +436,8 @@ honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWh
 honnef.co/go/tools v0.0.0-20190106161140-3f1c8253044a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 rsc.io/binaryregexp v0.2.0/go.mod h1:qTv7/COck+e2FymRvadv62gMdZztPaShugOCi3I+8D8=
+src.techknowlogick.com/xgo v0.0.0-20191106201509-8f7d703e28a9 h1:Ds7y3Q5MgMEWlGbXCS+qBCSykLvLVglxQUwfIDpYPpk=
+src.techknowlogick.com/xgo v0.0.0-20191106201509-8f7d703e28a9/go.mod h1:31CE1YKtDOrKTk9PSnjTpe6YbO6W/0LTYZ1VskL09oU=
 xorm.io/builder v0.3.6 h1:ha28mQ2M+TFx96Hxo+iq6tQgnkC9IZkM6D8w9sKHHF8=
 xorm.io/builder v0.3.6/go.mod h1:LEFAPISnRzG+zxaxj2vPicRwz67BdhFreKg8yv8/TgU=
 xorm.io/core v0.7.2-0.20190928055935-90aeac8d08eb h1:msX3zG3BPl8Ti+LDzP33/9K7BzO/WqFXk610K1kYKfo=

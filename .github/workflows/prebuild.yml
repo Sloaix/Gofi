@@ -1,0 +1,28 @@
+name: Gofi Prebuild
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 获取触发TAG
+      - name: Obtain Trigger Tag
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      # 打印触发TAG
+      - name: Echo Trigger Tag
+        run: echo Trigger tag is ${{ steps.tag.outputs.VERSION }}
+
+      # 检出对应TAG的代码
+      - name: Checkout Trigger Branch
+        uses: actions/checkout@v1
+
+      # 拉取xgo docker镜像
+      - name: Pull xgo docker image
+        run: docker pull techknowlogick/xgo:latest
+
+      # 执行构建脚本
+      - name: Excute Build Script
+        run: ./build.sh
