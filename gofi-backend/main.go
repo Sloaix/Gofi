@@ -18,7 +18,7 @@ func init() {
 }
 
 func main() {
-	logrus.Infof("Gofi is running on %v \n", context.Get().LocalAddress)
+	logrus.Infof("Gofi is running on %v \n", context.Get().ServerAddress)
 	app := newApp()
 	_ = app.Run(iris.Addr(":"+context.Get().Port), iris.WithoutServerError(iris.ErrServerClosed))
 }

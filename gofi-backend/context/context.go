@@ -18,6 +18,7 @@ const (
 	Version     = "v0.3.0"
 	DefaultPort = "8080"
 	portUsage   = "port to expose web services"
+	ipUsage     = "server side ip for web client to request,default is lan ip"
 )
 
 type Context struct {
@@ -25,8 +26,8 @@ type Context struct {
 	Port              string
 	DatabaseName      string
 	AppName           string
-	LocalAddress      string
-	LocalIp           string
+	ServerAddress     string
+	ServerIp          string // server and api ip.
 	WorkDir           string
 	DefaultStorageDir string
 	CustomStorageDir  string
@@ -36,15 +37,23 @@ type Context struct {
 	settings          *models.Settings
 }
 
-var instance *Context
+var instance = new(Context)
+var isFlagBind = false
+
+func init() {
+	bindFlags()
+}
+
+func bindFlags() {
+	if !isFlagBind {
+		flag.StringVar(&instance.Port, "port", DefaultPort, portUsage)
+		flag.StringVar(&instance.Port, "p", DefaultPort, portUsage+" (shorthand)")
+		flag.StringVar(&instance.ServerIp, "ip", "", ipUsage)
+		isFlagBind = true
+	}
+}
 
 func InitContext() {
-	if instance != nil {
-		return
-	}
-	instance = new(Context)
-	flag.StringVar(&instance.Port, "port", DefaultPort, portUsage)
-	flag.StringVar(&instance.Port, "p", DefaultPort, portUsage+" (shorthand)")
 	flag.Parse()
 	instance.Version = Version
 	instance.AppName = "gofi"
@@ -53,11 +62,19 @@ func InitContext() {
 	instance.DatabaseFilePath = filepath.Join(instance.WorkDir, instance.DatabaseName)
 	instance.DefaultStorageDir = filepath.Join(instance.WorkDir, "storage")
 	instance.LogDir = filepath.Join(instance.WorkDir, "log")
-	instance.LocalIp = instance.getLocalIp()
-	instance.LocalAddress = instance.LocalIp + ":" + instance.Port
+
+	// 如果ip为空,默认获取局域网ip
+	if instance.ServerIp == "" || !CheckIp(instance.ServerIp) {
+		instance.ServerIp = instance.GetLanIp()
+	}
+	instance.ServerAddress = instance.ServerIp + ":" + instance.Port
 	instance.Orm = instance.initDatabase()
 	instance.settings = instance.queryAppSettings()
 	instance.CustomStorageDir = instance.settings.CustomStoragePath
+}
+
+func CheckIp(ip string) bool {
+	return net.ParseIP(ip) != nil
 }
 
 func Get() *Context {
@@ -121,7 +138,7 @@ func (context *Context) queryAppSettings() *models.Settings {
 	}
 
 	pSettings.Version = context.Version
-	
+
 	return pSettings
 }
 
@@ -151,7 +168,7 @@ func (context *Context) getWorkDirectoryPath() string {
 }
 
 // 返回本地ip
-func (context *Context) getLocalIp() string {
+func (context *Context) GetLanIp() string {
 	addresses, err := net.InterfaceAddrs()
 
 	if err != nil {
