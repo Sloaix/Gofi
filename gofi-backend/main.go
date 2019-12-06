@@ -70,8 +70,15 @@ func spa(app *iris.Application) {
 
 // api endpoint
 func api(app *iris.Application) {
-	limiter := tollbooth.NewLimiter(1, nil)
-	api := app.Party("/api", tollboothic.LimitHandler(limiter)).AllowMethods(iris.MethodOptions)
+	limiter := tollbooth.NewLimiter(0.7, nil)
+	api := app.Party("/api", func(ctx iris.Context) {
+		// 预览模式下,限制请求频率
+		if env.Current == env.Preview {
+			tollboothic.LimitHandler(limiter)
+		} else {
+			ctx.Next()
+		}
+	}).AllowMethods(iris.MethodOptions)
 	{
 		api.Get("/setting", controllers.GetSetting)
 		api.Post("/setting", controllers.UpdateSetting)
