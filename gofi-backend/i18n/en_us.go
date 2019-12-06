@@ -8,4 +8,5 @@ var EnUS = map[MessageKey]string{
 	GofiIsAlreadyInitialized: "Gofi is already initialized",
 	UploadFailed:             "upload failed",
 	CanNotOverlayExistFile:   "%s is exist, can not overlay it",
+	CurrentIsPreviewMode:     "current is preview mode",
 }

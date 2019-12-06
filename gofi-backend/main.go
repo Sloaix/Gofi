@@ -10,6 +10,7 @@ import (
 	"gofi/binary"
 	"gofi/context"
 	"gofi/controllers"
+	"gofi/env"
 	"gofi/util"
 )
 
@@ -18,7 +19,7 @@ func init() {
 }
 
 func main() {
-	logrus.Infof("Gofi is running on %v \n", context.Get().ServerAddress)
+	logrus.Infof("Gofi is running on %v ，current environment is %s\n", context.Get().ServerAddress, env.Current)
 	app := newApp()
 	_ = app.Run(iris.Addr(":"+context.Get().Port), iris.WithoutServerError(iris.ErrServerClosed))
 }

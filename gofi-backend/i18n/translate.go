@@ -19,6 +19,7 @@ const (
 	GofiIsAlreadyInitialized
 	UploadFailed
 	CanNotOverlayExistFile
+	CurrentIsPreviewMode
 )
 
 var TranslateKeys = []MessageKey{

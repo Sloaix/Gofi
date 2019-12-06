@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 )
 
+//UpdateSetting 更新设置
 func UpdateSetting(ctx iris.Context) {
 	appSettings := context.Get().GetSettings()
 	appSettings.Initialized = true
@@ -75,7 +76,7 @@ func UpdateSetting(ctx iris.Context) {
 
 }
 
-// 初始化
+//Setup 初始化
 func Setup(ctx iris.Context) {
 	// 已经初始化过
 	if context.Get().GetSettings().Initialized {
@@ -86,6 +87,7 @@ func Setup(ctx iris.Context) {
 	UpdateSetting(ctx)
 }
 
+//GetSetting 获取设置项
 func GetSetting(ctx iris.Context) {
 	settings := context.Get().GetSettings()
 	ctx.JSON(ResponseSuccess(settings))

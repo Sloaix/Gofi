@@ -8,4 +8,5 @@ var ZhCN = map[MessageKey]string{
 	GofiIsAlreadyInitialized: "Gofi已初始化过,请勿再次初始化",
 	UploadFailed:             "上传失败",
 	CanNotOverlayExistFile:   "%s 已存在,无法覆盖已存在的文件",
+	CurrentIsPreviewMode:     "当前是预览模式",
 }

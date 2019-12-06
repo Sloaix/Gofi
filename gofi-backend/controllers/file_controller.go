@@ -4,6 +4,7 @@ import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
 	"gofi/context"
+	"gofi/env"
 	"gofi/i18n"
 	"gofi/models"
 	"gofi/util"
@@ -12,6 +13,7 @@ import (
 	"strings"
 )
 
+//ListFiles 返回给定路径文件夹的一级子节点文件
 func ListFiles(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
@@ -84,7 +86,14 @@ func ListFiles(ctx iris.Context) {
 	return
 }
 
+//Upload 上传文件
 func Upload(ctx iris.Context) {
+	// 预览模式禁止上传文件
+	if env.Current == env.Preview {
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.CurrentIsPreviewMode)))
+		return
+	}
+
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
@@ -128,7 +137,7 @@ func Upload(ctx iris.Context) {
 	return
 }
 
-// 下载文件
+//Download 下载文件
 func Download(ctx iris.Context) {
 	ctx.ReadJSON(map[string]interface{}{"Key": "value"})
 	// 需要列出文件的文件夹地址相对路径
