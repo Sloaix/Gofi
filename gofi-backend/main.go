@@ -1,7 +1,9 @@
 package main
 
 import (
+	"github.com/didip/tollbooth"
 	"github.com/iris-contrib/middleware/cors"
+	"github.com/iris-contrib/middleware/tollboothic"
 	"github.com/kataras/iris"
 	"github.com/kataras/iris/core/router"
 	"github.com/kataras/iris/middleware/logger"
@@ -68,7 +70,8 @@ func spa(app *iris.Application) {
 
 // api endpoint
 func api(app *iris.Application) {
-	api := app.Party("/api").AllowMethods(iris.MethodOptions)
+	limiter := tollbooth.NewLimiter(1, nil)
+	api := app.Party("/api", tollboothic.LimitHandler(limiter)).AllowMethods(iris.MethodOptions)
 	{
 		api.Get("/setting", controllers.GetSetting)
 		api.Post("/setting", controllers.UpdateSetting)
