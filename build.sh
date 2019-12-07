@@ -20,7 +20,7 @@ function xgo() {
     if ! [ -x "$(command -v $go_bin_dir/xgo)" ]; then
         go get src.techknowlogick.com/xgo
     fi
-    $go_bin_dir/xgo --dest ./output -out gofi-$(gitTag) --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm -tags='product' $1
+    $go_bin_dir/xgo --dest ./output -out gofi-$(gitTag) --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm -tags='product' -ldflags="-X 'gofi/context.Version='$gitTag''" $1
 }
 
 function beforeBuild() {
