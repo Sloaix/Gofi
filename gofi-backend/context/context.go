@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/go-xorm/xorm"
+	//import sqlite3 driver
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
 	"gofi/models"
@@ -14,20 +15,24 @@ import (
 	"time"
 )
 
+//version ,will be replaced at compile time by [-ldflags="-X 'gofi/context.Version=vX.X.X'"]
+var version string = "UNKOWN VERSION"
+
 const (
-	Version     = "v0.3.0"
+	//DefaultPort default port to listen Gofi监听的默认端口号
 	DefaultPort = "8080"
 	portUsage   = "port to expose web services"
 	ipUsage     = "server side ip for web client to request,default is lan ip"
 )
 
+//Context 上下文对象
 type Context struct {
 	Version           string
 	Port              string
 	DatabaseName      string
 	AppName           string
 	ServerAddress     string
-	ServerIp          string // server and api ip.
+	ServerIP          string //ServerIP server side ip for web client to request,default is lan ip
 	WorkDir           string
 	DefaultStorageDir string
 	CustomStorageDir  string
@@ -48,14 +53,15 @@ func bindFlags() {
 	if !isFlagBind {
 		flag.StringVar(&instance.Port, "port", DefaultPort, portUsage)
 		flag.StringVar(&instance.Port, "p", DefaultPort, portUsage+" (shorthand)")
-		flag.StringVar(&instance.ServerIp, "ip", "", ipUsage)
+		flag.StringVar(&instance.ServerIP, "ip", "", ipUsage)
 		isFlagBind = true
 	}
 }
 
+//InitContext 初始化Context,只能初始化一次
 func InitContext() {
 	flag.Parse()
-	instance.Version = Version
+	instance.Version = version
 	instance.AppName = "gofi"
 	instance.WorkDir = instance.getWorkDirectoryPath()
 	instance.DatabaseName = instance.AppName + ".db"
@@ -63,28 +69,32 @@ func InitContext() {
 	instance.DefaultStorageDir = filepath.Join(instance.WorkDir, "storage")
 	instance.LogDir = filepath.Join(instance.WorkDir, "log")
 
-	// 如果ip为空,默认获取局域网ip
-	if instance.ServerIp == "" || !CheckIp(instance.ServerIp) {
-		instance.ServerIp = instance.GetLanIp()
+	// if ip is empty, obtain lan ip to instead.
+	if instance.ServerIP == "" || !CheckIP(instance.ServerIP) {
+		instance.ServerIP = instance.GetLanIP()
 	}
-	instance.ServerAddress = instance.ServerIp + ":" + instance.Port
+	instance.ServerAddress = instance.ServerIP + ":" + instance.Port
 	instance.Orm = instance.initDatabase()
 	instance.settings = instance.queryAppSettings()
 	instance.CustomStorageDir = instance.settings.CustomStoragePath
 }
 
-func CheckIp(ip string) bool {
+//CheckIP 校验IP是否有效
+func CheckIP(ip string) bool {
 	return net.ParseIP(ip) != nil
 }
 
+//Get 返回当前Context实例
 func Get() *Context {
 	return instance
 }
 
+//GetSettings 获取当前设置项
 func (context *Context) GetSettings() models.Settings {
 	return *context.settings
 }
 
+//GetStorageDir 获取当前仓储目录
 func (context *Context) GetStorageDir() string {
 	if len(context.CustomStorageDir) == 0 {
 		return context.DefaultStorageDir
@@ -93,7 +103,7 @@ func (context *Context) GetStorageDir() string {
 }
 
 func (context *Context) initDatabase() *xorm.Engine {
-	// 连接到数据库
+	// connect to database
 	engine, err := xorm.NewEngine("sqlite3", context.DatabaseFilePath)
 	if err != nil {
 		logrus.Println(err)
@@ -103,7 +113,7 @@ func (context *Context) initDatabase() *xorm.Engine {
 	if context.IsTestEnvironment() {
 		logrus.Info("on environment,skip database sync")
 	} else {
-		// 自动迁移表结构,自动增加缺失的字段或者表
+		// migrate database
 		if err := engine.Sync2(new(models.Settings)); err != nil {
 			logrus.Error(err)
 		}
@@ -114,9 +124,9 @@ func (context *Context) initDatabase() *xorm.Engine {
 
 func (context *Context) queryAppSettings() *models.Settings {
 	var pSettings = new(models.Settings)
-	//获取第一条记录,
+	//obtain first record
 	if has, _ := context.Orm.Get(pSettings); !has {
-		// 如果不存在就重新创建
+		//create new record if there is no record exist
 		pSettings = &models.Settings{
 			AppPath:            context.WorkDir,
 			Initialized:        false,
@@ -142,13 +152,14 @@ func (context *Context) queryAppSettings() *models.Settings {
 	return pSettings
 }
 
+//AfterUpdateSettings 设置更新后，需要更新Context上下文中的文件仓储路径
 func (context *Context) AfterUpdateSettings(bean interface{}) {
 	context.settings = bean.(*models.Settings)
 	context.CustomStorageDir = context.settings.CustomStoragePath
 	logrus.Infof("AfterUpdateSettings current storage dir is %s", context.settings.CustomStoragePath)
 }
 
-// 判断是否是测试环境
+//IsTestEnvironment 当前是否测试环境
 func (context *Context) IsTestEnvironment() bool {
 	for _, value := range os.Args {
 		if strings.Contains(value, "-test.v") {
@@ -158,7 +169,7 @@ func (context *Context) IsTestEnvironment() bool {
 	return false
 }
 
-// 获取工作目录
+//getWorkDirectoryPath 获取工作目录
 func (context *Context) getWorkDirectoryPath() string {
 	dir, err := os.Getwd()
 	if err != nil {
@@ -167,8 +178,8 @@ func (context *Context) getWorkDirectoryPath() string {
 	return dir
 }
 
-// 返回本地ip
-func (context *Context) GetLanIp() string {
+//GetLanIP 返回本地ip
+func (context *Context) GetLanIP() string {
 	addresses, err := net.InterfaceAddrs()
 
 	if err != nil {

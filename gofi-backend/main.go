@@ -21,7 +21,7 @@ func init() {
 }
 
 func main() {
-	logrus.Infof("Gofi is running on %v ，current environment is %s\n", context.Get().ServerAddress, env.Current)
+	logrus.Infof("Gofi is running on %v，current environment is %s,version is %s\n", context.Get().ServerAddress, env.Current,context.Get().Version)
 	app := newApp()
 	_ = app.Run(iris.Addr(":"+context.Get().Port), iris.WithoutServerError(iris.ErrServerClosed))
 }
