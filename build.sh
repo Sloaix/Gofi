@@ -3,11 +3,7 @@ build_dir=$(pwd)
 client_dir=$(pwd)/gofi-frontend
 server_dir=$(pwd)/gofi-backend
 go_bin_dir=$(go env GOPATH)/bin
-
-# 获取最近的tag
-function gitTag() {
-    git describe --tags $(git rev-list --tags --max-count=1)
-}
+tag=$(git describe --tags $(git rev-list --tags --max-count=1))
 
 function bindata() {
     if ! [ -x "$(command -v $go_bin_dir/go-bindata)" ]; then
@@ -20,7 +16,7 @@ function xgo() {
     if ! [ -x "$(command -v $go_bin_dir/xgo)" ]; then
         go get src.techknowlogick.com/xgo
     fi
-    $go_bin_dir/xgo --dest ./output -out gofi-$(gitTag) --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm -tags='product' -ldflags="-X 'gofi/context.Version='$gitTag''" $1
+    $go_bin_dir/xgo -go=go-1.13.4 -out=gofi-$tag -tags='product' -ldflags='-X gofi/context.version='$tag'' --dest=./output --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm $1
 }
 
 function beforeBuild() {
@@ -39,7 +35,7 @@ function buildServer() {
     echo "start build server for Gofi"
     cd $build_dir
     mv $client_dir/dist $server_dir/public
-    cd $server_dir 
+    cd $server_dir
     mkdir $server_dir/output
     go get -v -t -d
     bindata public/...
