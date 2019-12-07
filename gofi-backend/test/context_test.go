@@ -37,8 +37,8 @@ func TestNoPort(t *testing.T) {
 	}
 }
 
-func TestCheckIpFunc(t *testing.T) {
-	var invalidIpArray = []string{
+func TestCheckIPFunc(t *testing.T) {
+	var invalidIPArray = []string{
 		"123",
 		"haha",
 		"123.321",
@@ -48,42 +48,42 @@ func TestCheckIpFunc(t *testing.T) {
 		"3213.",
 	}
 
-	for _, v := range invalidIpArray {
-		if context.CheckIp(v) {
+	for _, v := range invalidIPArray {
+		if context.CheckIP(v) {
 			t.Errorf(" %s , ecpect is invalid. actul is valid", v)
 		}
 	}
 
-	invalidIpArray = []string{
+	invalidIPArray = []string{
 		"192.168.1.1",
 		"10.10.10.1",
 		"0.0.0.0",
 	}
 
-	for _, v := range invalidIpArray {
-		if !context.CheckIp(v) {
+	for _, v := range invalidIPArray {
+		if !context.CheckIP(v) {
 			t.Errorf(" %s , ecpect is valid. actul is invalid", v)
 		}
 	}
 }
 
-func TestHasIp(t *testing.T) {
+func TestHasIP(t *testing.T) {
 	os.Args = savedArgs
 	os.Args = append(os.Args, "-ip")
 	os.Args = append(os.Args, "192.168.1.1")
 	context.InitContext()
-	if context.Get().ServerIp != "192.168.1.1" {
+	if context.Get().ServerIP != "192.168.1.1" {
 		t.Errorf("ecpect is 192.168.1.1, actul is %s", context.Get().Port)
 	}
 }
 
-func TestCheckIp(t *testing.T) {
+func TestCheckIP(t *testing.T) {
 	os.Args = savedArgs
 	os.Args = append(os.Args, "-ip")
 	os.Args = append(os.Args, "haha")
 	context.InitContext()
-	if context.Get().ServerIp != context.Get().GetLanIp() {
-		t.Errorf("ecpect is %s. actul is %s", context.Get().GetLanIp(), context.Get().ServerIp)
+	if context.Get().ServerIP != context.Get().GetLanIP() {
+		t.Errorf("ecpect is %s. actul is %s", context.Get().GetLanIP(), context.Get().ServerIP)
 	}
 }
 
