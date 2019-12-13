@@ -5,8 +5,11 @@ English | [简体中文](./README.zh-CN.md)
 A file indexer written by go.
 </div>
 
-Overview
-----
+# Preview
+
+http://gofi.sloaix.com
+
+# Overview
 
 ![preview-en](https://github.com/Sloaix/Gofi/blob/master/preview/preview-en.png?raw=true)
 

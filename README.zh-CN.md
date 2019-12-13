@@ -5,8 +5,11 @@
 一个用Go语言实现的文件目录应用
 </div>
 
-Overview
-----
+# 预览
+
+http://gofi.sloaix.com
+
+# 总览
 
 ![preview-zn](https://github.com/Sloaix/Gofi/blob/master/preview/preview-zh.png?raw=true)
 
