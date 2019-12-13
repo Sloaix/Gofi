@@ -2,7 +2,7 @@
   <div class="footer">
     <div class="links">
       <a
-        href="https://github.com/Sloaix/ant-design-pro-vue"
+        href="https://github.com/Sloaix/Gofi"
         target="_blank"
       >
         <a-icon type="github" />

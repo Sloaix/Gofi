@@ -12,6 +12,12 @@ import (
 
 //UpdateSetting 更新设置
 func UpdateSetting(ctx iris.Context) {
+	// 初始化完成且处于Preview环境,不允许更改设置项
+	if env.Current == env.Preview && context.Get().GetSettings().Initialized {
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)))
+		return
+	}
+
 	appSettings := context.Get().GetSettings()
 	appSettings.Initialized = true
 
@@ -28,14 +34,6 @@ func UpdateSetting(ctx iris.Context) {
 
 	// 是否使用默认地址
 	useDefaultDir := path == "" || path == defaultStorageDir
-
-	// 预览环境下只允许访问默认目录
-	if env.Current == env.Preview && !useDefaultDir {
-		logrus.Errorln("当前是Preview环境，只能使用默认文件仓库路径")
-		// 判断给定的目录是否存在
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode, path)))
-		return
-	}
 
 	logrus.Printf("工作目录是%v \n", workDir)
 	logrus.Printf("dir目录是%v \n", path)

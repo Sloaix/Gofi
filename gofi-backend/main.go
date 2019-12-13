@@ -70,7 +70,7 @@ func spa(app *iris.Application) {
 
 // api endpoint
 func api(app *iris.Application) {
-	limiter := tollbooth.NewLimiter(1, nil)
+	limiter := tollbooth.NewLimiter(2, nil)
 	api := app.Party("/api", func(ctx iris.Context) {
 		logrus.Println(limiter)
 		// 预览模式下,限制请求频率
