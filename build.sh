@@ -4,6 +4,16 @@ client_dir=$(pwd)/gofi-frontend
 server_dir=$(pwd)/gofi-backend
 go_bin_dir=$(go env GOPATH)/bin
 tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+ENV=$1
+ENV="${ENV:-product}"
+
+
+echo Gofi: build enviroment is $ENV
+
+function usage() {
+    echo "Usage: $0 [-s <45|90>] [-p <string>]" 1>&2
+    exit 1
+}
 
 function bindata() {
     if ! [ -x "$(command -v $go_bin_dir/go-bindata)" ]; then
@@ -16,7 +26,7 @@ function xgo() {
     if ! [ -x "$(command -v $go_bin_dir/xgo)" ]; then
         go get src.techknowlogick.com/xgo
     fi
-    $go_bin_dir/xgo -go=go-1.13.4 -out=gofi-$tag -tags='product' -ldflags='-X gofi/context.version='$tag'' --dest=./output --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm $1
+    $go_bin_dir/xgo -go=go-1.13.4 -out=gofi-$tag -tags=''$ENV'' -ldflags='-X gofi/context.version='$tag'' --dest=./output --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm $1
 }
 
 function beforeBuild() {

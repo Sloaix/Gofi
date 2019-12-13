@@ -27,9 +27,9 @@ jobs:
       - name: Excute Build Script
         run: ./build.sh
 
-      # 上传临时编译产物
-      - name: Upload Snapshot Build Product  
-        uses: actions/upload-artifact@v1
-        with:
-          name: Snapshot
-          path: ./output
+      # # 上传临时编译产物
+      # - name: Upload Snapshot Build Product  
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: Snapshot
+      #     path: ./output
