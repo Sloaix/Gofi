@@ -29,6 +29,13 @@ func ListFiles(ctx iris.Context) {
 		path = "/" + path
 	}
 
+	// 确保该路径只是文件仓库的子路径
+	if !strings.Contains(path, storagePath) {
+		ctx.StatusCode(iris.StatusNotFound)
+		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode, path)))
+		return
+	}
+
 	if !util.FileExist(path) {
 		ctx.StatusCode(iris.StatusNotFound)
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.DirIsNotExist, path)))

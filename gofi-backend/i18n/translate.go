@@ -20,6 +20,7 @@ const (
 	UploadFailed
 	CanNotOverlayExistFile
 	CurrentIsPreviewMode
+	OperationNotAllowedInPreviewMode
 )
 
 var TranslateKeys = []MessageKey{
@@ -30,6 +31,8 @@ var TranslateKeys = []MessageKey{
 	GofiIsAlreadyInitialized,
 	UploadFailed,
 	CanNotOverlayExistFile,
+	CurrentIsPreviewMode,
+	OperationNotAllowedInPreviewMode,
 }
 
 func (messageKey MessageKey) String() string {
