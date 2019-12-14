@@ -24,26 +24,18 @@ func ListFiles(ctx iris.Context) {
 
 	path := filepath.Join(storagePath, relativePath)
 
-	// 确保路径一定是以/开头的绝对路径
-	if !strings.HasPrefix(path, "/") {
-		path = "/" + path
-	}
-
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storagePath) {
-		ctx.StatusCode(iris.StatusNotFound)
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)))
 		return
 	}
 
 	if !util.FileExist(path) {
-		ctx.StatusCode(iris.StatusNotFound)
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.DirIsNotExist, path)))
 		return
 	}
 
 	if !util.IsDirectory(path) {
-		ctx.StatusCode(iris.StatusBadRequest)
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotDir, path)))
 		return
 	}
@@ -53,7 +45,6 @@ func ListFiles(ctx iris.Context) {
 
 	// 读取失败
 	if err != nil {
-		ctx.StatusCode(iris.StatusNotFound)
 		ctx.JSON(ResponseFailWithMessage(err.Error()))
 		return
 	}
