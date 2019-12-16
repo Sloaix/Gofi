@@ -1,4 +1,8 @@
-# [Gofi](https://gofi-doc.sloaix.com/en-US) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Sloaix/Gofi/blob/master/LICENSE)
+<div align="center">
+<img src="https://github.com/Sloaix/Gofi/blob/master/preview/logo-192x192.png?raw=true">
+</div>
+
+# [Gofi](https://gofi-doc.sloaix.com/en-US) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Sloaix/Gofi/blob/master/LICENSE) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Sloaix/Gofi)
 
 English | [简体中文](./README.zh-CN.md)
 
