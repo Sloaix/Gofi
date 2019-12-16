@@ -187,15 +187,43 @@ func (context *Context) GetLanIP() string {
 		os.Exit(1)
 	}
 
-	for _, address := range addresses {
 
-		// 检查ip地址判断是否回环地址
-		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
-			if ipNet.IP.To4() != nil {
-				return ipNet.IP.String()
-			}
+	logrus.Infof("print all ip address: %v\n\t", addresses)
+
+	for _, address := range addresses {
+		ipNet, ok := address.(*net.IPNet)
+
+		if !ok || ipNet.IP.IsLoopback() || ipNet.IP.To4() == nil {
+			continue
+		}
+
+		// 当前ip属于私有地址,直接返回
+		if isIpBelongToPrivateIpNet(ipNet.IP) {
+			return ipNet.IP.To4().String()
 		}
 	}
 
 	return "127.0.0.1"
+}
+
+// 某个ip是否属于私有网段
+func isIpBelongToPrivateIpNet(ip net.IP) bool {
+	for _, ipNet := range getInternalIpNetArray() {
+		if ipNet.Contains(ip) {
+			return true
+		}
+	}
+	return false
+}
+
+// 返回私有网段切片
+func getInternalIpNetArray() []*net.IPNet {
+	var ipNetArrays []*net.IPNet
+
+	for _, ip := range []string{"192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8"} {
+		_, ipNet, _ := net.ParseCIDR(ip)
+		ipNetArrays = append(ipNetArrays, ipNet)
+	}
+
+	return ipNetArrays
 }
