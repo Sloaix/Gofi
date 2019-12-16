@@ -6,6 +6,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 设置环境
+      - name: Setup env
+        run: |
+          echo "::set-env name=GOPATH::${{ github.workspace }}"
+          echo PWD is $pwd
+          ls -l
+
       # 获取触发TAG
       - name: Obtain Trigger Tag
         id: tag
@@ -18,17 +25,38 @@ jobs:
       # 检出对应TAG的代码
       - name: Checkout Trigger Branch
         uses: actions/checkout@v1
+        with:
+          path: Gofi/src/Gofi
+
+      # Debug
+      - name: Debug
+        run: |
+          ls -l
+          echo Github Workspace is ${{ github.workspace }}
+          echo GOPATH is $GOPATH
+          echo PWD is $(pwd)
 
       # 拉取xgo docker镜像
       - name: Pull xgo docker image
-        run: docker pull techknowlogick/xgo:latest
+        run: docker pull karalabe/xgo-latest
 
       # 执行构建脚本
       - name: Excute Build Script
         run: ./build.sh
 
+      # 压缩产物
+      - name: Compress
+        uses: docker://gact/upx:latest
+        with:
+          dir: './output'
+          upx_args: '-9'
+
+      # 列出产物
+      - name: List output
+        run: du -ah ./output
+
       # # 上传临时编译产物
-      # - name: Upload Snapshot Build Product  
+      # - name: Upload Snapshot Build Product
       #   uses: actions/upload-artifact@v1
       #   with:
       #     name: Snapshot

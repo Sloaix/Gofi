@@ -12,6 +12,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 设置环境
+      - name: Setup env
+        run: |
+          echo "::set-env name=GOPATH::${{ github.workspace }}"
+          echo PWD is $pwd
+          ls -l
+
       # 获取触发TAG
       - name: Obtain Trigger Tag
         id: tag
@@ -21,17 +28,38 @@ jobs:
       - name: Echo Trigger Tag
         run: echo Trigger tag is ${{ steps.tag.outputs.VERSION }}
 
-      # 拉取xgo docker镜像
-      - name: Pull xgo docker image
-        run: docker pull techknowlogick/xgo:latest
-
       # 检出对应TAG的代码
       - name: Checkout Trigger Branch
         uses: actions/checkout@v1
+        with:
+          path: Gofi/src/Gofi
+
+      # Debug
+      - name: Debug
+        run: |
+          ls -l
+          echo Github Workspace is ${{ github.workspace }}
+          echo GOPATH is $GOPATH
+          echo PWD is $(pwd)
+
+      # 拉取xgo docker镜像
+      - name: Pull xgo docker image
+        run: docker pull karalabe/xgo-latest
 
       # 执行构建脚本
       - name: Excute Build Script
         run: ./build.sh
+        
+      # 列出产物
+      - name: List output
+        run: du -ah ./output      
+        
+      # 压缩产物
+      - name: Compress
+        uses: docker://gact/upx:latest
+        with:
+          dir: './output'
+          upx_args: '-9'
 
       # 创建新的发布
       - name: Create Release
@@ -50,10 +78,10 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./output/gofi-${{ steps.tag.outputs.VERSION }}-android-16-arm
-            ./output/gofi-${{ steps.tag.outputs.VERSION }}-darwin-10.6-amd64
-            ./output/gofi-${{ steps.tag.outputs.VERSION }}-linux-amd64
-            ./output/gofi-${{ steps.tag.outputs.VERSION }}-linux-arm-5
-            ./output/gofi-${{ steps.tag.outputs.VERSION }}-windows-4.0-amd64.exe
+            ./output/gofi-android-16-arm
+            ./output/gofi-darwin-10.6-amd64
+            ./output/gofi-linux-amd64
+            ./output/gofi-linux-arm-5
+            ./output/gofi-windows-4.0-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
