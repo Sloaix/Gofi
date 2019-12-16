@@ -24,7 +24,7 @@ Gofi has been released for multi platform, and **you can download binary from [R
 
 ```bash
 # download MacOS plaftform gofi, rename it.
-wget -O gofi https://github.com/Sloaix/Gofi/releases/download/<latest>/gofi-<latest>-darwin-10.6-amd64
+wget -O gofi https://github.com/Sloaix/Gofi/releases/latest/download/gofi-darwin-10.6-amd64
 
 # run it
 ./gofi -p 80 -ip 251.251.251.251
