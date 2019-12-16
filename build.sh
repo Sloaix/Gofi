@@ -81,7 +81,7 @@ function afterBuild() {
     rm -rf $server_dir/public
     gofilog "Build complete. The build product has been exported to the directory $build_dir/output"
     cd $build_dir/output
-    ls -al
+    du -ah ./
 }
 
 beforeBuild
