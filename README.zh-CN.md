@@ -1,5 +1,5 @@
 <div align="center">
-<img src="https://github.com/Sloaix/Gofi/blob/master/preview/logo-192x192.png?raw=true">
+<img src="./preview/logo.png">
 </div>
 
 # [Gofi](https://gofi-doc.sloaix.com/en-US) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Sloaix/Gofi/blob/master/LICENSE) ![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/Sloaix/Gofi)
@@ -16,7 +16,7 @@ Gofi (gəʊfi:) 是一个用于构建个人云盘的应用.
 
 [查看Gofi的预览站点](http://gofi.sloaix.com)
 
-![preview-en](https://github.com/Sloaix/Gofi/blob/master/preview/preview-en.png?raw=true)
+![preview](./preview/preview.jpg)
 
 ## 安装
 
