@@ -68,11 +68,12 @@ func ListFiles(ctx iris.Context) {
 
 		// 实例化File model
 		file := models.File{
-			IsDirectory: f.IsDir(),
-			Name:        f.Name(),
-			Size:        size,
-			Extension:   strings.TrimLeft(filepath.Ext(f.Name()), "."),
-			Path:        filepath.Join(relativePath, f.Name()),
+			IsDirectory:  f.IsDir(),
+			Name:         f.Name(),
+			Size:         size,
+			Extension:    strings.TrimLeft(filepath.Ext(f.Name()), "."),
+			Path:         filepath.Join(relativePath, f.Name()),
+			LastModified: f.ModTime().Unix(),
 		}
 
 		// 添加到切片中等待json序列化

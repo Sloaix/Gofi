@@ -33,6 +33,7 @@ export default {
     name: '名称',
     size: '大小',
     action: '操作',
+    lastModified: '最后修改时间',
     download: '下载'
   },
   upload: {

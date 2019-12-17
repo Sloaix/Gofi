@@ -1,8 +1,12 @@
 <template>
   <page-view :title="title">
     <div class="table-operator">
-      <a-button type="default" icon="home" @click="backRootDirectory()" :disabled="!hasParentDirectory" >{{ $t('allFile.rootDir') }}</a-button>
-      <a-button type="default" icon="arrow-left" @click="backParentDirectory()" :disabled="!hasParentDirectory" >{{ $t('allFile.parentDir') }}</a-button>
+      <a-button type="default" icon="home" @click="backRootDirectory()" :disabled="!hasParentDirectory">{{
+        $t('allFile.rootDir') }}
+      </a-button>
+      <a-button type="default" icon="arrow-left" @click="backParentDirectory()" :disabled="!hasParentDirectory">{{
+        $t('allFile.parentDir') }}
+      </a-button>
 
       <!--上传文件-->
       <a-upload
@@ -14,7 +18,9 @@
         :openFileDialogOnClick="!uploading"
         style="float: right"
       >
-        <a-button :disabled="uploading" :loading="uploading" type="primary" icon="upload" style="margin-right: 0"> {{ $t('allFile.upload') }} </a-button>
+        <a-button :disabled="uploading" :loading="uploading" type="primary" icon="upload" style="margin-right: 0"> {{
+          $t('allFile.upload') }}
+        </a-button>
       </a-upload>
     </div>
     <a-card
@@ -53,6 +59,18 @@
           <span slot="title">{{ $t('allFile.size') }}</span>
           <template slot-scope="text, record">
             {{ record.size | human-size }}
+          </template>
+        </a-table-column>
+
+        <!--大小-->
+        <a-table-column
+          dataIndex="size"
+          key="size"
+          width="20%"
+        >
+          <span slot="title">{{ $t('allFile.lastModified') }}</span>
+          <template slot-scope="text, record">
+            {{ record.lastModified * 1000 | moment }}
           </template>
         </a-table-column>
 
@@ -136,7 +154,8 @@ export default {
   },
   methods: {
     uploadUrl () {
-      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(this.currentDirectory)}`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Upload}?path=${encodeURIComponent(
+        this.currentDirectory)}`
     },
     backParentDirectory () {
       // 导航到上级目录
@@ -204,14 +223,13 @@ export default {
         directoryPath = ''
       }
       this.loading = true
-      return getFileList(directoryPath)
-        .then(data => {
-          const pagination = { ...this.pagination }
-          pagination.total = data && data.length ? data.length : 0
-          this.loading = false
-          this.data = data
-          this.pagination = pagination
-        })
+      return getFileList(directoryPath).then(data => {
+        const pagination = { ...this.pagination }
+        pagination.total = data && data.length ? data.length : 0
+        this.loading = false
+        this.data = data
+        this.pagination = pagination
+      })
     }
   }
 }

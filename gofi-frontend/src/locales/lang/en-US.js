@@ -33,6 +33,7 @@ export default {
     name: 'Name',
     size: 'Size',
     action: 'Action',
+    lastModified: 'Last Modified',
     download: 'Download'
   },
   upload: {
