@@ -41,7 +41,7 @@
           <span slot="title">{{ $t('allFile.name') }}</span>
           <template slot-scope="text, record">
             <span>
-              <a-icon :type="record.isDirectory?'folder':'file'" style="margin-right: 8px"></a-icon>
+              <gofi-icon :is-folder="record.isDirectory" :type="record.extension" style="margin-right: 8px"/>
               <router-link
                 v-if="record.isDirectory"
                 :to="{path:'',query: { path:record.path}}">{{ record.name }}</router-link>
@@ -62,10 +62,10 @@
           </template>
         </a-table-column>
 
-        <!--大小-->
+        <!--最后修改时间-->
         <a-table-column
-          dataIndex="size"
-          key="size"
+          dataIndex="lastModified"
+          key="lastModified"
           width="20%"
         >
           <span slot="title">{{ $t('allFile.lastModified') }}</span>
@@ -96,10 +96,12 @@
 <script>
 import api, { getFileList } from '@/api/disk'
 import { PageView } from '@/layouts'
+import GofiIcon from '../../components/GofiIcon/GofiIcon'
 
 export default {
   name: 'AllFile',
   components: {
+    GofiIcon,
     PageView
   },
   data () {
