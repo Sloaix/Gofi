@@ -88,7 +88,7 @@ func ListFiles(ctx iris.Context) {
 //Upload 上传文件
 func Upload(ctx iris.Context) {
 	// 预览模式禁止上传文件
-	if env.Current == env.Preview {
+	if env.IsPreview() {
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.CurrentIsPreviewMode)))
 		return
 	}

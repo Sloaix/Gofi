@@ -1,11 +1,12 @@
 import { BasicLayout } from '@/layouts'
 import AllFile from '@/views/disk/AllFile'
+import config from '@/config/defaultSettings'
 
 /**
  * 基础路由
  * @type { *[] }
  */
-export default [
+const basicRoutes = [
   {
     path: '/',
     name: 'index',
@@ -61,3 +62,24 @@ export default [
     path: '*', redirect: '/404', hidden: true
   }
 ]
+
+// Preview模式下渲染到导航菜单栏的外部链接
+const previewRoutes = [
+  {
+    path: 'https://github.com/Sloaix/Gofi',
+    name: 'gofi',
+    meta: { title: 'preview.nav.github', icon: 'github', target: '_blank', dot: true }
+  },
+  {
+    path: 'https://Gofi-doc.sloaix.com',
+    name: 'doc',
+    meta: { title: 'preview.nav.userGuide', icon: 'book', target: '_blank', dot: true }
+  }
+]
+
+if (config.preview) {
+  const menuRoutes = basicRoutes.find(item => item.path === '/')
+  menuRoutes.children = menuRoutes.children.concat(previewRoutes)
+}
+
+export default basicRoutes

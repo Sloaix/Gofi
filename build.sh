@@ -12,7 +12,7 @@ client_dir=$(pwd)/gofi-frontend
 server_dir=$(pwd)/gofi-backend
 
 ENV=$1
-ENV="${ENV:-product}"
+ENV="${ENV:-production}"
 
 gofilog corrent build dir is $correct_build_dir, current build dir is $build_dir
 
@@ -61,7 +61,7 @@ function beforeBuild() {
 function buildClient() {
     gofilog "start building client for Gofi..."
     cd $client_dir
-    yarn install && yarn run lint --no-fix && yarn run build
+    yarn install && yarn run lint --no-fix && yarn run build --mode $ENV
 }
 
 function buildServer() {

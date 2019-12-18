@@ -1,6 +1,6 @@
 <template>
   <a-layout :class="['layout', device]">
-    <!-- SideMenu -->
+    <!-- SideMenu Mobile Mode -->
     <a-drawer
       v-if="isMobile()"
       placement="left"
@@ -18,7 +18,9 @@
         @menuSelect="menuSelect"
       ></side-menu>
     </a-drawer>
+    <!-- SideMenu Mobile Mode -->
 
+    <!-- SideMenu Desktop Mode -->
     <side-menu
       v-else-if="isSideMenu()"
       mode="inline"
@@ -27,6 +29,7 @@
       :collapsed="collapsed"
       :collapsible="true"
     ></side-menu>
+    <!-- SideMenu Desktop Mode -->
 
     <a-layout :class="[navMode+'menu', `content-width-`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
       <!-- layout header -->

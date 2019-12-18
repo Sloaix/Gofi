@@ -1,7 +1,7 @@
 // +build !preview
-// +build !product
+// +build !production
 
 package env
 
-//Current 当前模式
-const Current = Develop
+//current 当前模式
+const current = Development

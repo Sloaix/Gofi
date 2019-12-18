@@ -4,10 +4,26 @@ package env
 type Mode string
 
 const (
-	//Develop 开发环境
-	Develop Mode = "DEVELOP"
+	//Development 开发环境
+	Development Mode = "DEVELOPMENT"
 	//Preview 预览环境
 	Preview Mode = "PREVIEW"
-	//Product 线上环境
-	Product Mode = "PRODUCT"
+	//Production 线上环境
+	Production Mode = "PRODUCTION"
 )
+
+func IsDevelop() bool {
+	return current == Development
+}
+
+func IsPreview() bool {
+	return current == Preview
+}
+
+func IsProduct() bool {
+	return current == Production
+}
+
+func Current() Mode {
+	return current
+}

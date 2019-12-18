@@ -16,6 +16,16 @@ export default {
       defaultLanguage: '默认语言'
     }
   },
+  preview: {
+    nav: {
+      userGuide: '使用文档',
+      github: 'Github'
+    },
+    tip: {
+      title: '当前处于预览模式',
+      message: '为了提供一致的体验，在该模式下，无法更改主题样式，也无法更改文件仓库路径，但是您可以自由进行上传下载测试。'
+    }
+  },
   menu: {
     index: '首页',
     allFile: '所有文件',
@@ -24,11 +34,11 @@ export default {
   footer: {
     aboutMe: '关于我',
     copyRight: 'Copyright © 2019 Sloaix',
-    version: '当前版本'
+    version: '构建版本'
   },
   allFile: {
     rootDir: '根目录',
-    parentDir: '上级目录',
+    parentDir: '返回',
     upload: '上传',
     name: '名称',
     size: '大小',

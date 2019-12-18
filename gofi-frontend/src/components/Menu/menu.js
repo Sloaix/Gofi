@@ -1,5 +1,6 @@
 import Menu from 'ant-design-vue/es/menu'
 import Icon from 'ant-design-vue/es/icon'
+import Badge from 'ant-design-vue/es/badge'
 import i18n from '@/locales'
 
 const { Item, SubMenu } = Menu
@@ -41,7 +42,7 @@ export default {
       return keys
     }
   },
-  mounted () {
+  created () {
     this.updateMenu()
   },
   watch: {
@@ -58,14 +59,67 @@ export default {
     }
   },
   methods: {
-    // select menu item
-    onOpenChange (openKeys) {
-      // 在水平模式下时执行，并且不再执行后续
-      if (this.mode === 'horizontal') {
-        this.openKeys = openKeys
-        return
+    renderIcon: function (h, icon) {
+      if (icon === 'none' || icon === undefined) {
+        return null
       }
-      // 非水平模式时
+      const props = {}
+      typeof (icon) === 'object' ? props.component = icon : props.type = icon
+      return h(Icon, { props: { ...props } })
+    },
+    renderTitle: function (h, title, showDot) {
+      const pureTitle = h('span', [i18n.t(title)])
+      if (showDot) {
+        return h(Badge, { props: { dot: '' } }, [pureTitle])
+      } else {
+        return pureTitle
+      }
+    },
+    renderMenuItem: function (h, menu, pIndex, index) {
+      const target = menu.meta.target || null
+      const tag = target && 'a' || 'router-link'
+      const showDot = menu.meta.dot || false
+      const props = { to: { name: menu.name } }
+      const attrs = { href: menu.path, target: menu.meta.target }
+
+      return h(Item, { key: menu.path ? menu.path : 'item_' + pIndex + '_' + index }, [
+        h(tag, { props: props, attrs: attrs, target: target }, [
+          this.renderIcon(h, menu.meta.icon),
+          this.renderTitle(h, menu.meta.title, showDot)
+        ])
+      ])
+    },
+    renderSubMenu: function (h, menu, pIndex, index) {
+      const this2_ = this
+      const subItem = [h('span', { slot: 'title' }, [this.renderIcon(h, menu.meta.icon), h('span', [menu.meta.title])])]
+      const itemArr = []
+      const pIndex_ = pIndex + '_' + index
+      console.log('menu', menu)
+      if (!menu.hideChildrenInMenu) {
+        menu.children.forEach(function (item, i) {
+          itemArr.push(this2_.renderItem(h, item, pIndex_, i))
+        })
+      }
+      return h(SubMenu, { key: menu.path ? menu.path : 'submenu_' + pIndex + '_' + index }, subItem.concat(itemArr))
+    },
+    renderItem: function (h, menu, pIndex, index) {
+      if (!menu.hidden) {
+        return menu.children && !menu.hideChildrenInMenu
+          ? this.renderSubMenu(h, menu, pIndex, index)
+          : this.renderMenuItem(h, menu, pIndex, index)
+      }
+    },
+    renderMenu: function (h, menuTree) {
+      const this2_ = this
+      const menuArr = []
+      menuTree.forEach(function (menu, i) {
+        if (!menu.hidden) {
+          menuArr.push(this2_.renderItem(h, menu, '0', i))
+        }
+      })
+      return menuArr
+    },
+    onOpenChange (openKeys) {
       const latestOpenKey = openKeys.find(key => !this.openKeys.includes(key))
       if (!this.rootSubmenuKeys.includes(latestOpenKey)) {
         this.openKeys = openKeys
@@ -75,13 +129,14 @@ export default {
     },
     updateMenu () {
       const routes = this.$route.matched.concat()
-      const { hidden } = this.$route.meta
-      if (routes.length >= 3 && hidden) {
+
+      if (routes.length >= 4 && this.$route.meta.hidden) {
         routes.pop()
-        this.selectedKeys = [routes[routes.length - 1].path]
+        this.selectedKeys = [routes[2].path]
       } else {
         this.selectedKeys = [routes.pop().path]
       }
+
       const openKeys = []
       if (this.mode === 'inline') {
         routes.forEach(item => {
@@ -90,92 +145,27 @@ export default {
       }
 
       this.collapsed ? (this.cachedOpenKeys = openKeys) : (this.openKeys = openKeys)
-    },
-
-    // render
-    renderItem (menu) {
-      if (!menu.hidden) {
-        return menu.children && !menu.hideChildrenInMenu ? this.renderSubMenu(menu) : this.renderMenuItem(menu)
-      }
-      return null
-    },
-    renderMenuItem (menu) {
-      const target = menu.meta.target || null
-      const tag = target && 'a' || 'router-link'
-      const props = { to: { name: menu.name } }
-      const attrs = { href: menu.path, target: menu.meta.target }
-
-      if (menu.children && menu.hideChildrenInMenu) {
-        // 把有子菜单的 并且 父菜单是要隐藏子菜单的
-        // 都给子菜单增加一个 hidden 属性
-        // 用来给刷新页面时， selectedKeys 做控制用
-        menu.children.forEach(item => {
-          item.meta = Object.assign(item.meta, { hidden: true })
-        })
-      }
-
-      return (
-        <Item {...{ key: menu.path }}>
-          <tag {...{ props, attrs }}>
-            {this.renderIcon(menu.meta.icon)}
-            <span>{i18n.t(menu.meta.title)}</span>
-          </tag>
-        </Item>
-      )
-    },
-    renderSubMenu (menu) {
-      const itemArr = []
-      if (!menu.hideChildrenInMenu) {
-        menu.children.forEach(item => itemArr.push(this.renderItem(item)))
-      }
-      return (
-        <SubMenu {...{ key: menu.path }}>
-          <span slot="title">
-            {this.renderIcon(menu.meta.icon)}
-            <span>{i18n.t(menu.meta.title)}</span>
-          </span>
-          {itemArr}
-        </SubMenu>
-      )
-    },
-    renderIcon (icon) {
-      if (icon === 'none' || icon === undefined) {
-        return null
-      }
-      const props = {}
-      typeof (icon) === 'object' ? props.component = icon : props.type = icon
-      return (
-        <Icon {... { props } }/>
-      )
     }
   },
-
-  render () {
-    const { mode, theme, menu } = this
-    const props = {
-      mode: mode,
-      theme: theme,
-      openKeys: this.openKeys
-    }
-    const on = {
-      select: obj => {
-        this.selectedKeys = obj.selectedKeys
-        this.$emit('select', obj)
+  render (h) {
+    return h(
+      Menu,
+      {
+        props: {
+          theme: this.$props.theme,
+          mode: this.$props.mode,
+          openKeys: this.openKeys,
+          selectedKeys: this.selectedKeys
+        },
+        on: {
+          openChange: this.onOpenChange,
+          select: obj => {
+            this.selectedKeys = obj.selectedKeys
+            this.$emit('select', obj)
+          }
+        }
       },
-      openChange: this.onOpenChange
-    }
-
-    const menuTree = menu.map(item => {
-      if (item.hidden) {
-        return null
-      }
-      return this.renderItem(item)
-    })
-    // {...{ props, on: on }}
-    return (
-      <Menu vModel={this.selectedKeys} {...{ props, on: on }}>
-        {menuTree}
-      </Menu>
+      this.renderMenu(h, this.menu)
     )
   }
 }

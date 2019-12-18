@@ -12,6 +12,7 @@ export default {
   navTheme: 'light', // theme for nav menu
   navMode: 'top', // nav menu position: side or top
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true',
+  preview: process.env.VUE_APP_PREVIEW === 'true',
   // vue-ls options
   storageOptions: {
     namespace: 'pro__', // key prefix

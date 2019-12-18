@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "serve:preview": "vue-cli-service serve --mode preview",
     "build": "vue-cli-service build",
     "build:preview": "vue-cli-service build --mode preview",
     "lint": "vue-cli-service lint",

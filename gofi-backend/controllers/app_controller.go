@@ -13,7 +13,7 @@ import (
 //UpdateSetting 更新设置
 func UpdateSetting(ctx iris.Context) {
 	// 初始化完成且处于Preview环境,不允许更改设置项
-	if env.Current == env.Preview && context.Get().GetSettings().Initialized {
+	if env.IsPreview() && context.Get().GetSettings().Initialized {
 		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)))
 		return
 	}

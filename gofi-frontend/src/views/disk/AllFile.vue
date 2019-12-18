@@ -1,11 +1,20 @@
 <template>
   <page-view :title="title">
+    <a-alert
+      v-if="preview"
+      type="warning"
+      :showIcon="true"
+      :closable="true"
+      :message="$t('preview.tip.title')"
+      :description="$t('preview.tip.message')"
+      style="margin-bottom: 20px"
+    />
     <div class="table-operator">
-      <a-button type="default" icon="home" @click="backRootDirectory()" :disabled="!hasParentDirectory">{{
-        $t('allFile.rootDir') }}
+      <a-button type="default" icon="home" @click="backRootDirectory()" :disabled="!hasParentDirectory">
+        {{ $t('allFile.rootDir') }}
       </a-button>
-      <a-button type="default" icon="arrow-left" @click="backParentDirectory()" :disabled="!hasParentDirectory">{{
-        $t('allFile.parentDir') }}
+      <a-button type="default" icon="arrow-left" @click="backParentDirectory()" :disabled="!hasParentDirectory">
+        {{ $t('allFile.parentDir') }}
       </a-button>
 
       <!--上传文件-->
@@ -18,8 +27,8 @@
         :openFileDialogOnClick="!uploading"
         style="float: right"
       >
-        <a-button :disabled="uploading" :loading="uploading" type="primary" icon="upload" style="margin-right: 0"> {{
-          $t('allFile.upload') }}
+        <a-button :disabled="uploading" :loading="uploading" type="primary" icon="upload" style="margin-right: 0">
+          {{ $t('allFile.upload') }}
         </a-button>
       </a-upload>
     </div>
@@ -97,6 +106,7 @@
 import api, { getFileList } from '@/api/disk'
 import { PageView } from '@/layouts'
 import GofiIcon from '../../components/GofiIcon/GofiIcon'
+import config from '@/config/defaultSettings'
 
 export default {
   name: 'AllFile',
@@ -106,6 +116,7 @@ export default {
   },
   data () {
     return {
+      preview: config.preview,
       data: [],
       pagination: {
         defaultPageSize: 50,

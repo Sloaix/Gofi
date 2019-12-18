@@ -2,4 +2,4 @@
 
 package env
 
-const Current = Preview
+const current = Preview

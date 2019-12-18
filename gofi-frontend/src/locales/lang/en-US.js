@@ -16,6 +16,16 @@ export default {
       defaultLanguage: 'Default language'
     }
   },
+  preview: {
+    nav: {
+      userGuide: 'User Guide',
+      github: 'Github'
+    },
+    tip: {
+      title: 'Preview Mode',
+      message: 'To provide the same experience, you cannot change the theme style or the file repository path in this mode, but you are free to upload and download file.'
+    }
+  },
   menu: {
     index: 'Home',
     allFile: 'File',
@@ -24,11 +34,11 @@ export default {
   footer: {
     aboutMe: 'About me',
     copyRight: 'Copyright © 2019 Sloaix',
-    version: 'Version'
+    version: 'Build Version'
   },
   allFile: {
-    rootDir: 'Root Directory',
-    parentDir: 'Parent Directory',
+    rootDir: 'Root',
+    parentDir: 'Back',
     upload: 'Upload',
     name: 'Name',
     size: 'Size',
