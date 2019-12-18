@@ -24,14 +24,6 @@ export function updateSetting (settings) {
 }
 
 /**
- * 更新gofi的默认语言
- * @returns {AxiosPromise}
- */
-export function updateLanguage (language) {
-  return updateSetting({ defaultLanguage: language })
-}
-
-/**
  * 更新gofi的文件仓库路径
  * @returns {AxiosPromise}
  */

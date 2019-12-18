@@ -48,9 +48,6 @@ func UpdateSetting(ctx iris.Context) {
 		// 写入到配置文件
 		_, _ = db.After(context.Get().AfterUpdateSettings).Update(&appSettings)
 
-		// 变更语言
-		i18n.SwitchLanguage(appSettings.DefaultLanguage)
-
 		logrus.Infof("use default path %s, setup success", defaultStorageDir)
 
 		GetSetting(ctx)
@@ -72,9 +69,6 @@ func UpdateSetting(ctx iris.Context) {
 
 		// 写入到配置文件
 		_, _ = db.After(context.Get().AfterUpdateSettings).Update(&appSettings)
-
-		// 变更语言
-		i18n.SwitchLanguage(appSettings.DefaultLanguage)
 
 		// 路径合法，初始化成功，持久化该路径。
 		logrus.Infof("setup success,storage path is %s", path)

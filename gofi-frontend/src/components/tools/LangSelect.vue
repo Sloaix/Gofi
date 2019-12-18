@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import i18n from '../../locales'
 import { message } from 'ant-design-vue'
 export default {
@@ -31,8 +31,8 @@ export default {
     ...mapGetters(['language'])
   },
   methods: {
-    ...mapActions({
-      switchLanguage: 'SwitchLanguage'
+    ...mapMutations({
+      switchLanguage: 'SWITCH_LANGUAGE'
     }),
     onItemSelect (item) {
       const hideMessage = message.loading(i18n.t('notice.switchLanguage', item.key), 0)
@@ -41,17 +41,8 @@ export default {
         setTimeout(() => hideMessage(), 300)
         return
       }
-      const that = this
       this.switchLanguage(item.key)
-        .then(() => {
-          setTimeout(() => hideMessage(), 300)
-        }).catch((e) => {
-          hideMessage()
-          that.$notification.error({
-            message: i18n.t('fallback.error'),
-            description: e
-          })
-        })
+      setTimeout(() => hideMessage(), 300)
     }
   }
 }

@@ -1,6 +1,9 @@
 import axios from 'axios'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
+import Vue from 'vue'
+import { DEFAULT_LANGUAGE } from '@/store/mutation-types'
+import config from '@/config/defaultSettings'
 
 // 创建 axios 实例
 const service = axios.create({
@@ -28,14 +31,14 @@ const err = (error) => {
   return Promise.reject(error)
 }
 
-// // request interceptor
-// service.interceptors.request.use(config => {
-//   const token = Vue.ls.get(ACCESS_TOKEN)
-//   if (token) {
-//     config.headers['Access-Token'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
-//   }
-//   return config
-// }, err)
+// request interceptor
+service.interceptors.request.use(request => {
+  const language = Vue.ls.get(DEFAULT_LANGUAGE, config.language)
+  if (language) {
+    request.headers['Accept-Language'] = language // 让每个请求携带自定义 token 请根据实际情况自行修改
+  }
+  return request
+}, err)
 
 // response interceptor
 service.interceptors.response.use((response) => {

@@ -13,6 +13,7 @@ import (
 	"gofi/context"
 	"gofi/controllers"
 	"gofi/env"
+	"gofi/middleware"
 	"gofi/util"
 )
 
@@ -36,6 +37,7 @@ func newApp() (app *iris.Application) {
 
 func setup(app *iris.Application) {
 	app.Logger().SetLevel("debug")
+	app.Use(middleware.LanguageHandler)
 	app.Use(iris.Gzip)
 	app.Use(recover.New())
 	app.Use(logger.New())

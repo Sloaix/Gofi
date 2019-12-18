@@ -8,6 +8,7 @@ import (
 )
 
 var printer *message.Printer
+var currentTag = language.English
 
 type MessageKey int
 
@@ -45,6 +46,15 @@ func init() {
 		_ = message.SetString(language.English, key.String(), EnUS[key])
 	}
 	printer = message.NewPrinter(language.Chinese)
+}
+
+func SwitchLanguageByTag(tag language.Tag) {
+	if currentTag.String() == tag.String() {
+		return
+	}
+
+	printer = message.NewPrinter(tag)
+	currentTag = tag
 }
 
 func SwitchLanguage(lang string) {

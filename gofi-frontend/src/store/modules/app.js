@@ -7,7 +7,6 @@ import {
 import {
   getSetting,
   setup,
-  updateLanguage,
   updateSetting,
   updateStoragePath
 } from '@/api/app'
@@ -83,17 +82,6 @@ const app = {
         updateStoragePath(storagePath).then(settings => {
           commit('SET_SETTINGS', settings)
           resolve(settings)
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    SwitchLanguage ({ commit }, language) {
-      return new Promise((resolve, reject) => {
-        console.log(language)
-        updateLanguage(language).then(response => {
-          commit('SWITCH_LANGUAGE', language)
-          resolve(response)
         }).catch(error => {
           reject(error)
         })
