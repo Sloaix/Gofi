@@ -53,7 +53,10 @@
               <gofi-icon :is-folder="record.isDirectory" :type="record.extension" style="margin-right: 8px"/>
               <router-link
                 v-if="record.isDirectory"
-                :to="{path:'',query: { path:record.path}}">{{ record.name }}</router-link>
+                :to="{path:record.name}"
+                append>
+                {{ record.name }}
+              </router-link>
               <template v-else>{{ record.name }}</template>
             </span>
           </template>
@@ -129,11 +132,11 @@ export default {
     }
   },
   mounted () {
-    this.fetch(this.$route.query.path)
+    this.fetch(this.$route.params.path)
   },
   watch: {
     '$route' (to, from) {
-      const path = to.query.path
+      const path = to.params.path
       this.fetch(path)
     }
   },
@@ -142,11 +145,11 @@ export default {
       return `Gofi://${this.currentDirectory}`
     },
     currentDirectory () {
-      if (!this.$route || !this.$route.query) {
+      if (!this.$route || !this.$route.params) {
         return ''
       }
 
-      const path = this.$route.query.path
+      const path = this.$route.params.path
 
       // 如果目录不存在
       if (!path) {
@@ -162,7 +165,7 @@ export default {
     },
     // 是否存在上级目录
     hasParentDirectory () {
-      return !!this.$route.query.path
+      return !!this.$route.params.path
     }
   },
   methods: {
@@ -172,11 +175,11 @@ export default {
     },
     backParentDirectory () {
       // 导航到上级目录
-      this.$router.push({ path: '', query: { path: this.parentDirectoryPath } })
+      this.$router.push({ path: '../', append: true })
     },
     backRootDirectory () {
       // 导航到根目录
-      this.$router.push({ path: '' })
+      this.$router.push({ name: this.$route.name })
     },
     generateDownloadUrl (filePath) {
       return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(filePath)}`
@@ -236,13 +239,23 @@ export default {
         directoryPath = ''
       }
       this.loading = true
-      return getFileList(directoryPath).then(data => {
-        const pagination = { ...this.pagination }
-        pagination.total = data && data.length ? data.length : 0
-        this.loading = false
-        this.data = data
-        this.pagination = pagination
-      })
+      return getFileList(directoryPath)
+        .then(data => {
+          const pagination = { ...this.pagination }
+          pagination.total = data && data.length ? data.length : 0
+          this.loading = false
+          this.data = data
+          this.pagination = pagination
+        })
+        .catch(err => {
+          this.loading = false
+          this.$notification.error({
+            duration: null,
+            message: err
+          })
+
+          this.backRootDirectory()
+        })
     }
   }
 }

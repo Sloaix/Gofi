@@ -12,10 +12,10 @@ const basicRoutes = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.index' },
-    redirect: '/all-file',
+    redirect: '/file',
     children: [
       {
-        path: '/all-file',
+        path: '/file/:path*',
         name: 'all-file',
         component: AllFile,
         meta: {
