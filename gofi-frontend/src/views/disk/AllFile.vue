@@ -213,7 +213,7 @@ export default {
               description: that.$t('upload.uploadSuccess', [file.name])
             })
             // 刷新列表
-            this.fetch(this.$route.query.path)
+            this.fetch(this.$route.params.path)
           } else {
             this.$notification.error({
               key: file.name,
@@ -248,13 +248,11 @@ export default {
           this.pagination = pagination
         })
         .catch(err => {
-          this.loading = false
           this.$notification.error({
             duration: null,
             message: err
           })
-
-          this.backRootDirectory()
+          this.loading = false
         })
     }
   }

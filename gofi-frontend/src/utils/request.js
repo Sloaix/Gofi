@@ -4,6 +4,7 @@ import { VueAxios } from './axios'
 import Vue from 'vue'
 import { DEFAULT_LANGUAGE } from '@/store/mutation-types'
 import config from '@/config/defaultSettings'
+import i18n from '@/locales'
 
 // 创建 axios 实例
 const service = axios.create({
@@ -12,6 +13,7 @@ const service = axios.create({
 })
 
 const err = (error) => {
+  console.log(error)
   if (error.response) {
     const data = error.response.data
     if (error.response.status === 403) {
@@ -27,6 +29,8 @@ const err = (error) => {
         description: 'Authorization verification failed'
       })
     }
+  } else {
+    error = i18n.t('network.error')
   }
   return Promise.reject(error)
 }

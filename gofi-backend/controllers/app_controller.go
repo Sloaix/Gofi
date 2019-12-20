@@ -14,7 +14,7 @@ import (
 func UpdateSetting(ctx iris.Context) {
 	// 初始化完成且处于Preview环境,不允许更改设置项
 	if env.IsPreview() && context.Get().GetSettings().Initialized {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)))
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
 		return
 	}
 
@@ -25,7 +25,7 @@ func UpdateSetting(ctx iris.Context) {
 	// 避免Body为空的时候ReadJson报错,导致后续不能默认初始化，这里用ContentLength做下判断
 	if err := ctx.ReadJSON(&appSettings); ctx.GetContentLength() != 0 && err != nil {
 		logrus.Error(err)
-		ctx.JSON(ResponseFailWithMessage(err.Error()))
+		_, _ = ctx.JSON(NewResource().Fail().Build())
 	}
 
 	path := filepath.Clean(appSettings.CustomStoragePath)
@@ -54,13 +54,13 @@ func UpdateSetting(ctx iris.Context) {
 	} else {
 		// 判断给定的目录是否存在
 		if !util.FileExist(path) {
-			ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.DirIsNotExist, path)))
+			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.DirIsNotExist, path)))
 			return
 		}
 
 		// 判断给定的路径是否是目录
 		if !util.IsDirectory(path) {
-			ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotDir, path)))
+			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotDir, path)))
 			return
 		}
 
@@ -81,7 +81,7 @@ func UpdateSetting(ctx iris.Context) {
 func Setup(ctx iris.Context) {
 	// 已经初始化过
 	if context.Get().GetSettings().Initialized {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.GofiIsAlreadyInitialized)))
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.GofiIsAlreadyInitialized)).Build())
 		return
 	}
 
@@ -91,5 +91,5 @@ func Setup(ctx iris.Context) {
 //GetSetting 获取设置项
 func GetSetting(ctx iris.Context) {
 	settings := context.Get().GetSettings()
-	ctx.JSON(ResponseSuccess(settings))
+	_, _ = ctx.JSON(NewResource().Payload(settings).Build())
 }

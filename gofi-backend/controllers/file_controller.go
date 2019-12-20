@@ -4,11 +4,11 @@ import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
 	"gofi/context"
-	"gofi/env"
 	"gofi/i18n"
 	"gofi/models"
 	"gofi/util"
 	"io/ioutil"
+	"mime"
 	"path/filepath"
 	"strings"
 )
@@ -26,17 +26,17 @@ func ListFiles(ctx iris.Context) {
 
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storagePath) {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)))
+		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
 		return
 	}
 
 	if !util.FileExist(path) {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.DirIsNotExist, path)))
+		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 		return
 	}
 
 	if !util.IsDirectory(path) {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotDir, path)))
+		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.IsNotDir, path)).Build())
 		return
 	}
 
@@ -45,7 +45,7 @@ func ListFiles(ctx iris.Context) {
 
 	// 读取失败
 	if err != nil {
-		ctx.JSON(ResponseFailWithMessage(err.Error()))
+		_, _ = ctx.JSON(NewResource().Fail().Message(err.Error()).Build())
 		return
 	}
 
@@ -80,19 +80,13 @@ func ListFiles(ctx iris.Context) {
 		filesOfDir = append(filesOfDir, file)
 	}
 
-	ctx.JSON(ResponseSuccess(filesOfDir))
+	_, _ = ctx.JSON(NewResource().Payload(filesOfDir).Build())
 
 	return
 }
 
 //Upload 上传文件
 func Upload(ctx iris.Context) {
-	// 预览模式禁止上传文件
-	if env.IsPreview() {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.CurrentIsPreviewMode)))
-		return
-	}
-
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
@@ -108,7 +102,7 @@ func Upload(ctx iris.Context) {
 
 	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.UploadFailed)))
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 		return
 	}
 
@@ -118,13 +112,13 @@ func Upload(ctx iris.Context) {
 				for _, file := range files {
 
 					if util.FileExist(filepath.Join(destDirectory, file.Filename)) {
-						ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)))
+						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)).Build())
 						return
 					}
 
 					_, err := util.UploadFileTo(file, destDirectory)
 					if err != nil {
-						ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.UploadFailed)))
+						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 						return
 					}
 				}
@@ -132,13 +126,13 @@ func Upload(ctx iris.Context) {
 		}
 	}
 
-	ctx.JSON(ResponseSuccess(nil))
+	_, _ = ctx.JSON(NewResource().Build())
 	return
 }
 
 //Download 下载文件
 func Download(ctx iris.Context) {
-	ctx.ReadJSON(map[string]interface{}{"Key": "value"})
+	_ = ctx.ReadJSON(map[string]interface{}{"Key": "value"})
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
@@ -149,16 +143,20 @@ func Download(ctx iris.Context) {
 	path := filepath.Join(storageDir, relativePath)
 
 	if !util.FileExist(path) {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.FileIsNotExist, path)))
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
 		return
 	}
 
 	if util.IsDirectory(path) {
-		ctx.JSON(ResponseFailWithMessage(i18n.Translate(i18n.IsNotFile, path)))
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotFile)).Build())
 		return
 	}
 
 	filename := filepath.Base(path)
-
-	ctx.SendFile(path, filename)
+	contentType := mime.TypeByExtension(filepath.Ext(path))
+	if strings.HasPrefix(contentType, "text/") {
+		contentType = "text/plain"
+	}
+	ctx.ContentType(contentType)
+	_ = ctx.SendFile(path, filename)
 }

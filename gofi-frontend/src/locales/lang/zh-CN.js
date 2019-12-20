@@ -46,6 +46,9 @@ export default {
     lastModified: '最后修改时间',
     download: '下载'
   },
+  network: {
+    error: '网络连接出现错误，请检查您的网络，稍后再试。'
+  },
   upload: {
     failed: '上传失败',
     success: '上传成功',

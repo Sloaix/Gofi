@@ -46,6 +46,9 @@ export default {
     lastModified: 'Last Modified',
     download: 'Download'
   },
+  network: {
+    error: 'Network connection occur error, please check your network and try again later.'
+  },
   upload: {
     failed: 'upload failed',
     success: 'upload success',

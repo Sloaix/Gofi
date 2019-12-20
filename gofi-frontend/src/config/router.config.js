@@ -56,6 +56,7 @@ const basicRoutes = [
 
   {
     path: '/404',
+    name: 'notfound',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   },
   {
