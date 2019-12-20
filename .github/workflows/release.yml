@@ -54,12 +54,12 @@ jobs:
       - name: List output
         run: du -ah ./output      
         
-      # 压缩产物
-      - name: Compress
-        uses: docker://gact/upx:latest
-        with:
-          dir: './output'
-          upx_args: '-9'
+      # # 压缩产物
+      # - name: Compress
+      #   uses: docker://gact/upx:latest
+      #   with:
+      #     dir: './output'
+      #     upx_args: '-9'
 
       # 创建新的发布
       - name: Create Release
