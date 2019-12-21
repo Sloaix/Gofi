@@ -1,9 +1,14 @@
 <template>
   <div class="page-header-index-wide">
     <div class="table-operator">
-      <a-button shape="circle" type="default" icon="home" @click="navToFileList">
+      <a-button type="default" icon="home" @click="navToFileList">
+        {{ $t('allFile.rootDir') }}
       </a-button>
-      <a-button shape="circle" type="default" icon="arrow-left" @click="navBack">
+      <a-button type="default" icon="arrow-left" @click="navBack">
+        {{ $t('allFile.parentDir') }}
+      </a-button>
+      <a-button type="primary" icon="download" :href="downloadUrl" style="float: right">
+        {{ $t('allFile.download') }}
       </a-button>
     </div>
     <a-card size="small" :title="`Gofi://${data.path}`">
@@ -17,14 +22,14 @@
       <img
         v-if="isImage"
         alt="example"
-        :src="downloadUrl"
+        :src="previewUrl"
         style="max-width: 100%"
       />
       <video
         width="100%"
         style="border: none;outline: none"
         v-if="isVideo"
-        :src="downloadUrl"
+        :src="previewUrl"
         controls="controls">
         您的浏览器不支持 video
         <标></标>
@@ -72,7 +77,11 @@ export default {
       return !!this.data.content
     },
     downloadUrl () {
-      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(this.$route.query.path)}&raw=true`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(
+        this.$route.query.path)}`
+    },
+    previewUrl () {
+      return `${this.downloadUrl}&raw=true`
     }
   },
   data () {
