@@ -3,10 +3,26 @@ import { axios } from '@/utils/request'
 const api = {
   ListFiles: 'files',
   Download: 'download',
-  Upload: 'upload'
+  Upload: 'upload',
+  FileDetail: 'file'
 }
 
 export default api
+
+/**
+ *
+ * @param filePath 文件路径
+ * @returns {AxiosPromise}
+ */
+export function getFileDetail (filePath) {
+  return axios.get(api.FileDetail, {
+    params: {
+      path: filePath
+    }
+  })
+}
+
+/**
 
 /**
  *

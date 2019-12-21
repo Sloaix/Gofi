@@ -1,6 +1,6 @@
 <template>
   <div class="logo">
-    <router-link :to="{name:'all-file'}">
+    <router-link :to="{name:'file-list'}">
       <LogoSvg alt="logo" :style="colorStyle" />
       <h1 v-if="showTitle"><span :style="colorStyle">{{ title }}</span></h1>
     </router-link>

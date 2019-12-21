@@ -53,11 +53,16 @@
               <gofi-icon :is-folder="record.isDirectory" :type="record.extension" style="margin-right: 8px"/>
               <router-link
                 v-if="record.isDirectory"
-                :to="{path:record.name}"
-                append>
+                :to="{path:'',query: { path:record.path}}"
+              >
                 {{ record.name }}
               </router-link>
-              <template v-else>{{ record.name }}</template>
+              <router-link
+                v-else
+                :to="{name:'file-detail',query: { path: record.path }}"
+              >
+                {{ record.name }}
+              </router-link>
             </span>
           </template>
         </a-table-column>
@@ -112,7 +117,7 @@ import GofiIcon from '../../components/GofiIcon/GofiIcon'
 import config from '@/config/defaultSettings'
 
 export default {
-  name: 'AllFile',
+  name: 'FileList',
   components: {
     GofiIcon,
     PageView
@@ -132,11 +137,11 @@ export default {
     }
   },
   mounted () {
-    this.fetch(this.$route.params.path)
+    this.fetch(this.$route.query.path)
   },
   watch: {
     '$route' (to, from) {
-      const path = to.params.path
+      const path = to.query.path
       this.fetch(path)
     }
   },
@@ -145,11 +150,11 @@ export default {
       return `Gofi://${this.currentDirectory}`
     },
     currentDirectory () {
-      if (!this.$route || !this.$route.params) {
+      if (!this.$route || !this.$route.query) {
         return ''
       }
 
-      const path = this.$route.params.path
+      const path = this.$route.query.path
 
       // 如果目录不存在
       if (!path) {
@@ -165,7 +170,7 @@ export default {
     },
     // 是否存在上级目录
     hasParentDirectory () {
-      return !!this.$route.params.path
+      return !!this.$route.query.path
     }
   },
   methods: {
@@ -175,11 +180,11 @@ export default {
     },
     backParentDirectory () {
       // 导航到上级目录
-      this.$router.push({ path: '../', append: true })
+      this.$router.push({ path: '', query: { path: this.parentDirectoryPath } })
     },
     backRootDirectory () {
       // 导航到根目录
-      this.$router.push({ name: this.$route.name })
+      this.$router.push({ path: '' })
     },
     generateDownloadUrl (filePath) {
       return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(filePath)}`
@@ -213,7 +218,7 @@ export default {
               description: that.$t('upload.uploadSuccess', [file.name])
             })
             // 刷新列表
-            this.fetch(this.$route.params.path)
+            this.fetch(this.$route.query.path)
           } else {
             this.$notification.error({
               key: file.name,
@@ -239,21 +244,19 @@ export default {
         directoryPath = ''
       }
       this.loading = true
-      return getFileList(directoryPath)
-        .then(data => {
-          const pagination = { ...this.pagination }
-          pagination.total = data && data.length ? data.length : 0
-          this.loading = false
-          this.data = data
-          this.pagination = pagination
+      return getFileList(directoryPath).then(data => {
+        const pagination = { ...this.pagination }
+        pagination.total = data && data.length ? data.length : 0
+        this.loading = false
+        this.data = data
+        this.pagination = pagination
+      }).catch(err => {
+        this.$notification.error({
+          duration: null,
+          message: err
         })
-        .catch(err => {
-          this.$notification.error({
-            duration: null,
-            message: err
-          })
-          this.loading = false
-        })
+        this.loading = false
+      })
     }
   }
 }

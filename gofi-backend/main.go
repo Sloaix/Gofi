@@ -13,11 +13,13 @@ import (
 	"gofi/context"
 	"gofi/controllers"
 	"gofi/env"
+	"gofi/extension"
 	"gofi/middleware"
 	"gofi/util"
 )
 
 func init() {
+	extension.InitAdditionalExtensionType()
 	context.InitContext()
 }
 
@@ -87,6 +89,7 @@ func api(app *iris.Application) {
 		api.Post("/setting", controllers.UpdateSetting)
 		api.Post("/setup", controllers.Setup)
 		api.Get("/files", controllers.ListFiles)
+		api.Get("/file", controllers.FileDetail)
 		api.Get("/download", controllers.Download)
 		api.Post("/upload", controllers.Upload)
 	}

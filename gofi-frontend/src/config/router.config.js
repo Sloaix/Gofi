@@ -1,6 +1,7 @@
 import { BasicLayout } from '@/layouts'
-import AllFile from '@/views/disk/AllFile'
+import FileList from '@/views/disk/FileList'
 import config from '@/config/defaultSettings'
+import FileDetail from '@/views/disk/preview/FilePreview'
 
 /**
  * 基础路由
@@ -15,14 +16,20 @@ const basicRoutes = [
     redirect: '/file',
     children: [
       {
-        path: '/file/:path*',
-        name: 'all-file',
-        component: AllFile,
+        path: '/file',
+        name: 'file-list',
+        component: FileList,
         meta: {
           title: 'menu.allFile',
           icon: 'folder',
           permission: ['dashboard']
         }
+      },
+      {
+        path: '/blob',
+        name: 'file-detail',
+        component: FileDetail,
+        hidden: true
       },
       {
         path: '/setting',

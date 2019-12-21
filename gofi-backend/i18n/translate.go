@@ -15,6 +15,7 @@ type MessageKey int
 const (
 	IsNotDir MessageKey = iota
 	IsNotFile
+	IsNotTextFile
 	DirIsNotExist
 	FileIsNotExist
 	GofiIsAlreadyInitialized
@@ -27,6 +28,7 @@ const (
 var TranslateKeys = []MessageKey{
 	IsNotDir,
 	IsNotFile,
+	IsNotTextFile,
 	DirIsNotExist,
 	FileIsNotExist,
 	GofiIsAlreadyInitialized,

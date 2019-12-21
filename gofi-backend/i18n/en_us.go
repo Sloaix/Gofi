@@ -3,6 +3,7 @@ package i18n
 var EnUS = map[MessageKey]string{
 	IsNotDir:                         "%s is not a folder",
 	IsNotFile:                        "%s is not a file",
+	IsNotTextFile:                    "%s is not a  text file",
 	DirIsNotExist:                    "the folder %s is not exist",
 	FileIsNotExist:                   "the file %s is not exist",
 	GofiIsAlreadyInitialized:         "Gofi is already initialized",

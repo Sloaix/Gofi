@@ -1,6 +1,7 @@
 package util
 
 import (
+	"golang.org/x/tools/godoc/util"
 	"io"
 	"mime/multipart"
 	"os"
@@ -31,7 +32,6 @@ func IsFile(filename string) bool {
 	return !info.IsDir()
 }
 
-
 // 创建文件夹如果不存在
 func MkdirIfNotExist(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -61,4 +61,20 @@ func UploadFileTo(fh *multipart.FileHeader, destDirectory string) (int64, error)
 	defer out.Close()
 
 	return io.Copy(out, src)
+}
+
+func IsTextFile(filepath string) bool {
+	f, err := os.Open(filepath)
+	if err != nil {
+		return false
+	}
+	defer f.Close()
+
+	var buf [1024]byte
+	n, err := f.Read(buf[0:])
+	if err != nil {
+		return false
+	}
+
+	return util.IsText(buf[0:n])
 }
