@@ -29,7 +29,8 @@ export default {
   menu: {
     index: '首页',
     allFile: '所有文件',
-    setting: '设置'
+    setting: '设置',
+    language: '语言(Lang)'
   },
   footer: {
     aboutMe: '关于我',

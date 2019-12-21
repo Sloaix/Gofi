@@ -29,7 +29,8 @@ export default {
   menu: {
     index: 'Home',
     allFile: 'File',
-    setting: 'Setting'
+    setting: 'Setting',
+    language: 'Language'
   },
   footer: {
     aboutMe: 'About me',

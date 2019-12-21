@@ -1,7 +1,8 @@
 <template>
   <a-dropdown>
-    <span class="action global-lang">
-      <a-icon type="global" style="font-size: 16px"/>
+    <span class="action global-lang" style="font-size: 16px">
+      {{ $t('menu.language') }}
+      <a-icon type="global" />
     </span>
     <a-menu slot="overlay" style="width: 150px;" @click="onItemSelect">
       <a-menu-item key="zh-CN">
@@ -20,7 +21,6 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
-import i18n from '../../locales'
 import { message } from 'ant-design-vue'
 export default {
   name: 'LangSelect',
@@ -35,7 +35,7 @@ export default {
       switchLanguage: 'SWITCH_LANGUAGE'
     }),
     onItemSelect (item) {
-      const hideMessage = message.loading(i18n.t('notice.switchLanguage', item.key), 0)
+      const hideMessage = message.loading(this.$t('notice.switchLanguage', item.key), 0)
 
       if (item.key === this.language) {
         setTimeout(() => hideMessage(), 300)
