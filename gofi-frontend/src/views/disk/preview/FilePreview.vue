@@ -72,8 +72,7 @@ export default {
       return !!this.data.content
     },
     downloadUrl () {
-      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(
-        this.$route.query.path)}`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(this.$route.query.path)}&raw=true`
     }
   },
   data () {
