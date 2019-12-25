@@ -3,6 +3,7 @@ package context
 import (
 	"flag"
 	"fmt"
+	"github.com/asaskevich/govalidator"
 	"github.com/go-xorm/xorm"
 	//import sqlite3 driver
 	_ "github.com/mattn/go-sqlite3"
@@ -70,18 +71,13 @@ func InitContext() {
 	instance.LogDir = filepath.Join(instance.WorkDir, "log")
 
 	// if ip is empty, obtain lan ip to instead.
-	if instance.ServerIP == "" || !CheckIP(instance.ServerIP) {
+	if instance.ServerIP == "" || !govalidator.IsHost(instance.ServerIP) {
 		instance.ServerIP = instance.GetLanIP()
 	}
 	instance.ServerAddress = instance.ServerIP + ":" + instance.Port
 	instance.Orm = instance.initDatabase()
 	instance.settings = instance.queryAppSettings()
 	instance.CustomStorageDir = instance.settings.CustomStoragePath
-}
-
-//CheckIP 校验IP是否有效
-func CheckIP(ip string) bool {
-	return net.ParseIP(ip) != nil
 }
 
 //Get 返回当前Context实例
@@ -186,7 +182,6 @@ func (context *Context) GetLanIP() string {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
 
 	logrus.Infof("print all ip address: %v\n\t", addresses)
 
