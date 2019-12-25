@@ -37,36 +37,6 @@ func TestNoPort(t *testing.T) {
 	}
 }
 
-func TestCheckIPFunc(t *testing.T) {
-	var invalidIPArray = []string{
-		"123",
-		"haha",
-		"123.321",
-		".123.321",
-		".123.321.",
-		".123",
-		"3213.",
-	}
-
-	for _, v := range invalidIPArray {
-		if context.CheckIP(v) {
-			t.Errorf(" %s , ecpect is invalid. actul is valid", v)
-		}
-	}
-
-	invalidIPArray = []string{
-		"192.168.1.1",
-		"10.10.10.1",
-		"0.0.0.0",
-	}
-
-	for _, v := range invalidIPArray {
-		if !context.CheckIP(v) {
-			t.Errorf(" %s , ecpect is valid. actul is invalid", v)
-		}
-	}
-}
-
 func TestHasIP(t *testing.T) {
 	os.Args = savedArgs
 	os.Args = append(os.Args, "-ip")
