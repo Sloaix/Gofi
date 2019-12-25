@@ -26,15 +26,14 @@
         style="max-width: 100%"
       />
       <video
+        v-if="isVideo"
         width="100%"
         style="border: none;outline: none"
-        v-if="isVideo"
         :src="previewUrl"
         controls="controls">
-        您的浏览器不支持 video
-        <标></标>
-        签。
+        您的浏览器不支持 video 标签。
       </video>
+      <audio v-if="isAudio" :src="previewUrl" controls style="outline: none"/>
       <pre v-if="isText" style="max-width: 100%;white-space:pre-line">
         {{ data.content }}
       </pre>
@@ -60,7 +59,7 @@ export default {
   computed: {
     contentStyle () {
       return {
-        'text-align': this.isImage ? 'center' : 'none',
+        'text-align': this.isImage || this.isAudio ? 'center' : 'none',
         'border-top': 'none'
       }
     },
@@ -73,12 +72,14 @@ export default {
     isVideo () {
       return this.data.mime && this.data.mime.includes('video')
     },
+    isAudio () {
+      return this.data.mime && this.data.mime.includes('audio')
+    },
     isText () {
       return !!this.data.content
     },
     downloadUrl () {
-      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(
-        this.$route.query.path)}`
+      return `${window.GOFI_MANIFEST.VUE_APP_API_BASE_URL}${api.Download}?path=${encodeURIComponent(this.$route.query.path)}`
     },
     previewUrl () {
       return `${this.downloadUrl}&raw=true`
@@ -128,7 +129,7 @@ export default {
 }
 </script>
 
-<style scoped lang="less">
+<style lang="less" scoped>
   .table-operator {
     margin-bottom: 20px;
 

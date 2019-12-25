@@ -3,9 +3,11 @@ package util
 import (
 	"golang.org/x/tools/godoc/util"
 	"io"
+	"mime"
 	"mime/multipart"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func FileExist(path string) bool {
@@ -77,4 +79,13 @@ func IsTextFile(filepath string) bool {
 	}
 
 	return util.IsText(buf[0:n])
+}
+
+// 根据扩展名解析文件的类型,默认将文本类型都转换为纯文本,不需要浏览器对其作出解析
+func ParseFileContentType(fileName string) string {
+	contentType := mime.TypeByExtension(filepath.Ext(fileName))
+	if strings.HasPrefix(contentType, "text/") {
+		contentType = "text/plain"
+	}
+	return contentType
 }

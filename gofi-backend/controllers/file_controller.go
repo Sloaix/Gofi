@@ -201,10 +201,7 @@ func Download(ctx iris.Context) {
 	}
 
 	filename := filepath.Base(path)
-	contentType := mime.TypeByExtension(filepath.Ext(path))
-	if strings.HasPrefix(contentType, "text/") {
-		contentType = "text/plain"
-	}
+	contentType := util.ParseFileContentType(filename)
 	ctx.ContentType(contentType)
 
 	if !raw {
