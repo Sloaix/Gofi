@@ -74,15 +74,15 @@ func ListFiles(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	storagePath := context.Get().GetStorageDir()
+	storageDir := context.Get().GetStorageDir()
 
-	logrus.Printf("root path is %v \n", storagePath)
+	logrus.Printf("root path is %v \n", storageDir)
 
-	path := filepath.Join(storagePath, relativePath)
+	path := filepath.Join(storageDir, relativePath)
 
 	// 确保该路径只是文件仓库的子路径
-	if !strings.Contains(path, storagePath) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
+	if !strings.Contains(path, storageDir) {
+		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist)).Build())
 		return
 	}
 
@@ -150,6 +150,12 @@ func Upload(ctx iris.Context) {
 
 	logrus.Infof("destPath path is %v \n", destDirectory)
 
+	// 确保该路径只是文件仓库的子路径
+	if !strings.Contains(destDirectory, storageDir) {
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
+		return
+	}
+
 	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
 		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
@@ -189,6 +195,12 @@ func Download(ctx iris.Context) {
 	storageDir := context.Get().GetStorageDir()
 
 	path := filepath.Join(storageDir, relativePath)
+
+	// 确保该路径只是文件仓库的子路径
+	if !strings.Contains(path, storageDir) {
+		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist)).Build())
+		return
+	}
 
 	if !util.FileExist(path) {
 		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
