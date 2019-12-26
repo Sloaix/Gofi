@@ -24,7 +24,8 @@ export default {
     tip: {
       title: 'Preview Mode',
       message: 'To provide the same experience, you cannot change the theme style or the file repository path in this mode, but you are free to upload and download file.'
-    }
+    },
+    notSupport: 'Sorry, a preview of this file is not supported.'
   },
   menu: {
     index: 'Home',

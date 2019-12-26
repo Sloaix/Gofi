@@ -26,17 +26,18 @@
         style="max-width: 100%"
       />
       <video
-        v-if="isVideo"
+        v-else-if="isVideo"
         width="100%"
         style="border: none;outline: none"
         :src="previewUrl"
         controls="controls">
         您的浏览器不支持 video 标签。
       </video>
-      <audio v-if="isAudio" :src="previewUrl" controls style="outline: none"/>
-      <pre v-if="isText" style="max-width: 100%;white-space:pre-line">
+      <audio v-else-if="isAudio" :src="previewUrl" controls style="outline: none"/>
+      <pre v-else-if="isText" style="max-width: 100%;white-space:pre-line">
         {{ data.content }}
       </pre>
+      <p v-else style="text-align: center">{{ $t('preview.notSupport') }}</p>
     </a-card>
   </div>
 </template>
