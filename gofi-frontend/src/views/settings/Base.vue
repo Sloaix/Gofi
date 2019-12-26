@@ -45,7 +45,7 @@ export default {
     this.storageType = this.settings.customStoragePath === this.settings.defaultStoragePath ? 'default' : 'custom'
   },
   computed: {
-    ...mapGetters(['settings', 'color', 'language']),
+    ...mapGetters(['settings', 'language']),
     storagePathInputDisabled () {
       return this.storageType === 'default'
     },

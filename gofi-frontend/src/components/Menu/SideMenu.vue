@@ -12,7 +12,7 @@
       :theme="theme"
       :mode="mode"
       @select="onSelect"
-      style="padding: 16px 0;"></s-menu>
+      style="padding: 16px 0;"/>
   </a-layout-sider>
 
 </template>

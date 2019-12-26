@@ -1,4 +1,4 @@
-import { BasicLayout } from '@/layouts'
+import { BasicLayout, UserLayout } from '@/layouts'
 import FileList from '@/views/disk/FileList'
 import config from '@/config/defaultSettings'
 import FileDetail from '@/views/disk/preview/FilePreview'
@@ -6,6 +6,8 @@ import FileDetail from '@/views/disk/preview/FilePreview'
 /**
  * 基础路由
  * @type { *[] }
+ *
+ * path一定在以/开头，不然SMenu渲染MenuItem的时候Key则不是以/开头，匹配路由的时候会导致失败
  */
 const basicRoutes = [
   {
@@ -13,7 +15,7 @@ const basicRoutes = [
     name: 'index',
     component: BasicLayout,
     meta: { title: 'menu.index' },
-    redirect: '/file',
+    redirect: { name: 'file-list' },
     children: [
       {
         path: '/file',
@@ -36,18 +38,18 @@ const basicRoutes = [
         name: 'setting',
         component: () => import('@/views/settings/Index'),
         meta: { title: 'menu.setting', icon: 'setting' },
-        redirect: '/settings/base',
+        redirect: { name: 'base-setting' },
         hideChildrenInMenu: true,
         children: [
           {
-            path: '/settings/base',
-            name: 'BaseSetting',
-            component: () => import('@/views/settings/BaseSetting'),
+            path: '/base',
+            name: 'base-setting',
+            component: () => import('@/views/settings/Base'),
             meta: { title: 'setting.baseSetting' }
           },
           {
-            path: '/settings/custom',
-            name: 'CustomSetting',
+            path: '/custom',
+            name: 'custom-setting',
             component: () => import('@/views/settings/Custom'),
             meta: { title: 'setting.customSetting' }
           }
@@ -56,18 +58,30 @@ const basicRoutes = [
     ]
   },
   {
+    path: '/auth',
+    name: 'auth',
+    component: UserLayout,
+    redirect: { name: 'login' },
+    children: [
+      {
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/auth/Login')
+      }
+    ]
+  },
+  {
     path: '/setup',
     name: 'setup',
     component: () => import('@/views/configuration/initial/SetupForm')
   },
-
   {
     path: '/404',
     name: 'notfound',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   },
   {
-    path: '*', redirect: '/404', hidden: true
+    path: '*', redirect: { name: 'notfound' }, hidden: true
   }
 ]
 

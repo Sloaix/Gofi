@@ -4,19 +4,19 @@
       <div class="account-settings-info-main" :class="device">
         <div class="account-settings-info-left">
           <a-menu
-            :mode="device == 'mobile' ? 'horizontal' : 'inline'"
-            :style="{ border: '0', width: device == 'mobile' ? '560px' : 'auto'}"
+            :mode="device === 'mobile' ? 'horizontal' : 'inline'"
+            :style="{ border: '0', width: device === 'mobile' ? '560px' : 'auto'}"
             :selectedKeys="selectedKeys"
             type="inner"
             @openChange="onOpenChange"
           >
-            <a-menu-item key="/settings/base">
-              <router-link :to="{ name: 'BaseSetting' }">
+            <a-menu-item :key="this.$router.resolve({ name: 'base-setting' }).route.path">
+              <router-link :to="{ name: 'base-setting' }">
                 {{ $t('setting.baseSetting') }}
               </router-link>
             </a-menu-item>
-            <a-menu-item key="/settings/custom">
-              <router-link :to="{ name: 'CustomSetting' }">
+            <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
+              <router-link :to="{ name: 'custom-setting' }">
                 {{ $t('setting.customSetting') }}
               </router-link>
             </a-menu-item>

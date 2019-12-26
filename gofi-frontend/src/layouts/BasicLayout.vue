@@ -16,7 +16,7 @@
         :collapsed="false"
         :collapsible="true"
         @menuSelect="menuSelect"
-      ></side-menu>
+      />
     </a-drawer>
     <!-- SideMenu Mobile Mode -->
 
@@ -28,7 +28,7 @@
       :theme="navTheme"
       :collapsed="collapsed"
       :collapsible="true"
-    ></side-menu>
+    />
     <!-- SideMenu Desktop Mode -->
 
     <a-layout :class="[navMode+'menu', `content-width-`]" :style="{ paddingLeft: contentPaddingLeft, minHeight: '100vh' }">
@@ -55,7 +55,7 @@
       </a-layout-footer>
 
       <!-- Setting Drawer (show in development mode) -->
-      <setting-drawer v-if="!production"></setting-drawer>
+      <setting-drawer v-if="!production"/>
     </a-layout>
   </a-layout>
 

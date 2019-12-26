@@ -8,7 +8,7 @@
         <div v-if="mode === 'side'" class="header">
           <a-icon v-if="device==='mobile'" class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle"/>
           <a-icon v-else class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" @click="toggle"/>
-          <user-menu></user-menu>
+          <user-menu/>
         </div>
         <div v-else :class="['top-nav-header-index', theme]">
           <div class="header-index-wide">
@@ -17,7 +17,7 @@
               <s-menu v-if="device !== 'mobile'" mode="horizontal" :menu="menus" :theme="theme" />
               <a-icon v-else class="trigger" :type="collapsed ? 'menu-fold' : 'menu-unfold'" @click="toggle" />
             </div>
-            <user-menu class="header-index-right"></user-menu>
+            <user-menu class="header-index-right"/>
           </div>
         </div>
       </a-layout-header>

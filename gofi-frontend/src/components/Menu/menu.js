@@ -120,6 +120,12 @@ export default {
       return menuArr
     },
     onOpenChange (openKeys) {
+      // 在水平模式下时执行，并且不再执行后续
+      if (this.mode === 'horizontal') {
+        this.openKeys = openKeys
+        return
+      }
+      // 非水平模式时
       const latestOpenKey = openKeys.find(key => !this.openKeys.includes(key))
       if (!this.rootSubmenuKeys.includes(latestOpenKey)) {
         this.openKeys = openKeys
@@ -129,13 +135,12 @@ export default {
     },
     updateMenu () {
       const routes = this.$route.matched.concat()
-
-      if (routes.length >= 4 && this.$route.meta.hidden) {
+      const { hidden } = this.$route.meta
+      if (hidden) {
         routes.pop()
-        this.selectedKeys = [routes[2].path]
-      } else {
-        this.selectedKeys = [routes.pop().path]
       }
+
+      this.selectedKeys = routes.map(route => route.path).filter(path => !!path)
 
       const openKeys = []
       if (this.mode === 'inline') {

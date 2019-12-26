@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     handleToHome () {
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push({ name: 'index' })
     }
   }
 }
