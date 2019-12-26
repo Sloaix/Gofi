@@ -42,13 +42,13 @@ const basicRoutes = [
         hideChildrenInMenu: true,
         children: [
           {
-            path: '/base',
+            path: 'base',
             name: 'base-setting',
             component: () => import('@/views/settings/Base'),
             meta: { title: 'setting.baseSetting' }
           },
           {
-            path: '/custom',
+            path: 'custom',
             name: 'custom-setting',
             component: () => import('@/views/settings/Custom'),
             meta: { title: 'setting.customSetting' }
@@ -64,7 +64,7 @@ const basicRoutes = [
     redirect: { name: 'login' },
     children: [
       {
-        path: '/login',
+        path: 'login',
         name: 'login',
         component: () => import('@/views/auth/Login')
       }
