@@ -11,7 +11,7 @@
         {{ $t('allFile.download') }}
       </a-button>
     </div>
-    <a-card size="small" :title="`Gofi://${data.path}`">
+    <a-card size="small" :title="`Gofi:/${data.path}`">
       <description-list size="small">
         <description-list-item term="文件名">{{ data.name }}</description-list-item>
         <description-list-item term="大小">{{ data.size | human-size }}</description-list-item>
