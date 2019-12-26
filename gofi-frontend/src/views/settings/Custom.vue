@@ -13,14 +13,14 @@
           <a-select-option value="top">
             <img
               style="height: 20px;margin-right: 10px"
-              src="https://gw.alipayobjects.com/zos/rmsportal/KDNDBbriJhLwuqMoxcAr.svg"
+              src="@/assets/icons/nav_top.svg"
               alt="topmenu">
             <span>{{ $t('form.input.navMode.top') }}</span>
           </a-select-option>
           <a-select-option value="side">
             <img
               style="height: 20px;margin-right: 10px"
-              src="https://gw.alipayobjects.com/zos/rmsportal/JopDzEhOqwOjeNTXkoje.svg"
+              src="@/assets/icons/nav_side.svg"
               alt="sidemenu">
             <span>{{ $t('form.input.navMode.side') }}</span>
           </a-select-option>
@@ -38,14 +38,14 @@
           <a-select-option value="light">
             <img
               style="height: 20px;margin-right: 10px"
-              src="https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg"
+              src="@/assets/icons/theme_light.svg"
               alt="light">
             <span>{{ $t('form.input.themeStyle.light') }}</span>
           </a-select-option>
           <a-select-option value="dark">
             <img
               style="height: 20px;margin-right: 10px"
-              src="https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg"
+              src="@/assets/icons/theme_dark.svg"
               alt="dark">
             <span>{{ $t('form.input.themeStyle.dark') }}</span>
           </a-select-option>

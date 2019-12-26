@@ -20,7 +20,7 @@
               </template>
               <div class="setting-drawer-index-item" @click="handleMenuTheme('dark')">
                 <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/LCkqqYNmvBEbokSDscrm.svg"
+                  src="@/assets/icons/theme_dark.svg"
                   alt="dark">
                 <div class="setting-drawer-index-selectIcon" v-if="navTheme === 'dark'">
                   <a-icon type="check"/>
@@ -34,7 +34,7 @@
               </template>
               <div class="setting-drawer-index-item" @click="handleMenuTheme('light')">
                 <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/jpRkZQMyYRryryPNtyIC.svg"
+                  src="@/assets/icons/theme_light.svg"
                   alt="light">
                 <div class="setting-drawer-index-selectIcon" v-if="navTheme !== 'dark'">
                   <a-icon type="check"/>
@@ -56,7 +56,7 @@
               </template>
               <div class="setting-drawer-index-item" @click="handleLayout('side')">
                 <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/JopDzEhOqwOjeNTXkoje.svg"
+                  src="@/assets/icons/nav_side.svg"
                   alt="sidemenu">
                 <div class="setting-drawer-index-selectIcon" v-if="navMode === 'side'">
                   <a-icon type="check"/>
@@ -70,7 +70,7 @@
               </template>
               <div class="setting-drawer-index-item" @click="handleLayout('top')">
                 <img
-                  src="https://gw.alipayobjects.com/zos/rmsportal/KDNDBbriJhLwuqMoxcAr.svg"
+                  src="@/assets/icons/nav_top.svg"
                   alt="topmenu">
                 <div class="setting-drawer-index-selectIcon" v-if="navMode !== 'side'">
                   <a-icon type="check"/>

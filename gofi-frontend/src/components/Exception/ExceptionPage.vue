@@ -1,8 +1,7 @@
 <template>
   <div class="exception">
     <div class="imgBlock">
-      <div class="imgEle" :style="{backgroundImage: `url(${config[type].img})`}">
-      </div>
+      <div class="imgEle" :style="{backgroundImage: `url(${require(`@/assets/exception/${config[type].img}`)})`}"/>
     </div>
     <div class="content">
       <h1>{{ config[type].title }}</h1>
