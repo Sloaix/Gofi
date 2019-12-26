@@ -37,13 +37,16 @@
       <pre v-else-if="isText" style="max-width: 100%;white-space:pre-line">
         {{ data.content }}
       </pre>
-      <p v-else style="text-align: center">{{ $t('preview.notSupport') }}</p>
+      <a-empty
+        v-else
+        :description=" $t('preview.notSupport') "/>
     </a-card>
   </div>
 </template>
 
 <script>
 import { PageView } from '@/layouts'
+import { Result } from '@/components'
 import api, { getFileDetail } from '@/api/disk'
 import PageHeader from '@/components/PageHeader/PageHeader'
 import DescriptionList from '@/components/DescriptionList/DescriptionList'
@@ -55,7 +58,8 @@ export default {
     DescriptionListItem,
     DescriptionList,
     PageHeader,
-    PageView
+    PageView,
+    Result
   },
   computed: {
     contentStyle () {
