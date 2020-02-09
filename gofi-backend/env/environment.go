@@ -1,5 +1,10 @@
 package env
 
+import (
+	"os"
+	"strings"
+)
+
 //Mode 模式
 type Mode string
 
@@ -26,4 +31,14 @@ func IsProduct() bool {
 
 func Current() Mode {
 	return current
+}
+
+// IsTest 当前是否测试环境
+func IsTest() bool {
+	for _, value := range os.Args {
+		if strings.Contains(value, "-test.v") {
+			return true
+		}
+	}
+	return false
 }

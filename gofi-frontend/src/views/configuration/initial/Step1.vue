@@ -121,12 +121,12 @@ export default {
   },
   computed: {
     ...mapActions(['Setup']),
-    ...mapGetters(['settings', 'color', 'language']),
+    ...mapGetters(['configuration', 'color', 'language']),
     storagePathInputDisabled () {
       return this.storageType === 'default'
     },
     storagePathInitialValue () {
-      return this.storagePathInputDisabled ? this.settings.defaultStoragePath : ''
+      return this.storagePathInputDisabled ? this.configuration.defaultStoragePath : ''
     }
   },
   methods: {
@@ -152,10 +152,10 @@ export default {
     nextStep () {
       this.loading = true
       const that = this
-      this.form.validateFields((err, settings) => {
+      this.form.validateFields((err, configuration) => {
         if (!err) {
-          console.log('表单 values', settings)
-          this.$store.dispatch('Setup', settings).then(() => {
+          console.log('表单 values', configuration)
+          this.$store.dispatch('Setup', configuration).then(() => {
             that.loading = false
             that.$emit('nextStep')
           }).catch((err) => {

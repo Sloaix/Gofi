@@ -7,7 +7,7 @@ import (
 )
 
 func TestExt(t *testing.T) {
-	extension.InitAdditionalExtensionType()
+	extension.BindAdditionalType()
 	for key, value := range extension.ExtTypeMap {
 		if mime.TypeByExtension(key) != value {
 			t.Error("wrong parse for ext " + key)

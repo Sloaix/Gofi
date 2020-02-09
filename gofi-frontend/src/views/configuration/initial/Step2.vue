@@ -9,15 +9,11 @@
           </a-row>
           <a-row>
             <a-col :sm="8" :xs="24">{{ $t('setup.step2.logDirectoryPath') }}</a-col>
-            <a-col :sm="16" :xs="24">{{ settings.logDirectoryPath }}</a-col>
+            <a-col :sm="16" :xs="24">{{ configuration.logDirectoryPath }}</a-col>
           </a-row>
           <a-row>
             <a-col :sm="8" :xs="24">{{ $t('setup.step2.sqlite3DbFilePath') }}</a-col>
-            <a-col :sm="16" :xs="24">{{ settings.databaseFilePath }}</a-col>
-          </a-row>
-          <a-row>
-            <a-col :sm="8" :xs="24">{{ $t('setup.step2.defaultLanguage') }}</a-col>
-            <a-col :sm="16" :xs="24">{{ settings.defaultLanguage }}</a-col>
+            <a-col :sm="16" :xs="24">{{ configuration.databaseFilePath }}</a-col>
           </a-row>
         </div>
         <div slot="action">
@@ -44,7 +40,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['settings', 'storagePath']),
+    ...mapGetters(['configuration', 'storagePath']),
     description () {
       return this.$t('setup.step2.description', [this.seconds])
     }

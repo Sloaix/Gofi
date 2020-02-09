@@ -1,4 +1,4 @@
-package models
+package db
 
 type File struct {
 	Name         string `json:"name"`         // 文件名

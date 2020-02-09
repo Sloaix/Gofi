@@ -1,4 +1,4 @@
-package util
+package tool
 
 import (
 	"golang.org/x/tools/godoc/util"
@@ -24,6 +24,15 @@ func IsDirectory(filename string) bool {
 		return false
 	}
 	return info.IsDir()
+}
+
+
+func IsHiddenFile(name string) bool {
+	if strings.TrimSpace(name) == "" {
+		return false
+	}
+
+	return strings.HasPrefix(name, ".")
 }
 
 func IsFile(filename string) bool {

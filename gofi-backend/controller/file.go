@@ -1,12 +1,11 @@
-package controllers
+package controller
 
 import (
 	"github.com/kataras/iris"
 	"github.com/sirupsen/logrus"
-	"gofi/context"
+	"gofi/db"
 	"gofi/i18n"
-	"gofi/models"
-	"gofi/util"
+	"gofi/tool"
 	"io/ioutil"
 	"mime"
 	"os"
@@ -14,11 +13,20 @@ import (
 	"strings"
 )
 
+//GetStorageDir 获取当前仓储目录
+func GetStorageDir() string {
+	configuration := db.ObtainConfiguration()
+	if len(configuration.CustomStoragePath) == 0 {
+		return tool.GetDefaultStorageDir()
+	}
+	return configuration.CustomStoragePath
+}
+
 func FileDetail(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	storagePath := context.Get().GetStorageDir()
+	storagePath := GetStorageDir()
 
 	logrus.Printf("root path is %v \n", storagePath)
 
@@ -30,7 +38,7 @@ func FileDetail(ctx iris.Context) {
 		return
 	}
 
-	if !util.FileExist(path) {
+	if !tool.FileExist(path) {
 		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 		return
 	}
@@ -45,7 +53,7 @@ func FileDetail(ctx iris.Context) {
 	}
 
 	content := ""
-	if util.IsTextFile(path) {
+	if tool.IsTextFile(path) {
 		bytes, err := ioutil.ReadFile(path)
 		if err == nil {
 			content = string(bytes[:])
@@ -53,7 +61,7 @@ func FileDetail(ctx iris.Context) {
 	}
 
 	// 实例化File model
-	file := models.File{
+	file := db.File{
 		IsDirectory:  fileInfo.IsDir(),
 		Name:         fileInfo.Name(),
 		Size:         int(fileInfo.Size()),
@@ -74,7 +82,7 @@ func ListFiles(ctx iris.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.URLParamDefault("path", "")
 
-	storageDir := context.Get().GetStorageDir()
+	storageDir := GetStorageDir()
 
 	logrus.Printf("root path is %v \n", storageDir)
 
@@ -86,12 +94,12 @@ func ListFiles(ctx iris.Context) {
 		return
 	}
 
-	if !util.FileExist(path) {
+	if !tool.FileExist(path) {
 		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 		return
 	}
 
-	if !util.IsDirectory(path) {
+	if !tool.IsDirectory(path) {
 		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.IsNotDir, path)).Build())
 		return
 	}
@@ -105,18 +113,18 @@ func ListFiles(ctx iris.Context) {
 		return
 	}
 
-	var filesOfDir []models.File
+	var filesOfDir []db.File
 
 	// 将所有文件再次封装成客户端需要的数据格式
 	for _, fileInfo := range fileInfos {
 
 		// 当前文件是隐藏文件(以.开头)则不显示
-		if util.IsHiddenFile(fileInfo.Name()) {
+		if tool.IsHiddenFile(fileInfo.Name()) {
 			continue
 		}
 
 		// 实例化File model
-		file := models.File{
+		file := db.File{
 			IsDirectory:  fileInfo.IsDir(),
 			Name:         fileInfo.Name(),
 			Size:         int(fileInfo.Size()),
@@ -142,7 +150,7 @@ func Upload(ctx iris.Context) {
 
 	logrus.Infof("relativePath path is %v \n", relativePath)
 
-	storageDir := context.Get().GetStorageDir()
+	storageDir := GetStorageDir()
 
 	logrus.Infof("root path is %v \n", storageDir)
 
@@ -167,12 +175,12 @@ func Upload(ctx iris.Context) {
 			for _, files := range fileHeaders {
 				for _, file := range files {
 
-					if util.FileExist(filepath.Join(destDirectory, file.Filename)) {
+					if tool.FileExist(filepath.Join(destDirectory, file.Filename)) {
 						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)).Build())
 						return
 					}
 
-					_, err := util.UploadFileTo(file, destDirectory)
+					_, err := tool.UploadFileTo(file, destDirectory)
 					if err != nil {
 						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 						return
@@ -192,7 +200,7 @@ func Download(ctx iris.Context) {
 	relativePath := ctx.URLParamDefault("path", "")
 	raw := ctx.URLParamExists("raw") && ctx.URLParam("raw") == "true"
 
-	storageDir := context.Get().GetStorageDir()
+	storageDir := GetStorageDir()
 
 	path := filepath.Join(storageDir, relativePath)
 
@@ -202,18 +210,18 @@ func Download(ctx iris.Context) {
 		return
 	}
 
-	if !util.FileExist(path) {
+	if !tool.FileExist(path) {
 		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
 		return
 	}
 
-	if util.IsDirectory(path) {
+	if tool.IsDirectory(path) {
 		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotFile)).Build())
 		return
 	}
 
 	filename := filepath.Base(path)
-	contentType := util.ParseFileContentType(filename)
+	contentType := tool.ParseFileContentType(filename)
 	ctx.ContentType(contentType)
 
 	if !raw {

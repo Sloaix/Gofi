@@ -5,9 +5,9 @@ import {
   DEFAULT_THEME
 } from '@/store/mutation-types'
 import {
-  getSetting,
+  getConfiguration,
   setup,
-  updateSetting,
+  updateConfiguration,
   updateStoragePath
 } from '@/api/app'
 import i18n from '@/locales'
@@ -19,11 +19,12 @@ const app = {
     theme: '',
     navMode: '',
     language: 'zh-CN',
-    settings: {}
+    acceptLanguage: {},
+    configuration: {}
   },
   mutations: {
-    SET_SETTINGS: (state, settings) => {
-      state.settings = settings
+    SET_CONFIGURATION: (state, configuration) => {
+      state.configuration = configuration
     },
     TOGGLE_DEVICE: (state, device) => {
       state.device = device
@@ -40,17 +41,18 @@ const app = {
       Vue.ls.set(DEFAULT_LANGUAGE, language)
       // 更改vue内置组件的语言
       state.language = language
+      state.acceptLanguage = { 'Accept-Language': language }
       // 更改自有组件的语言
       i18n.locale = language
     }
   },
   actions: {
     // 获取用户信息
-    GetSettings ({ commit }) {
+    GetConfiguration ({ commit }) {
       return new Promise((resolve, reject) => {
-        getSetting().then(settings => {
-          commit('SET_SETTINGS', settings)
-          resolve(settings)
+        getConfiguration().then(configuration => {
+          commit('SET_CONFIGURATION', configuration)
+          resolve(configuration)
         }).catch(error => {
           reject(error)
         })
@@ -58,20 +60,20 @@ const app = {
     },
     Setup ({ commit }, forms) {
       return new Promise((resolve, reject) => {
-        setup(forms).then(settings => {
-          commit('SET_SETTINGS', settings)
-          resolve(settings)
+        setup(forms).then(configuration => {
+          commit('SET_CONFIGURATION', configuration)
+          resolve(configuration)
         }).catch(error => {
           reject(error)
         })
       })
     },
-    UpdateSettings ({ commit }, params) {
+    UpdateConfiguration ({ commit }, params) {
       return new Promise((resolve, reject) => {
         console.log(params)
-        updateSetting(params).then(settings => {
-          commit('SET_SETTINGS', settings)
-          resolve(settings)
+        updateConfiguration(params).then(configuration => {
+          commit('SET_CONFIGURATION', configuration)
+          resolve(configuration)
         }).catch(error => {
           reject(error)
         })
@@ -79,9 +81,9 @@ const app = {
     },
     UpdateStoragePath ({ commit }, storagePath) {
       return new Promise((resolve, reject) => {
-        updateStoragePath(storagePath).then(settings => {
-          commit('SET_SETTINGS', settings)
-          resolve(settings)
+        updateStoragePath(storagePath).then(configuration => {
+          commit('SET_CONFIGURATION', configuration)
+          resolve(configuration)
         }).catch(error => {
           reject(error)
         })

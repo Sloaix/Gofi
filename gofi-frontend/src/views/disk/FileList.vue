@@ -22,6 +22,7 @@
         name="file"
         @change="uploadChange"
         :action="uploadUrl"
+        :headers="acceptLanguage"
         :showUploadList="false"
         :multiple="true"
         :openFileDialogOnClick="!uploading"
@@ -115,6 +116,7 @@ import api, { getFileList } from '@/api/disk'
 import { PageView } from '@/layouts'
 import GofiIcon from '../../components/GofiIcon/GofiIcon'
 import config from '@/config/defaultSettings'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'FileList',
@@ -146,6 +148,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['acceptLanguage']),
     title () {
       return `Gofi://${this.currentDirectory}`
     },

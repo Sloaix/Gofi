@@ -1,7 +1,7 @@
 package test
 
 import (
-	"gofi/util"
+	"gofi/tool"
 	"testing"
 )
 
@@ -14,7 +14,7 @@ func TestIsHiddenFile(t *testing.T) {
 	}
 
 	for _, name := range fileNames {
-		if util.IsHiddenFile(name) {
+		if tool.IsHiddenFile(name) {
 			t.Error()
 		}
 	}
@@ -25,7 +25,7 @@ func TestIsHiddenFile(t *testing.T) {
 	}
 
 	for _, name := range fileNames {
-		if !util.IsHiddenFile(name) {
+		if !tool.IsHiddenFile(name) {
 			t.Error()
 		}
 	}

@@ -1,13 +1,14 @@
 const getters = {
   device: state => state.app.device,
   theme: state => state.app.theme,
-  settings: state => state.app.settings,
+  configuration: state => state.app.configuration,
+  acceptLanguage: state => state.app.acceptLanguage,
   language: state => state.app.language,
   storagePath: state => {
-    const { customStoragePath } = state.app.settings
-    return customStoragePath
+    const { customStoragePath, defaultStoragePath } = state.app.configuration
+    return customStoragePath || defaultStoragePath
   },
-  settingsValid: state => Object.entries(state.app.settings).length !== 0 // app info 是有效的，而不是空object
+  configurationValid: state => Object.entries(state.app.configuration).length !== 0 // app info 是有效的，而不是空object
 }
 
 export default getters

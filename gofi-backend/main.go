@@ -10,23 +10,26 @@ import (
 	"github.com/kataras/iris/middleware/recover"
 	"github.com/sirupsen/logrus"
 	"gofi/binary"
-	"gofi/context"
-	"gofi/controllers"
+	"gofi/boot"
+	"gofi/controller"
+	"gofi/db"
 	"gofi/env"
 	"gofi/extension"
 	"gofi/middleware"
-	"gofi/util"
+	"strings"
 )
 
+const ApiIpAddressInFrontend = "127.0.0.1:8080"
+
 func init() {
-	extension.InitAdditionalExtensionType()
-	context.InitContext()
+	extension.BindAdditionalType()
+	boot.ParseArguments()
 }
 
 func main() {
-	logrus.Infof("Gofi is running on %v，current environment is %s,version is %s\n", context.Get().ServerAddress, env.Current(), context.Get().Version)
+	logrus.Infof("Gofi is running on %v，current environment is %s,version is %s\n", boot.GetArguments().ServerAddress, env.Current(), db.ObtainConfiguration().Version)
 	app := newApp()
-	_ = app.Run(iris.Addr(":"+context.Get().Port), iris.WithoutServerError(iris.ErrServerClosed))
+	_ = app.Run(iris.Addr(":"+boot.GetArguments().Port), iris.WithoutServerError(iris.ErrServerClosed))
 }
 
 func newApp() (app *iris.Application) {
@@ -52,12 +55,29 @@ func setup(app *iris.Application) {
 	}))
 }
 
+// dynamic replace server ip address for index.html static assets.
+func AssetProxy(name string) ([]byte, error) {
+	assetsBytes, err := binary.Asset(name)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if indexHtmlName := "public/index.html"; name == indexHtmlName {
+		indexHtmlString := strings.Replace(string(assetsBytes[:]), ApiIpAddressInFrontend, boot.GetArguments().ServerAddress, -1)
+		assetsBytes = []byte(indexHtmlString)
+		logrus.Info("server ip address replace success")
+	}
+
+	return assetsBytes, nil
+}
+
 // single page application
 func spa(app *iris.Application) {
 	// set static assets
-	app.RegisterView(iris.HTML("./public", ".html").Binary(util.AssetProxy, binary.AssetNames))
+	app.RegisterView(iris.HTML("./public", ".html").Binary(AssetProxy, binary.AssetNames))
 	app.HandleDir("/", "./public", router.DirOptions{
-		Asset:      util.AssetProxy,
+		Asset:      AssetProxy,
 		AssetInfo:  binary.AssetInfo,
 		AssetNames: binary.AssetNames,
 		Gzip:       true,
@@ -85,12 +105,12 @@ func api(app *iris.Application) {
 		}
 	}).AllowMethods(iris.MethodOptions)
 	{
-		api.Get("/setting", controllers.GetSetting)
-		api.Post("/setting", controllers.UpdateSetting)
-		api.Post("/setup", controllers.Setup)
-		api.Get("/files", controllers.ListFiles)
-		api.Get("/file", controllers.FileDetail)
-		api.Get("/download", controllers.Download)
-		api.Post("/upload", controllers.Upload)
+		api.Get("/configuration", controller.GetConfiguration)
+		api.Post("/configuration", controller.UpdateConfiguration)
+		api.Post("/setup", controller.Setup)
+		api.Get("/files", controller.ListFiles)
+		api.Get("/file", controller.FileDetail)
+		api.Get("/download", controller.Download)
+		api.Post("/upload", controller.Upload)
 	}
 }

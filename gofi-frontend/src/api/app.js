@@ -1,7 +1,7 @@
 import { axios } from '@/utils/request'
 
 const api = {
-  Setting: 'setting',
+  Configuration: 'configuration',
   Setup: 'setup'
 }
 
@@ -11,16 +11,16 @@ export default api
  * 获取gofi的设置项
  * @returns {AxiosPromise}
  */
-export function getSetting () {
-  return axios.get(api.Setting)
+export function getConfiguration () {
+  return axios.get(api.Configuration)
 }
 
 /**
  * 更新gofi的设置项
  * @returns {AxiosPromise}
  */
-export function updateSetting (settings) {
-  return axios.post(api.Setting, settings)
+export function updateConfiguration (configuration) {
+  return axios.post(api.Configuration, configuration)
 }
 
 /**
@@ -28,14 +28,14 @@ export function updateSetting (settings) {
  * @returns {AxiosPromise}
  */
 export function updateStoragePath (storagePath) {
-  return updateSetting({ customStoragePath: storagePath })
+  return updateConfiguration({ customStoragePath: storagePath })
 }
 
 /**
  * setup 安装gofi,需要进行一些初始化设置
- * @param settings
+ * @param configuration
  * @returns {Promise<AxiosResponse<T>>}
  */
-export function setup (settings) {
-  return axios.post(api.Setup, settings)
+export function setup (configuration) {
+  return axios.post(api.Setup, configuration)
 }

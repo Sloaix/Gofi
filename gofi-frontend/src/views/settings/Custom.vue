@@ -7,7 +7,7 @@
           @select="onNavModeSelect"
           v-decorator="[
             'navMode',
-            { initialValue: settings.navMode, rules: [{ required: true,message:'请选择导航模式'}] }
+            { initialValue: configuration.navMode, rules: [{ required: true,message:'请选择导航模式'}] }
           ]"
         >
           <a-select-option value="top">
@@ -32,7 +32,7 @@
           @select="onThemeStyleSelect"
           v-decorator="[
             'themeStyle',
-            { initialValue: settings.themeStyle, rules: [{ required: true,message:'请选择主题样式'}] }
+            { initialValue: configuration.themeStyle, rules: [{ required: true,message:'请选择主题样式'}] }
           ]"
         >
           <a-select-option value="light">
@@ -73,12 +73,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['settings', 'storagePath'])
+    ...mapGetters(['configuration', 'storagePath'])
   },
   methods: {
     resetIfNotSave () {
-      this.$store.dispatch('ToggleTheme', this.settings.themeStyle)
-      this.$store.dispatch('ToggleLayoutMode', this.settings.navMode)
+      this.$store.dispatch('ToggleTheme', this.configuration.themeStyle)
+      this.$store.dispatch('ToggleLayoutMode', this.configuration.navMode)
     },
     onThemeStyleSelect (theme) {
       this.$store.dispatch('ToggleTheme', theme)
@@ -91,7 +91,7 @@ export default {
       const that = this
       this.form.validateFields((err, forms) => {
         if (!err) {
-          this.$store.dispatch('UpdateSettings', forms)
+          this.$store.dispatch('UpdateConfiguration', forms)
             .then(() => {
               that.$notification.success({
                 message: that.$t('fallback.saveSuccess')

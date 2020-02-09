@@ -9,7 +9,7 @@ var ExtTypeMap = map[string]string{
 	".markdown": "text/plain; charset=utf-8",
 }
 
-func InitAdditionalExtensionType() {
+func BindAdditionalType() {
 	for key, value := range ExtTypeMap {
 		_ = mime.AddExtensionType(key, value)
 	}

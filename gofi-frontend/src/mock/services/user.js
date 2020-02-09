@@ -702,12 +702,12 @@ const userNav = (options) => {
         'hideChildren': true,
         'show': true
       },
-      'redirect': '/account/settings/base',
+      'redirect': '/account/configuration/base',
       'component': 'AccountSettings'
     },
     {
       'name': 'BaseSettings',
-      'path': '/account/settings/base',
+      'path': '/account/configuration/base',
       'parentId': 10030,
       'id': 10031,
       'meta': {
@@ -718,7 +718,7 @@ const userNav = (options) => {
     },
     {
       'name': 'SecuritySettings',
-      'path': '/account/settings/security',
+      'path': '/account/configuration/security',
       'parentId': 10030,
       'id': 10032,
       'meta': {
@@ -729,7 +729,7 @@ const userNav = (options) => {
     },
     {
       'name': 'CustomSettings',
-      'path': '/account/settings/custom',
+      'path': '/account/configuration/custom',
       'parentId': 10030,
       'id': 10033,
       'meta': {
@@ -740,7 +740,7 @@ const userNav = (options) => {
     },
     {
       'name': 'BindingSettings',
-      'path': '/account/settings/binding',
+      'path': '/account/configuration/binding',
       'parentId': 10030,
       'id': 10034,
       'meta': {
@@ -751,7 +751,7 @@ const userNav = (options) => {
     },
     {
       'name': 'NotificationSettings',
-      'path': '/account/settings/notification',
+      'path': '/account/configuration/notification',
       'parentId': 10030,
       'id': 10034,
       'meta': {

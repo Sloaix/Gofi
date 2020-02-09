@@ -16,7 +16,7 @@
       </a>
     </div>
     <div class="copyright">
-      {{ $t('footer.version') }} {{ settings.version }} | {{ $t('footer.copyRight') }}
+      {{ $t('footer.version') }} {{ configuration.version }} | {{ $t('footer.copyRight') }}
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['settings'])
+    ...mapGetters(['configuration'])
   }
 }
 </script>

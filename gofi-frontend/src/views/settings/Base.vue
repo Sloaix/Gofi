@@ -42,15 +42,15 @@ export default {
     }
   },
   mounted () {
-    this.storageType = this.settings.customStoragePath === this.settings.defaultStoragePath ? 'default' : 'custom'
+    this.storageType = this.configuration.customStoragePath ? 'custom' : 'default'
   },
   computed: {
-    ...mapGetters(['settings', 'language']),
+    ...mapGetters(['configuration', 'language']),
     storagePathInputDisabled () {
       return this.storageType === 'default'
     },
     storagePathInitialValue () {
-      return this.storagePathInputDisabled ? this.settings.defaultStoragePath : this.settings.customStoragePath
+      return this.storagePathInputDisabled ? this.configuration.defaultStoragePath : this.configuration.customStoragePath
     }
   },
   methods: {

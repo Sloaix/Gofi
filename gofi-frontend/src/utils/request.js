@@ -38,6 +38,7 @@ const err = (error) => {
 // request interceptor
 service.interceptors.request.use(request => {
   const language = Vue.ls.get(DEFAULT_LANGUAGE, config.language)
+  console.log('http-interceptor:header language is ' + language)
   if (language) {
     request.headers['Accept-Language'] = language // 让每个请求携带自定义 token 请根据实际情况自行修改
   }

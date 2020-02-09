@@ -20,7 +20,7 @@ router.afterEach(() => {
 
 function setupOrNext (next, to) {
   // if initialized, just call next()
-  const initialized = store.getters.settings.initialized
+  const initialized = store.getters.configuration.initialized
   console.log('initialized ' + initialized)
   if (to.name === 'setup') {
     if (initialized) {
@@ -37,21 +37,21 @@ function setupOrNext (next, to) {
   }
 }
 
-function applySettingFromServer (settings) {
+function applySettingFromServer (configuration) {
   store.commit('TOGGLE_THEME',
-    defaultValue(settings.themeStyle, config.navTheme))
+    defaultValue(configuration.themeStyle, config.navTheme))
   store.commit('TOGGLE_NAV_MODE',
-    defaultValue(settings.navMode, config.navMode))
+    defaultValue(configuration.navMode, config.navMode))
 }
 
 function fetchSettingsIfNotExist (next, to) {
-  if (store.getters.settingsValid) {
-    console.log('settings valid')
+  if (store.getters.configurationValid) {
+    console.log('configuration valid')
     setupOrNext(next, to)
   } else {
-    console.log('get settings')
-    // make sure settings is always exist before navigate to any where.
-    store.dispatch('GetSettings')
+    console.log('get configuration')
+    // make sure configuration is always exist before navigate to any where.
+    store.dispatch('GetConfiguration')
       .then((data) => {
         setupOrNext(next, to)
         applySettingFromServer(data)
