@@ -1,4 +1,51 @@
 export default {
+  title: {
+    userType: 'User type',
+    username: 'Username',
+    password: 'Password',
+    changePassword: 'Change password',
+    newPassword: 'New Password',
+    confirmPassword: 'Confirm Password'
+  },
+  description: {
+    admin: 'Admin',
+    hasBeenSet: 'Has been set',
+    ChangePasswordSoonTip: 'To ensure the security of your account, please change your password as soon as possible after your first login.',
+    placeHolderForNewPassword: 'Input new password',
+    placeHolderForConfirmPassword: 'Input new password again',
+    confirmPasswordError: 'Confirm password error',
+    changeSuccess: 'Change succeeded.',
+    usernameOrPasswordWrong: 'Username or password is wrong',
+    forgetPassword: 'Forget password?',
+    contactAdmin: 'Please contact admin'
+  },
+  action: {
+    edit: 'Edit',
+    cancel: 'Cancel',
+    submit: 'Submit',
+    save: 'Save',
+    modify: 'Modify',
+    confirm: 'Confirm',
+    login: 'Login',
+    logout: 'Logout'
+  },
+  auth: {
+    requireAuth: {
+      content: 'Please login first'
+    },
+    logoutConfirm: {
+      title: 'Warning',
+      content: 'Really to logout ?'
+    },
+    loginSuccess: {
+      title: 'Welcome',
+      content: 'welcome back.'
+    },
+    logoutSuccess: {
+      title: 'Bye',
+      content: 'see you next time.'
+    }
+  },
   notice: {
     switchLanguage: 'Switching language...'
   },
@@ -67,6 +114,7 @@ export default {
     installFailed: 'install failed'
   },
   setting: {
+    accountSetting: 'Account',
     baseSetting: 'Base',
     customSetting: 'Custom'
   },
@@ -93,6 +141,13 @@ export default {
       }
     },
     input: {
+      password: {
+        newPassword: 'New Password',
+        confirmPassword: 'Confirm Password',
+        placeHolderForNewPassword: 'input new password',
+        placeHolderForConfirmPassword: 'input new password again',
+        errorMessage: 'confirmed password error'
+      },
       fileStoragePath: {
         name: 'File Storage Path',
         placeholder: 'input absolute directory path',

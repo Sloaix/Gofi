@@ -1,27 +1,31 @@
 <template>
-  <div class="user-wrapper">
-    <div class="content-box">
-      <lang-select/>
-      <account-option/>
-    </div>
-  </div>
+  <a-dropdown v-if="isLogin">
+    <span class="action">
+      <a-icon type="user" />
+      {{ username }}
+    </span>
+    <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
+      <a-menu-item key="0">
+        <a href="javascript:;" @click="handleLogout">
+          <a-icon type="logout"/>
+          <span>{{ $t('action.logout') }}</span>
+        </a>
+      </a-menu-item>
+    </a-menu>
+  </a-dropdown>
+  <router-link v-else :to="{name:'login'}">
+    <span class="action">
+      <a-icon type="login"></a-icon> {{ $t('action.login') }}
+    </span>
+  </router-link>
 </template>
 
 <script>
-import NoticeIcon from '@/components/NoticeIcon'
 import { mapActions, mapGetters } from 'vuex'
-import LangSelect from './LangSelect'
 import { message } from 'ant-design-vue'
 import i18n from '../../locales'
-import AccountOption from './AccountOption'
-
 export default {
-  name: 'UserMenu',
-  components: {
-    AccountOption,
-    LangSelect,
-    NoticeIcon
-  },
+  name: 'AccountOption',
   computed: {
     ...mapGetters(['isLogin', 'username'])
   },
@@ -47,6 +51,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 
 </style>

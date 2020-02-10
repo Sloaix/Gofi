@@ -7,9 +7,11 @@ type Resource struct {
 	Data    interface{} `json:"data"`
 }
 
-const StatusOk int = 200       // success
-const StatusUnknown int = -1   // fail,reason is unknown
-const StatusNotFound int = 404 // fail,reason is not found
+const StatusOk int = 200             // success
+const StatusUnknown int = -1         // fail,reason is unknown
+const StatusNotFound int = 404       // fail,reason is not found
+const StatusTokenMiss int = 10000    // token miss
+const StatusTokenInvalid int = 10001 // token is invalid
 
 type ResourceBuilder struct {
 	resource *Resource

@@ -7,11 +7,9 @@ require (
 	github.com/CloudyKit/fastprinter v0.0.0-20170127035650-74b38d55f37a // indirect
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20190710001350-29e7b2419f38 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/didip/tollbooth v4.0.2+incompatible
 	github.com/fasthttp-contrib/websocket v0.0.0-20160511215533-1f3b11f56072 // indirect
-	github.com/go-bindata/go-bindata v3.1.2+incompatible // indirect
-	github.com/go-playground/locales v0.13.0 // indirect
-	github.com/go-playground/universal-translator v0.16.0 // indirect
 	github.com/go-xorm/xorm v0.7.9
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-querystring v1.0.0 // indirect
@@ -24,7 +22,6 @@ require (
 	github.com/kataras/iris v0.0.0-20191006184023-c8e73f4f4df2
 	github.com/klauspost/compress v1.8.6 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
-	github.com/leodido/go-urn v1.2.0 // indirect
 	github.com/lib/pq v1.1.1 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mattn/go-sqlite3 v1.11.0
@@ -52,6 +49,5 @@ require (
 	golang.org/x/text v0.3.2
 	golang.org/x/tools v0.0.0-20190624190245-7f2218787638
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
-	gopkg.in/go-playground/validator.v9 v9.30.0
 	gopkg.in/yaml.v2 v2.2.4 // indirect
 )

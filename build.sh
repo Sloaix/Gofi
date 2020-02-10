@@ -49,7 +49,7 @@ function xgo() {
     if ! [ -x "$(command -v $go_bin_dir/xgo)" ]; then
         go get github.com/karalabe/xgo
     fi
-    $go_bin_dir/xgo -out=gofi -tags=''$ENV'' -ldflags='-w -s -X gofi/context.version='$(getVersion)'' --dest=./output --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm $1
+    $go_bin_dir/xgo -out=gofi -tags=''$ENV'' -ldflags='-w -s -X gofi/db.version='$(getVersion)'' --dest=./output --targets=windows/amd64,darwin/amd64,linux/amd64,linux/arm,android/arm $1
 }
 
 function beforeBuild() {

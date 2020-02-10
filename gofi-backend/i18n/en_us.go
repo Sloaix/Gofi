@@ -11,4 +11,6 @@ var EnUS = map[MessageKey]string{
 	CanNotOverlayExistFile:           "%s is exist, can not overlay it",
 	CurrentIsPreviewMode:             "current is preview mode",
 	OperationNotAllowedInPreviewMode: "operation not allowed in preview mode",
+	NotAuthorized:                    "not authorized",
+	UsernameOrPasswordIsWrong:        "username or password is wrong",
 }

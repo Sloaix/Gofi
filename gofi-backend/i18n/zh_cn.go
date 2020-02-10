@@ -11,4 +11,6 @@ var ZhCN = map[MessageKey]string{
 	CanNotOverlayExistFile:           "%s 已存在,无法覆盖已存在的文件",
 	CurrentIsPreviewMode:             "当前是预览模式",
 	OperationNotAllowedInPreviewMode: "预览模式不允许此操作",
+	NotAuthorized:                    "未授权",
+	UsernameOrPasswordIsWrong:        "用户名或密码错误",
 }

@@ -1,7 +1,14 @@
+import i18n from '@/locales'
+
 const getters = {
   device: state => state.app.device,
   theme: state => state.app.theme,
+  isLogin: state => !!state.user.token,
+  username: state => state.user.userInfo != null ? state.user.userInfo.username : '',
+  isAdmin: state => state.user.userInfo != null && state.user.userInfo.roleType === 0,
+  userType: state => state.user.userInfo != null && state.user.userInfo.roleType === 0 ? i18n.t('description.admin') : i18n.t('description.normalUser'),
   configuration: state => state.app.configuration,
+  initialized: state => state.app.configuration ? state.app.configuration.initialized : false,
   acceptLanguage: state => state.app.acceptLanguage,
   language: state => state.app.language,
   storagePath: state => {

@@ -1,4 +1,52 @@
 export default {
+  title: {
+    userType: '用户类型',
+    username: '用户名',
+    password: '密码',
+    changePassword: '修改密码',
+    newPassword: '新密码',
+    confirmPassword: '确认密码'
+  },
+  description: {
+    admin: '管理员',
+    normalUser: '普通用户',
+    hasBeenSet: '已设置',
+    ChangePasswordSoonTip: '为保证您的账户安全，首次登录后请尽快修改密码。',
+    placeHolderForNewPassword: '请输入新密码',
+    placeHolderForConfirmPassword: '请再次输入新密码',
+    confirmPasswordError: '确认密码错误',
+    changeSuccess: '修改成功',
+    usernameOrPasswordWrong: '用户名或密码错误',
+    forgetPassword: '忘记密码?',
+    contactAdmin: '请联系管理员'
+  },
+  action: {
+    edit: '编辑',
+    cancel: '取消',
+    submit: '提交',
+    save: '保存',
+    modify: '修改',
+    confirm: '确认',
+    login: '登录',
+    logout: '登出'
+  },
+  auth: {
+    requireAuth: {
+      content: '请先登录'
+    },
+    logoutConfirm: {
+      title: '警告',
+      content: '真的要注销登录吗？'
+    },
+    loginSuccess: {
+      title: '欢迎',
+      content: '欢迎回来'
+    },
+    logoutSuccess: {
+      title: '再见',
+      content: '下次再见'
+    }
+  },
   notice: {
     switchLanguage: '正在切换语言...'
   },
@@ -67,6 +115,7 @@ export default {
     installFailed: '安装失败'
   },
   setting: {
+    accountSetting: '账户与密码',
     baseSetting: '基本设置',
     customSetting: '个性化'
   },
@@ -93,6 +142,13 @@ export default {
       }
     },
     input: {
+      password: {
+        newPassword: '新密码',
+        confirmPassword: '确认密码',
+        placeHolderForNewPassword: '请输入新密码',
+        placeHolderForConfirmPassword: '请再次输入新密码',
+        errorMessage: '两次输入的密码不一致'
+      },
       fileStoragePath: {
         name: '文件仓库',
         placeholder: '请输入文件夹的绝对路径',

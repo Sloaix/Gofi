@@ -47,7 +47,7 @@ const app = {
     }
   },
   actions: {
-    // 获取用户信息
+    // 获取配置
     GetConfiguration ({ commit }) {
       return new Promise((resolve, reject) => {
         getConfiguration().then(configuration => {

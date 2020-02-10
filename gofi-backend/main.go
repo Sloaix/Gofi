@@ -19,7 +19,9 @@ import (
 	"strings"
 )
 
-const ApiIpAddressInFrontend = "127.0.0.1:8080"
+const (
+	ApiIpAddressInFrontend = "127.0.0.1:8080"
+)
 
 func init() {
 	extension.BindAdditionalType()
@@ -95,6 +97,7 @@ func spa(app *iris.Application) {
 // api endpoint
 func api(app *iris.Application) {
 	limiter := tollbooth.NewLimiter(2, nil)
+
 	api := app.Party("/api", func(ctx iris.Context) {
 		logrus.Println(limiter)
 		// 预览模式下,限制请求频率
@@ -104,13 +107,22 @@ func api(app *iris.Application) {
 			ctx.Next()
 		}
 	}).AllowMethods(iris.MethodOptions)
+
 	{
 		api.Get("/configuration", controller.GetConfiguration)
-		api.Post("/configuration", controller.UpdateConfiguration)
+		api.Post("/configuration", middleware.AutHandler, controller.UpdateConfiguration)
 		api.Post("/setup", controller.Setup)
 		api.Get("/files", controller.ListFiles)
 		api.Get("/file", controller.FileDetail)
 		api.Get("/download", controller.Download)
-		api.Post("/upload", controller.Upload)
+		api.Post("/upload", middleware.AutHandler, controller.Upload)
+	}
+
+	user := api.Party("/user")
+	{
+		user.Get("/", middleware.AutHandler, controller.GetUser)
+		user.Post("/login", controller.Login)
+		user.Post("/logout", middleware.AutHandler, controller.Logout)
+		user.Post("/changePassword", middleware.AutHandler, controller.ChangePassword)
 	}
 }

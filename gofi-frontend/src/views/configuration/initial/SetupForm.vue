@@ -16,6 +16,7 @@
 import Step1 from './Step1'
 import Step2 from './Step2'
 import GlobalFooter from '@/components/GlobalFooter'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'InitialForm',
@@ -23,6 +24,12 @@ export default {
     Step1,
     Step2,
     GlobalFooter
+  },
+  created () {
+    // 如果已经初始化过了，直接重定向到首页
+    if (this.initialized) {
+      this.$router.replace({ name: 'index' })
+    }
   },
   data () {
     return {
@@ -34,8 +41,10 @@ export default {
   mounted () {
     this.fetch(this.$route.query.path)
   },
+  computed: {
+    ...mapGetters(['initialized'])
+  },
   methods: {
-
     // handler
     nextStep () {
       if (this.currentTab < 2) {

@@ -2,6 +2,7 @@ import { BasicLayout, UserLayout } from '@/layouts'
 import FileList from '@/views/disk/FileList'
 import config from '@/config/defaultSettings'
 import FileDetail from '@/views/disk/preview/FilePreview'
+import store from '@/store'
 
 /**
  * 基础路由
@@ -23,8 +24,7 @@ const basicRoutes = [
         component: FileList,
         meta: {
           title: 'menu.allFile',
-          icon: 'folder',
-          permission: ['dashboard']
+          icon: 'folder'
         }
       },
       {
@@ -37,21 +37,32 @@ const basicRoutes = [
         path: '/setting',
         name: 'setting',
         component: () => import('@/views/settings/Index'),
-        meta: { title: 'menu.setting', icon: 'setting' },
-        redirect: { name: 'base-setting' },
+        meta: {
+          title: 'menu.setting',
+          icon: 'setting'
+        },
+        redirect: () => {
+          return store.getters.isAdmin ? { name: 'base-setting' } : { name: 'account-setting' }
+        },
         hideChildrenInMenu: true,
         children: [
+          {
+            path: 'account',
+            name: 'account-setting',
+            component: () => import('@/views/settings/Account'),
+            meta: { title: 'setting.accountSetting', requireAuth: true }
+          },
           {
             path: 'base',
             name: 'base-setting',
             component: () => import('@/views/settings/Base'),
-            meta: { title: 'setting.baseSetting' }
+            meta: { title: 'setting.baseSetting', requireAuth: true }
           },
           {
             path: 'custom',
             name: 'custom-setting',
             component: () => import('@/views/settings/Custom'),
-            meta: { title: 'setting.customSetting' }
+            meta: { title: 'setting.customSetting', requireAuth: true }
           }
         ]
       }

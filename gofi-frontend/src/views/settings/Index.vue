@@ -10,14 +10,23 @@
             type="inner"
             @openChange="onOpenChange"
           >
-            <a-menu-item :key="this.$router.resolve({ name: 'base-setting' }).route.path">
-              <router-link :to="{ name: 'base-setting' }">
-                {{ $t('setting.baseSetting') }}
-              </router-link>
-            </a-menu-item>
-            <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
-              <router-link :to="{ name: 'custom-setting' }">
-                {{ $t('setting.customSetting') }}
+            <!--管理员可见-->
+            <template v-if="isAdmin">
+              <a-menu-item :key="this.$router.resolve({ name: 'base-setting' }).route.path">
+                <router-link :to="{ name: 'base-setting' }">
+                  {{ $t('setting.baseSetting') }}
+                </router-link>
+              </a-menu-item>
+              <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
+                <router-link :to="{ name: 'custom-setting' }">
+                  {{ $t('setting.customSetting') }}
+                </router-link>
+              </a-menu-item>
+            </template>
+            <!--所有登录用户可见-->
+            <a-menu-item :key="this.$router.resolve({ name: 'account-setting' }).route.path">
+              <router-link :to="{ name: 'account-setting' }">
+                {{ $t('setting.accountSetting') }}
               </router-link>
             </a-menu-item>
           </a-menu>
@@ -36,6 +45,7 @@
 <script>
 import { PageView, RouteView } from '@/layouts'
 import { mixinDevice } from '@/utils/mixin.js'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -71,6 +81,9 @@ export default {
 
       pageTitle: ''
     }
+  },
+  computed: {
+    ...mapGetters(['isAdmin'])
   },
   created () {
     this.updateMenu()

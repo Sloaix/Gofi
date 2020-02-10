@@ -1,6 +1,6 @@
 <template>
   <a-dropdown>
-    <span class="action global-lang" style="font-size: 16px">
+    <span class="action global-lang">
       <a-icon type="global" />
       {{ $t('menu.language') }}
     </span>

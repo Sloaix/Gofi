@@ -23,6 +23,8 @@ const (
 	CanNotOverlayExistFile
 	CurrentIsPreviewMode
 	OperationNotAllowedInPreviewMode
+	NotAuthorized
+	UsernameOrPasswordIsWrong
 )
 
 var TranslateKeys = []MessageKey{
@@ -36,6 +38,8 @@ var TranslateKeys = []MessageKey{
 	CanNotOverlayExistFile,
 	CurrentIsPreviewMode,
 	OperationNotAllowedInPreviewMode,
+	NotAuthorized,
+	UsernameOrPasswordIsWrong,
 }
 
 func (messageKey MessageKey) String() string {
