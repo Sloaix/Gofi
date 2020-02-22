@@ -45,19 +45,19 @@ jobs:
         run: ./build.sh
 
       # # 压缩产物
-      # - name: Compress
-      #   uses: docker://gact/upx:latest
-      #   with:
-      #     dir: './output'
-      #     upx_args: '-9'
+      - name: Compress
+        uses: docker://gact/upx:latest
+        with:
+          dir: './output'
+          upx_args: '-9'
 
       # 列出产物
       - name: List output
         run: du -ah ./output
 
       # # 上传临时编译产物
-      # - name: Upload Snapshot Build Product
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: Snapshot
-      #     path: ./output
+      - name: Upload Snapshot Build Product
+        uses: actions/upload-artifact@v1
+        with:
+          name: Snapshot
+          path: ./output
