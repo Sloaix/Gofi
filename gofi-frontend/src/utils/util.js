@@ -1,6 +1,3 @@
-import Vue from 'vue'
-import { TOKEN } from '@/store/mutation-types'
-
 export function timeFix () {
   const time = new Date()
   const hour = time.getHours()
@@ -72,16 +69,4 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
   setTimeout(() => {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
-}
-
-/**
- * 将token的header 附加到对应的header上
- * @param {}} target eg.{contentLength:111}
- */
-export function attachTokenToHeaders (target) {
-  const token = Vue.ls.get(TOKEN, null)
-  if (token) {
-    target.Authorization = `bearer ${token}`
-  }
-  return target
 }

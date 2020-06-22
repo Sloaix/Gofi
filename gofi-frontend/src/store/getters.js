@@ -9,7 +9,13 @@ const getters = {
   userType: state => state.user.userInfo != null && state.user.userInfo.roleType === 0 ? i18n.t('description.admin') : i18n.t('description.normalUser'),
   configuration: state => state.app.configuration,
   initialized: state => state.app.configuration ? state.app.configuration.initialized : false,
-  acceptLanguage: state => state.app.acceptLanguage,
+  headers: state => {
+    let headers = { 'Accept-Language': state.app.language }
+    if (state.user && state.user.token) {
+      headers = Object.assign(headers, { Authorization: `bearer ${state.user.token}` })
+    }
+    return headers
+  },
   language: state => state.app.language,
   storagePath: state => {
     const { customStoragePath, defaultStoragePath } = state.app.configuration

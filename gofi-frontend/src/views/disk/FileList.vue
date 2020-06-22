@@ -117,7 +117,6 @@ import { PageView } from '@/layouts'
 import GofiIcon from '../../components/GofiIcon/GofiIcon'
 import config from '@/config/defaultSettings'
 import { mapGetters } from 'vuex'
-import { attachTokenToHeaders } from '../../utils/util'
 
 export default {
   name: 'FileList',
@@ -149,10 +148,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['acceptLanguage']),
-    headers () {
-      return attachTokenToHeaders(this.acceptLanguage)
-    },
+    ...mapGetters(['headers']),
     title () {
       return `Gofi://${this.currentDirectory}`
     },

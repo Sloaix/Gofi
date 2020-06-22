@@ -60,7 +60,7 @@ export function loadLanguageAsync (lang = defaultLang) {
     Vue.ls.set('lang', lang)
     if (i18n.locale !== lang) {
       if (!loadedLanguages.includes(lang)) {
-        return import(/* webpackChunkName: "lang-[request]" */ `./lang/${lang}`).then(
+        return import(/* webpackChunkName: "lang-[request]" */ `./${lang}`).then(
           msg => {
             i18n.setLocaleMessage(lang, msg.default)
             loadedLanguages.push(lang)

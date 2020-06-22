@@ -19,7 +19,6 @@ const app = {
     theme: '',
     navMode: '',
     language: 'zh-CN',
-    acceptLanguage: {},
     configuration: {}
   },
   mutations: {
@@ -41,7 +40,6 @@ const app = {
       Vue.ls.set(DEFAULT_LANGUAGE, language)
       // 更改vue内置组件的语言
       state.language = language
-      state.acceptLanguage = { 'Accept-Language': language }
       // 更改自有组件的语言
       i18n.locale = language
     }
