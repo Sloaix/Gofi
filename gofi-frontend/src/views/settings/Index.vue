@@ -14,19 +14,19 @@
             <template v-if="isAdmin">
               <a-menu-item :key="this.$router.resolve({ name: 'base-setting' }).route.path">
                 <router-link :to="{ name: 'base-setting' }">
-                  {{ $t('setting.baseSetting') }}
+                  {{ $t('menu.title.setting.base') }}
                 </router-link>
               </a-menu-item>
               <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
                 <router-link :to="{ name: 'custom-setting' }">
-                  {{ $t('setting.customSetting') }}
+                  {{ $t('menu.title.setting.custom') }}
                 </router-link>
               </a-menu-item>
             </template>
             <!--所有登录用户可见-->
             <a-menu-item :key="this.$router.resolve({ name: 'account-setting' }).route.path">
               <router-link :to="{ name: 'account-setting' }">
-                {{ $t('setting.accountSetting') }}
+                {{ $t('menu.title.setting.account') }}
               </router-link>
             </a-menu-item>
           </a-menu>

@@ -4,7 +4,7 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"github.com/dgrijalva/jwt-go"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"strconv"
 )
 

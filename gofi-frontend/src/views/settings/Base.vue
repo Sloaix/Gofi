@@ -1,15 +1,15 @@
 <template>
   <a-form :form="form">
     <!--文件仓库-->
-    <a-form-item :label="$t('form.input.fileStoragePath.name')">
+    <a-form-item :label="$t('setting.base.form.label.fileStoragePath')">
       <a-input-group style="display: inline-block; vertical-align: middle" :compact="true">
         <a-select
           style="width:95px"
           @select="onStorageTypeSelect"
           v-model="storageType"
         >
-          <a-select-option value="default">{{ $t('form.select.fileStorageType.def') }}</a-select-option>
-          <a-select-option value="custom">{{ $t('form.select.fileStorageType.custom') }}</a-select-option>
+          <a-select-option value="default">{{ $t('setup.step1.form.select.option.fileStorageType.default') }}</a-select-option>
+          <a-select-option value="custom">{{ $t('setup.step1.form.select.option.fileStorageType.custom') }}</a-select-option>
         </a-select>
         <a-input
           :placeholder="$t('form.input.fileStoragePath.placeholder')"
@@ -23,7 +23,7 @@
       </a-input-group>
     </a-form-item>
     <a-form-item >
-      <a-button :loading="loading" type="primary" @click="onSaveButtonClick">{{ $t('form.button.save.name') }}</a-button>
+      <a-button :loading="loading" type="primary" @click="onSaveButtonClick">{{ $t('setting.base.form.button.save') }}</a-button>
     </a-form-item>
   </a-form>
 </template>

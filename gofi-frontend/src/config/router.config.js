@@ -15,7 +15,7 @@ const basicRoutes = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: 'menu.index' },
+    meta: { title: 'menu.title.index' },
     redirect: { name: 'file-list' },
     children: [
       {
@@ -23,7 +23,7 @@ const basicRoutes = [
         name: 'file-list',
         component: FileList,
         meta: {
-          title: 'menu.allFile',
+          title: 'menu.title.allFile',
           icon: 'folder'
         }
       },
@@ -38,7 +38,7 @@ const basicRoutes = [
         name: 'setting',
         component: () => import('@/views/settings/Index'),
         meta: {
-          title: 'menu.setting',
+          title: 'menu.title.setting',
           icon: 'setting'
         },
         redirect: () => {
@@ -50,19 +50,19 @@ const basicRoutes = [
             path: 'account',
             name: 'account-setting',
             component: () => import('@/views/settings/Account'),
-            meta: { title: 'setting.accountSetting', requireAuth: true }
+            meta: { title: 'menu.title.setting.account', requireAuth: true }
           },
           {
             path: 'base',
             name: 'base-setting',
             component: () => import('@/views/settings/Base'),
-            meta: { title: 'setting.baseSetting', requireAuth: true }
+            meta: { title: 'menu.title.setting.base', requireAuth: true }
           },
           {
             path: 'custom',
             name: 'custom-setting',
             component: () => import('@/views/settings/Custom'),
-            meta: { title: 'setting.customSetting', requireAuth: true }
+            meta: { title: 'menu.title.setting.custom', requireAuth: true }
           }
         ]
       }

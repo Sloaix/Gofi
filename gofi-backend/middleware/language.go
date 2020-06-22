@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"gofi/i18n"
 	"golang.org/x/text/language"

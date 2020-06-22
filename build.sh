@@ -16,10 +16,10 @@ ENV="${ENV:-production}"
 
 gofilog corrent build dir is $correct_build_dir, current build dir is $build_dir
 
-if [ "$build_dir" != "$correct_build_dir" ]; then
-    gofilog build failed, you must place project at $correct_build_dir
-    exit
-fi
+# if [ "$build_dir" != "$correct_build_dir" ]; then
+#     gofilog build failed, you must place project at $correct_build_dir
+#     exit
+# fi
 
 gofilog build for $ENV
 

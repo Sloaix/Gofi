@@ -1,14 +1,14 @@
 <template>
   <a-modal
     :visible="visible"
-    :title="$t('title.changePassword')"
+    :title="$t('setting.account.form.label.changePassword')"
     :okText="$t('action.submit')"
     :cancelText="$t('action.cancel')"
     @cancel="() => { $emit('cancel') }"
     @ok="() => { $emit('create') }"
   >
     <a-form :form="form">
-      <a-form-item :label="$t('title.newPassword')">
+      <a-form-item :label="$t('setting.account.form.label.newPassword')">
         <a-input
           v-decorator="[
             'password',
@@ -18,7 +18,7 @@
           ]"
         />
       </a-form-item>
-      <a-form-item :label="$t('title.confirmPassword')">
+      <a-form-item :label="$t('setting.account.form.label.confirmPassword')">
         <a-input
           v-decorator="[
             'confirm',
@@ -43,9 +43,12 @@
 <script>
 export default {
   name: 'PasswordChangeModal',
-  props: [
-    'visible'
-  ],
+  props: {
+    'visible': {
+      required: true,
+      type: Boolean
+    }
+  },
   beforeCreate () {
     this.form = this.$form.createForm(this, { name: 'password_change_form_in_modal' })
   },

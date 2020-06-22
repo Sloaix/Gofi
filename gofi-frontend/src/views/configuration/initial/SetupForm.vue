@@ -1,8 +1,8 @@
 <template>
   <a-card :bordered="false">
     <a-steps class="steps" :current="currentTab">
-      <a-step :title="$t('setup.step1.name')"/>
-      <a-step :title="$t('setup.step2.name')"/>
+      <a-step :title="$t('setup.step1.indicator.title.setup')"/>
+      <a-step :title="$t('setup.step2.indicator.title.complete')"/>
     </a-steps>
     <div class="content">
       <step1 v-if="currentTab === 0" @nextStep="nextStep"/>

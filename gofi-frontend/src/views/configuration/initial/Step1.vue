@@ -2,12 +2,12 @@
   <div>
     <a-form :form="form" style="max-width: 700px; margin: 40px auto 0;">
       <!--默认语言-->
-      <a-form-item :label="$t('form.select.language.name')" :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item :label="$t('setup.step1.form.label.language')" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-select
           @select="onLanguageSelect"
           v-decorator="[
             'defaultLanguage',
-            { initialValue: language, rules: [{ required: true,message:$t('form.select.language.errorMessage')}] }
+            { initialValue: language, rules: [{ required: true,message:$t('setup.step1.form.select.error.language')}] }
           ]"
         >
           <a-select-option value="zh-CN"><span role="img" aria-label="简体中文">🇨🇳</span> 简体中文</a-select-option>
@@ -25,8 +25,8 @@
             @select="onStorageTypeSelect"
             defaultValue="default"
           >
-            <a-select-option value="default">{{ $t('form.select.fileStorageType.def') }}</a-select-option>
-            <a-select-option value="custom">{{ $t('form.select.fileStorageType.custom') }}</a-select-option>
+            <a-select-option value="default">{{ $t('setup.step1.form.select.option.fileStorageType.default') }}</a-select-option>
+            <a-select-option value="custom">{{ $t('setup.step1.form.select.option.fileStorageType.custom') }}</a-select-option>
           </a-select>
           <a-input
             :placeholder="$t('form.input.fileStoragePath.placeholder')"
@@ -40,7 +40,7 @@
         </a-input-group>
       </a-form-item>
       <!--导航模式-->
-      <a-form-item :label="$t('form.input.navMode.name')" :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item :label="$t('setup.step1.form.label.navMode')" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-select
           @select="onNavModeSelect"
           v-decorator="[
@@ -53,19 +53,19 @@
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/nav_top.svg"
               alt="topmenu">
-            <span>{{ $t('form.input.navMode.top') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.navMode.top') }}</span>
           </a-select-option>
           <a-select-option value="side">
             <img
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/nav_side.svg"
               alt="sidemenu">
-            <span>{{ $t('form.input.navMode.side') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.navMode.side') }}</span>
           </a-select-option>
         </a-select>
       </a-form-item>
       <!--主题风格-->
-      <a-form-item :label="$t('form.input.themeStyle.name')" :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item :label="$t('setup.step1.form.label.themeStyle')" :labelCol="labelCol" :wrapperCol="wrapperCol">
         <a-select
           @select="onThemeStyleSelect"
           v-decorator="[
@@ -78,29 +78,29 @@
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/theme_light.svg"
               alt="light">
-            <span>{{ $t('form.input.themeStyle.light') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.themeStyle.light') }}</span>
           </a-select-option>
           <a-select-option value="dark">
             <img
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/theme_dark.svg"
               alt="dark">
-            <span>{{ $t('form.input.themeStyle.dark') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.themeStyle.dark') }}</span>
           </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item :wrapperCol="{ span: 19, offset: 5 }">
-        <a-button :loading="loading" type="primary" @click="nextStep">{{ $t('form.button.submit.name') }}</a-button>
+        <a-button :loading="loading" type="primary" @click="nextStep">{{ $t('setup.step1.button.submit') }}</a-button>
       </a-form-item>
     </a-form>
     <a-divider/>
     <div class="step-form-style-desc" style="max-width: 800px; margin: 40px auto 0;">
-      <h3>说明</h3>
-      <h4>默认路径</h4>
-      <p>默认路径为gofi应用程序所在文件夹下Storage目录，Gofi在第一次启动时会自动创建该目录。</p>
-      <h4>自定义路径</h4>
-      <p>你可以为Gofi指定任意文件目录，但是请确保Gofi对该文件夹具有读写权限。</p>
-      <p>注意：请使用绝对路径,如/Users/lsxiao</p>
+      <h3>{{ $t('setup.step1.header.intorduction') }}</h3>
+      <h4>{{ $t('setup.step1.label.defaultPath') }}</h4>
+      <p>{{ $t('setup.step1.label.defaultPath.description') }}</p>
+      <h4>{{ $t('setup.step1.label.customPath') }}</h4>
+      <p>{{ $t('setup.step1.label.customPath.description') }}</p>
+      <p>{{ $t('setup.step1.description.attention') }}</p>
     </div>
   </div>
 </template>

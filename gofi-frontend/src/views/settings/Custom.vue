@@ -2,7 +2,7 @@
   <div>
     <a-form :form="form">
       <!--导航模式-->
-      <a-form-item :label="$t('form.input.navMode.name')">
+      <a-form-item :label="$t('setup.step1.form.label.navMode')">
         <a-select
           @select="onNavModeSelect"
           v-decorator="[
@@ -15,19 +15,19 @@
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/nav_top.svg"
               alt="topmenu">
-            <span>{{ $t('form.input.navMode.top') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.navMode.top') }}</span>
           </a-select-option>
           <a-select-option value="side">
             <img
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/nav_side.svg"
               alt="sidemenu">
-            <span>{{ $t('form.input.navMode.side') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.navMode.side') }}</span>
           </a-select-option>
         </a-select>
       </a-form-item>
       <!--主题风格-->
-      <a-form-item :label="$t('form.input.themeStyle.name')">
+      <a-form-item :label="$t('setup.step1.form.label.themeStyle')">
         <a-select
           @select="onThemeStyleSelect"
           v-decorator="[
@@ -40,19 +40,19 @@
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/theme_light.svg"
               alt="light">
-            <span>{{ $t('form.input.themeStyle.light') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.themeStyle.light') }}</span>
           </a-select-option>
           <a-select-option value="dark">
             <img
               style="height: 20px;margin-right: 10px"
               src="@/assets/icons/theme_dark.svg"
               alt="dark">
-            <span>{{ $t('form.input.themeStyle.dark') }}</span>
+            <span>{{ $t('setup.step1.form.select.option.themeStyle.dark') }}</span>
           </a-select-option>
         </a-select>
       </a-form-item>
       <a-form-item >
-        <a-button :loading="loading" type="primary" @click="onSaveButtonClick">{{ $t('form.button.save.name') }}</a-button>
+        <a-button :loading="loading" type="primary" @click="onSaveButtonClick">{{ $t('setting.base.form.button.save') }}</a-button>
       </a-form-item>
     </a-form>
   </div>

@@ -76,16 +76,16 @@ export default {
     ...mapGetters(['isAdmin', 'username', 'userType']),
     options () {
       return [
-        { title: this.$t('title.userType'),
+        { title: this.$t('setting.account.form.label.userType'),
           description: this.userType,
           value: ''
         },
-        { title: this.$t('title.username'),
+        { title: this.$t('setting.account.form.label.username'),
           description: this.username,
           value: ''
         },
-        { title: this.$t('title.password'),
-          description: this.$t('description.hasBeenSet'),
+        { title: this.$t('setting.account.form.label.password'),
+          description: '******',
           value: '',
           actions: {
             title: this.$t('action.edit'),

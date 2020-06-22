@@ -1,18 +1,13 @@
 <template>
   <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
+    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
       <a-alert
         v-if="isLoginError"
         type="error"
         showIcon
         style="margin-bottom: 24px;"
-        :message="$t('description.usernameOrPasswordWrong')"/>
+        :message="$t('description.usernameOrPasswordWrong')"
+      />
       <a-form-item>
         <a-input
           size="large"
@@ -20,10 +15,10 @@
           placeholder="用户名"
           v-decorator="[
             'username',
-            {rules: [{ required: true,min:1, message: '请输入用户名' }], validateTrigger: 'change'}
+            { rules: [{ required: true, min: 1, message: '请输入用户名' }], validateTrigger: 'change' }
           ]"
         >
-          <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+          <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
         </a-input>
       </a-form-item>
 
@@ -35,10 +30,10 @@
           placeholder="密码"
           v-decorator="[
             'password',
-            {rules: [{ required: true,min:1, message: '请输入密码' }], validateTrigger: 'blur'}
+            { rules: [{ required: true, min: 1, message: '请输入密码' }], validateTrigger: 'blur' }
           ]"
         >
-          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+          <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
         </a-input>
       </a-form-item>
 
@@ -55,13 +50,11 @@
       </a-form-item>
 
       <a-form-item>
-        <a-tooltip
-          placement="left"
-          style="float: right;cursor: pointer">
+        <a-tooltip placement="left" style="float: right;cursor: pointer">
           <template slot="title">
-            {{ $t('description.contactAdmin') }}
+            {{ $t('login.form.label.forgetPassword.tooltip') }}
           </template>
-          {{ $t('description.forgetPassword') }}
+          {{ $t('login.form.label.forgetPassword') }}
         </a-tooltip>
       </a-form-item>
     </a-form>
@@ -111,8 +104,8 @@ export default {
         if (!err) {
           console.log('user form', params)
           Login(params)
-            .then((res) => GetUser())
-            .then((res) => this.loginSuccess(res))
+            .then(res => GetUser())
+            .then(res => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
@@ -143,43 +136,43 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .user-layout-login {
-    label {
-      font-size: 14px;
-    }
+.user-layout-login {
+  label {
+    font-size: 14px;
+  }
 
-    .forge-password {
-      font-size: 14px;
-    }
+  .forge-password {
+    font-size: 14px;
+  }
 
-    button.login-button {
-      padding: 0 15px;
-      font-size: 16px;
-      height: 40px;
-      width: 100%;
-    }
+  button.login-button {
+    padding: 0 15px;
+    font-size: 16px;
+    height: 40px;
+    width: 100%;
+  }
 
-    .user-login-other {
-      text-align: left;
-      margin-top: 24px;
-      line-height: 22px;
+  .user-login-other {
+    text-align: left;
+    margin-top: 24px;
+    line-height: 22px;
 
-      .item-icon {
-        font-size: 24px;
-        color: rgba(0, 0, 0, 0.2);
-        margin-left: 16px;
-        vertical-align: middle;
-        cursor: pointer;
-        transition: color 0.3s;
+    .item-icon {
+      font-size: 24px;
+      color: rgba(0, 0, 0, 0.2);
+      margin-left: 16px;
+      vertical-align: middle;
+      cursor: pointer;
+      transition: color 0.3s;
 
-        &:hover {
-          color: #1890ff;
-        }
+      &:hover {
+        color: #1890ff;
       }
+    }
 
-      .register {
-        float: right;
-      }
+    .register {
+      float: right;
     }
   }
+}
 </style>

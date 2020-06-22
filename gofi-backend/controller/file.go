@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"gofi/db"
 	"gofi/i18n"

@@ -2,7 +2,7 @@
   <a-dropdown>
     <span class="action global-lang">
       <a-icon type="global" />
-      {{ $t('menu.language') }}
+      {{ $t('menu.title.language') }}
     </span>
     <a-menu slot="overlay" style="width: 150px;" @click="onItemSelect">
       <a-menu-item key="zh-CN">

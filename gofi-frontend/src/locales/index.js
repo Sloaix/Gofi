@@ -6,8 +6,8 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 // default language
-import enUS from './lang/en-US'
-import zhCN from './lang/zh-CN'
+import enUS from './en-US/index'
+import zhCN from './zh-CN/index'
 // change default accept-language
 import { axios } from '@/utils/request'
 import zhCnVue from 'ant-design-vue/lib/locale-provider/zh_CN'

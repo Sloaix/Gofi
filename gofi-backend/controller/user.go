@@ -3,7 +3,7 @@ package controller
 import (
 	jwt2 "github.com/dgrijalva/jwt-go"
 	"github.com/iris-contrib/middleware/jwt"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
 	"gofi/db"
 	"gofi/i18n"
