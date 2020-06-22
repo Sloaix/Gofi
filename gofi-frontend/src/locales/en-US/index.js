@@ -23,6 +23,7 @@ export default {
   'action.confirm': 'Confirm',
   'action.login': 'Login',
   'action.logout': 'Logout',
+  'action.changePassword': 'Change Password',
   'auth.requireAuth.content': 'Please login first',
   'auth.logoutConfirm.title': 'Warning',
   'auth.logoutConfirm.content': 'Really to logout ?',

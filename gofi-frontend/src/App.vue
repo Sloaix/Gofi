@@ -26,8 +26,17 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="less">
   #app {
     height: 100%;
+  }
+
+  // 对话框样式调整
+  .ant-modal{
+    .ant-modal-footer{
+      padding-top: 0 !important;
+      padding-bottom: 20px !important;
+      border-top: none !important;
+    }
   }
 </style>

@@ -2,17 +2,18 @@
   <a-dropdown>
     <span class="action global-lang">
       <a-icon type="global" />
-      {{ $t('menu.title.language') }}
     </span>
     <a-menu slot="overlay" style="width: 150px;" @click="onItemSelect">
       <a-menu-item key="zh-CN">
         <a rel="noopener noreferrer">
-          <span role="img" aria-label="简体中文">🇨🇳</span> 简体中文
+          <span role="img" aria-label="简体中文">🇨🇳</span>
+          <span style="margin-left:10px">简体中文</span>
         </a>
       </a-menu-item>
       <a-menu-item key="en-US">
         <a rel="noopener noreferrer">
-          <span role="img" aria-label="English">🇺🇸</span> English
+          <span role="img" aria-label="English">🇺🇸</span>
+          <span style="margin-left:10px">English</span>
         </a>
       </a-menu-item>
     </a-menu>

@@ -1,5 +1,9 @@
 <template>
   <a-modal
+    :closable="false"
+    :width="350"
+    :destroyOnClose="true"
+    :mask="true"
     :visible="visible"
     :title="$t('setting.account.form.label.changePassword')"
     :okText="$t('action.submit')"
@@ -7,19 +11,26 @@
     @cancel="() => { $emit('cancel') }"
     @ok="() => { $emit('create') }"
   >
-    <a-form :form="form">
-      <a-form-item :label="$t('setting.account.form.label.newPassword')">
+    <a-form
+      :form="form"
+    >
+      <a-form-item >
         <a-input
+          :placeholder="$t('setting.account.form.label.newPassword')"
           v-decorator="[
             'password',
             {
               rules: [{ required: true,message: $t('description.placeHolderForNewPassword') }],
             }
           ]"
-        />
+        >
+          <a-icon slot="addonBefore" type="lock" />
+        </a-input>
       </a-form-item>
-      <a-form-item :label="$t('setting.account.form.label.confirmPassword')">
+      <!-- <a-form-item :label="$t('setting.account.form.label.confirmPassword')"> -->
+      <a-form-item >
         <a-input
+          :placeholder="$t('setting.account.form.label.confirmPassword')"
           v-decorator="[
             'confirm',
             {
@@ -34,7 +45,9 @@
               ],
             }
           ]"
-        />
+        >
+          <a-icon slot="addonBefore" type="check-circle" />
+        </a-input>
       </a-form-item>
     </a-form>
   </a-modal>
@@ -65,6 +78,6 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
 
 </style>

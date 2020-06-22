@@ -23,6 +23,7 @@ export default {
   'action.confirm': '确认',
   'action.login': '登录',
   'action.logout': '登出',
+  'action.changePassword': '修改密码',
   'auth.requireAuth.content': '请先登录',
   'auth.logoutConfirm.title': '警告',
   'auth.logoutConfirm.content': '真的要注销登录吗？',

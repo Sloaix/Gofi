@@ -2,9 +2,14 @@
   <a-dropdown v-if="isLogin">
     <span class="action">
       <a-icon type="user" />
-      {{ username }}
     </span>
     <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
+      <a-menu-item key="1">
+        <router-link :to="{name:'account-setting'}">
+          <a-icon type="lock"/>
+          <span>{{ $t('action.changePassword') }}</span>
+        </router-link>
+      </a-menu-item>
       <a-menu-item key="0">
         <a href="javascript:;" @click="handleLogout">
           <a-icon type="logout"/>
@@ -53,5 +58,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
