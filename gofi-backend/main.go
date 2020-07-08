@@ -125,4 +125,10 @@ func api(app *iris.Application) {
 		user.Post("/logout", middleware.AutHandler, controller.Logout)
 		user.Post("/changePassword", middleware.AutHandler, controller.ChangePassword)
 	}
+
+	permission := api.Party("/permission", middleware.AdminHandler)
+	{
+		permission.Get("/guest", controller.GetGuestPermissions)
+		permission.Post("/guest", controller.UpdateGuestPermission)
+	}
 }

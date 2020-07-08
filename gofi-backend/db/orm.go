@@ -13,9 +13,7 @@ var engine *xorm.Engine
 
 func init() {
 	engine = createEngine()
-	SyncPermissions()
-	SyncRoles()
-	SyncAdminPermissions()
+	SyncGuestPermissions()
 	SyncAdmin()
 }
 
@@ -31,7 +29,7 @@ func createEngine() *xorm.Engine {
 		logrus.Info("on environment,skip database sync")
 	} else {
 		// migrate database
-		if err := engine.Sync2(new(Configuration), new(Role), new(User), new(Permission)); err != nil {
+		if err := engine.Sync2(new(Configuration), new(User), new(Permission)); err != nil {
 			logrus.Error(err)
 		}
 	}

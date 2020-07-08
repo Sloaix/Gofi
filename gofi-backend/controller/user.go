@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	jwt2 "github.com/dgrijalva/jwt-go"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
@@ -75,10 +76,12 @@ func Login(ctx iris.Context) {
 		return
 	}
 
+	fmt.Println(user)
+
 	// 生成jwt
 	token := jwt.NewTokenWithClaims(jwt.SigningMethodHS256, jwt2.StandardClaims{
 		Audience:  "Gofi",
-		Issuer:    "Gofi",
+		Issuer:    strconv.Itoa(int(user.RoleType)), // 用户角色
 		Subject:   "Gofi",
 		Id:        strconv.Itoa(int(user.Id)),                 // 用户ID
 		ExpiresAt: time.Now().Add(time.Hour * 24 * 30).Unix(), // 30天后过期

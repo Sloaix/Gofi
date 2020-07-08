@@ -8,8 +8,6 @@ import (
 
 type Configuration struct {
 	Id                 int64     `json:"-"`
-	ThemeStyle         string    `json:"themeStyle" validate:"required,oneof=dark light"` // 可选 dark,light
-	NavMode            string    `json:"navMode" validate:"required,oneof=side top"`      // 导航模式,side,top
 	CustomStoragePath  string    `json:"customStoragePath"`                               // 自定义文件仓库路径
 	Initialized        bool      `json:"initialized"`                                     // 是否初始化
 	Created            time.Time `json:"-" xorm:"created"`                                // 创建时间
@@ -49,8 +47,6 @@ func ObtainConfiguration() *Configuration {
 			DefaultStoragePath: tool.GetDefaultStorageDir(),
 			DatabaseFilePath:   tool.GetDatabaseFilePath(),
 			LogDirectoryPath:   tool.GetLogDir(),
-			ThemeStyle:         "light", // light or dark
-			NavMode:            "top",   // top or side
 			Created:            time.Time{},
 			Updated:            time.Time{},
 		}

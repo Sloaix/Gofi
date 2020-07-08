@@ -9,12 +9,12 @@ import (
 
 const (
 	AdminUsername = "admin"
-	AdminPassword = "gofi"
+	AdminPassword = "password"
 )
 
 type User struct {
 	Id       int64     `json:"id"`
-	RoleType int64     `json:"roleType"`
+	RoleType RoleType  `json:"roleType"`
 	Username string    `json:"username" validate:"required"`
 	Password string    `json:"-" validate:"required"`
 	Created  time.Time `json:"-" xorm:"created"` // 创建时间
@@ -45,7 +45,7 @@ func SyncAdmin() {
 // 管理员是否存在
 func adminExist() bool {
 	user := new(User)
-	has, err := engine.Where("role_type=?", TypeAdmin).Get(user)
+	has, err := engine.Where("role_type=?", RoleTypeAdmin).Get(user)
 	if err != nil {
 		logrus.Errorln(err)
 		return true
@@ -57,7 +57,7 @@ func adminExist() bool {
 // 实例化新的管理员
 func newAdmin() User {
 	return User{
-		RoleType: TypeAdmin,
+		RoleType: RoleTypeAdmin,
 		Username: AdminUsername,
 		Password: tool.MD5(AdminPassword),
 		Created:  time.Time{},
