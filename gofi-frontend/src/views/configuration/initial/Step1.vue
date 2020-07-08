@@ -16,7 +16,7 @@
       </a-form-item>
       <!--文件仓库-->
       <a-form-item
-        :label="$t('form.input.fileStoragePath.name')"
+        :label="$t('setup.step1.label.fileStoragePath')"
         :labelCol="labelCol"
         :wrapperCol="wrapperCol">
         <a-input-group style="display: inline-block; vertical-align: middle" :compact="true">
@@ -29,7 +29,7 @@
             <a-select-option value="custom">{{ $t('setup.step1.form.select.option.fileStorageType.custom') }}</a-select-option>
           </a-select>
           <a-input
-            :placeholder="$t('form.input.fileStoragePath.placeholder')"
+            :placeholder="$t('setup.step1.placeholder.fileStoragePath')"
             :style="{ width: 'calc(100% - 95px)' }"
             :disabled="storagePathInputDisabled"
             v-decorator="[

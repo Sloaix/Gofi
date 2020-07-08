@@ -14,6 +14,8 @@ export default {
   'setup.step1.label.defaultPath': 'Default path',
   'setup.step1.label.defaultPath.description': 'The default storage directory is under the folder where the gofi application is located. Gofi will automatically create this directory when it is first started.',
   'setup.step1.label.customPath': 'Custom path',
+  'setup.step1.label.fileStoragePath': 'File storage path',
+  'setup.step1.placeholder.fileStoragePath': 'input custom storage folder path',
   'setup.step1.label.customPath.description': 'You can specify any storage directory for Gofi, but make sure that Gofi has read and write permissions to this folder.',
   'setup.step1.description.attention': 'Note: Please use an absolute path, such as /Projects/Gofi',
   'setup.step1.indicator.title.setup': 'Setup',

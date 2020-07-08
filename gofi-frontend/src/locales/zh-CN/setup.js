@@ -14,6 +14,8 @@ export default {
   'setup.step1.label.defaultPath': '默认路径',
   'setup.step1.label.defaultPath.description': '默认路径为gofi应用程序所在文件夹下Storage目录，Gofi在第一次启动时会自动创建该目录。',
   'setup.step1.label.customPath': '自定义路径',
+  'setup.step1.label.fileStoragePath': '文件仓库',
+  'setup.step1.placeholder.fileStoragePath': '请输入自定义文件仓库路径',
   'setup.step1.label.customPath.description': '你可以为Gofi指定任意文件目录，但是请确保Gofi对该文件夹具有读写权限。',
   'setup.step1.description.attention': '注意：请使用绝对路径,如/Projects/Gofi',
   'setup.step1.indicator.title.setup': '安装',
