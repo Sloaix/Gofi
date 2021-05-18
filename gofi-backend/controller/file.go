@@ -228,5 +228,5 @@ func Download(ctx iris.Context) {
 		ctx.Header("Content-Disposition", "attachment;filename="+filename)
 	}
 
-	_ = ctx.ServeFile(path, false)
+	_ = ctx.ServeFile(path)
 }

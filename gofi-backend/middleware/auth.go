@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/iris-contrib/middleware/jwt"
 	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/context"
 	"gofi/controller"
 	"gofi/db"
 	"gofi/i18n"
@@ -19,7 +18,7 @@ func AutHandler(ctx iris.Context) {
 		},
 		Expiration:    true,
 		SigningMethod: jwt.SigningMethodHS256,
-		ErrorHandler: func(context context.Context, err error) {
+		ErrorHandler: func(context iris.Context, err error) {
 			var code int
 			if err == jwt.ErrTokenMissing {
 				code = controller.StatusTokenMiss

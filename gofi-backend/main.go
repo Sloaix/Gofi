@@ -1,7 +1,8 @@
 package main
 
 import (
-	"github.com/didip/tollbooth"
+	"embed"
+	"github.com/didip/tollbooth/v6"
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/iris-contrib/middleware/tollboothic"
 	"github.com/kataras/iris/v12"
@@ -9,15 +10,19 @@ import (
 	"github.com/kataras/iris/v12/middleware/logger"
 	"github.com/kataras/iris/v12/middleware/recover"
 	"github.com/sirupsen/logrus"
-	"gofi/binary"
 	"gofi/boot"
 	"gofi/controller"
 	"gofi/db"
 	"gofi/env"
 	"gofi/extension"
 	"gofi/middleware"
+	"net/http"
 	"strings"
 )
+
+//go:embed dist/*
+var DIST embed.FS
+var indexName = "index.html"
 
 const (
 	ApiIpAddressInFrontend = "127.0.0.1:8080"
@@ -36,16 +41,35 @@ func main() {
 
 func newApp() (app *iris.Application) {
 	app = iris.New()
+	replaceApiAddress(app)
 	setup(app)
 	spa(app)
 	api(app)
 	return
 }
 
+// dynamic replace the local api address to product api address for index.html static assets.
+func replaceApiAddress(app *iris.Application) {
+	// start record.
+	app.Use(func(ctx iris.Context) {
+		ctx.Record()
+		ctx.Next()
+	})
+
+	app.Done(func(ctx iris.Context) {
+		bodyAsBytes := ctx.Recorder().Body()
+		bodyAsString := string(bodyAsBytes)
+		if strings.Contains(bodyAsString, ApiIpAddressInFrontend) {
+			indexHtml := strings.Replace(bodyAsString, ApiIpAddressInFrontend, boot.GetArguments().ServerAddress, -1)
+			ctx.Recorder().SetBodyString(indexHtml)
+		}
+	})
+}
+
 func setup(app *iris.Application) {
 	app.Logger().SetLevel("debug")
 	app.Use(middleware.LanguageHandler)
-	app.Use(iris.Gzip)
+	//app.Use(iris.Gzip)
 	app.Use(recover.New())
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Options{
@@ -57,38 +81,31 @@ func setup(app *iris.Application) {
 	}))
 }
 
-// dynamic replace server ip address for index.html static assets.
-func AssetProxy(name string) ([]byte, error) {
-	assetsBytes, err := binary.Asset(name)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if indexHtmlName := "public/index.html"; name == indexHtmlName {
-		indexHtmlString := strings.Replace(string(assetsBytes[:]), ApiIpAddressInFrontend, boot.GetArguments().ServerAddress, -1)
-		assetsBytes = []byte(indexHtmlString)
-		logrus.Info("server ip address replace success")
-	}
-
-	return assetsBytes, nil
-}
-
 // single page application
 func spa(app *iris.Application) {
+
+	staticAssetFS := iris.PrefixDir("dist", http.FS(DIST))
+
 	// set static assets
-	app.RegisterView(iris.HTML("./public", ".html").Binary(AssetProxy, binary.AssetNames))
-	app.HandleDir("/", "./public", router.DirOptions{
-		Asset:      AssetProxy,
-		AssetInfo:  binary.AssetInfo,
-		AssetNames: binary.AssetNames,
-		Gzip:       true,
+	app.RegisterView(iris.HTML(staticAssetFS, ".html"))
+	app.HandleDir("/", staticAssetFS, iris.DirOptions{
+		IndexName:         indexName,
+		PushTargets:       nil,
+		PushTargetsRegexp: nil,
+		Cache:             router.DirCacheOptions{},
+		Compress:          true,
+		ShowList:          false,
+		DirList:           nil,
+		ShowHidden:        false,
+		Attachments:       router.Attachments{},
+		AssetValidator:    nil,
+		SPA:               true,
 	})
 
 	// spa route 404 handle
 	app.OnErrorCode(404, func(ctx iris.Context) {
 		ctx.StatusCode(200)
-		if err := ctx.View("index.html"); err != nil {
+		if err := ctx.View(indexName); err != nil {
 			logrus.Error(err)
 		}
 	})
@@ -131,4 +148,19 @@ func api(app *iris.Application) {
 		permission.Get("/guest", controller.GetGuestPermissions)
 		permission.Post("/guest", controller.UpdateGuestPermission)
 	}
+
+	//app.Get("*", indexHtmlEndpointReplaceHandler)
+	//app.WrapRouter(func(w http.ResponseWriter, r *http.Request, router http.HandlerFunc) {
+	//	body := ioutil.NopCloser(r.Response.Body)
+	//	logrus.Println("====================>")
+	//	logrus.Println(strings.Contains(string(body), "VUE_APP_API_BASE_UR"))
+	//	logrus.Println("====================>")
+	//
+	//	bodyString := string(body)
+	//	if strings.Contains(bodyString, ApiIpAddressInFrontend) {
+	//		indexHtml := strings.Replace(bodyString, ApiIpAddressInFrontend, boot.GetArguments().ServerAddress, -1)
+	//		_, _ = w.Write([]byte(indexHtml))
+	//	}
+	//	router(w, r)
+	//})
 }

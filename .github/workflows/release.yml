@@ -14,6 +14,8 @@ jobs:
     steps:
       # 设置环境
       - name: Setup env
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'      
         run: |
           echo "::set-env name=GOPATH::${{ github.workspace }}"
           echo PWD is $pwd
@@ -44,10 +46,12 @@ jobs:
 
       # 拉取xgo docker镜像
       - name: Pull xgo docker image
-        run: docker pull karalabe/xgo-latest
+        run: docker pull techknowlogick/xgo:latest
 
       # 执行构建脚本
       - name: Excute Build Script
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         run: ./build.sh
         
       # 列出产物
@@ -78,8 +82,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./output/gofi-android-16-arm
-            ./output/gofi-darwin-10.6-amd64
+            ./output/gofi-darwin-10.12-amd64
             ./output/gofi-linux-amd64
             ./output/gofi-linux-arm-5
             ./output/gofi-windows-4.0-amd64.exe

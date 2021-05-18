@@ -17,11 +17,11 @@
                   {{ $t('menu.title.setting.base') }}
                 </router-link>
               </a-menu-item>
-              <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
+              <!-- <a-menu-item :key="this.$router.resolve({ name: 'custom-setting' }).route.path">
                 <router-link :to="{ name: 'custom-setting' }">
                   {{ $t('menu.title.setting.custom') }}
                 </router-link>
-              </a-menu-item>
+              </a-menu-item> -->
             </template>
             <!--所有登录用户可见-->
             <a-menu-item :key="this.$router.resolve({ name: 'account-setting' }).route.path">

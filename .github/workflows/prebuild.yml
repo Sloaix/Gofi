@@ -8,6 +8,8 @@ jobs:
     steps:
       # 设置环境
       - name: Setup env
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'      
         run: |
           echo "::set-env name=GOPATH::${{ github.workspace }}"
           echo PWD is $pwd
@@ -38,10 +40,12 @@ jobs:
 
       # 拉取xgo docker镜像
       - name: Pull xgo docker image
-        run: docker pull karalabe/xgo-latest
+        run: docker pull techknowlogick/xgo:latest
 
       # 执行构建脚本
       - name: Excute Build Script
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         run: ./build.sh
 
       # # 压缩产物
