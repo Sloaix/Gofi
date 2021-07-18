@@ -4,6 +4,7 @@ go 1.16
 
 require (
 	github.com/Joker/hpp v1.0.0 // indirect
+	github.com/andybalholm/brotli v1.0.3 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20200428022330-06a60b6afbbc // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/didip/tollbooth/v6 v6.0.1
@@ -27,6 +28,7 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	golang.org/x/text v0.3.5
 	golang.org/x/tools v0.0.0-20201224043029-2b0845dc783e
+	src.techknowlogick.com/xgo v1.4.1-0.20210712230209-de44cf51083e // indirect
 	xorm.io/builder v0.3.7 // indirect
 	xorm.io/core v0.7.3 // indirect
 )
