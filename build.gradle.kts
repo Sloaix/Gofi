@@ -90,9 +90,23 @@ tasks.register("compile-backend-end") {
     }
 }
 
+fun printCurrentBuildInfo(){
+    println("====> Current Build Mode: $currentMode")
+    println("====> Build Version: $version")   
+    println("====> frontendFolder $frontendFolder") 
+    println("====> backendFolder $backendFolder") 
+    println("====> frontendDistFolder $frontendDistFolder") 
+    println("====> backendDistFolder $backendDistFolder") 
+    println("====> backendOutputFolder $backendOutputFolder") 
+    println("====> outputFolder $outputFolder") 
+    println("====> goPath $goPath") 
+    println("====> goBinDir $goBinDir") 
+    println("====> xgoPath $xgoPath") 
+    println("====> xgoExist $xgoExist") 
+}
+
 tasks.register("build") {
-    println("Current Build Mode: $currentMode")
-    println("Build Version: $version")
+    printCurrentBuildInfo()
     dependsOn("compile-backend-end")
     doLast {
         outputFolder.deleteRecursively()

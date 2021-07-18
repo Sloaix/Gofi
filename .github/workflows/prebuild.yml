@@ -6,14 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 设置环境
-      - name: Setup env
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'      
-        run: |
-          echo "::set-env name=GOPATH::${{ github.workspace }}"
-          echo PWD is $pwd
-          ls -l
+      - name: Setup golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16.5'
+      - run: go env -w GO111MODULE=on
 
       # 获取触发TAG
       - name: Obtain Trigger Tag
@@ -26,34 +23,11 @@ jobs:
 
       # 检出对应TAG的代码
       - name: Checkout Trigger Branch
-        uses: actions/checkout@v1
-        with:
-          path: Gofi/src/Gofi
-
-      # Debug
-      - name: Debug
-        run: |
-          ls -l
-          echo Github Workspace is ${{ github.workspace }}
-          echo GOPATH is $GOPATH
-          echo PWD is $(pwd)
-
-      # 拉取xgo docker镜像
-      - name: Pull xgo docker image
-        run: docker pull techknowlogick/xgo:latest
+        uses: actions/checkout@v2
 
       # 执行构建脚本
       - name: Excute Build Script
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-        run: ./build.sh
-
-      # # 压缩产物
-      # - name: Compress
-      #   uses: docker://gact/upx:latest
-      #   with:
-      #     dir: './output'
-      #     upx_args: '-9'
+        run: ./gradlew
 
       # 列出产物
       - name: List output
