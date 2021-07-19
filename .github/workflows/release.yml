@@ -1,16 +1,10 @@
 name: Gofi Release
 
-on:
-  create:
-    branches:
-      - master
-    tags:
-      - "v*.*.*"
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Set up golang
         uses: actions/setup-go@v2
@@ -18,23 +12,12 @@ jobs:
           go-version: '^1.16.5'
       - run: go env -w GO111MODULE=on
 
-      # 获取触发TAG
-      - name: Obtain Trigger Tag
-        id: tag
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      # 打印触发TAG
-      - name: Echo Trigger Tag
-        run: echo Trigger tag is ${{ steps.tag.outputs.VERSION }}
-
-      # 检出对应TAG的代码
+      # 检出代码
       - name: Checkout Trigger Branch
         uses: actions/checkout@v2
 
       # 执行构建脚本
       - name: Excute Build Script
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
         run: ./gradlew
         
       # 列出产物
@@ -47,6 +30,20 @@ jobs:
       #   with:
       #     dir: './output'
       #     upx_args: '-9'
+
+      # 检查push操作触发的是否是master分之,只在master执行后续的release操作
+      - name: Only release in the main branch
+        if: github.ref != 'refs/heads/master'
+        run: |
+          echo 'current branch is not master, exit.'
+          exit 1
+
+      # 检查本次commit的类型是否是release commit
+      - name: Check Commit Type
+        uses: gsactions/commit-message-checker@v1
+        with:
+          pattern: '^chore: release v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$'
+          error: '只有 "chore: release v1.0.2" 这种格式的commit才会触发发布流程,注意冒号和release后面的空格'
 
       # 创建新的发布
       - name: Create Release
