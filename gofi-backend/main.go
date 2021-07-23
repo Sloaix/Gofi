@@ -2,14 +2,6 @@ package main
 
 import (
 	"embed"
-	"github.com/didip/tollbooth/v6"
-	"github.com/iris-contrib/middleware/cors"
-	"github.com/iris-contrib/middleware/tollboothic"
-	"github.com/kataras/iris/v12"
-	"github.com/kataras/iris/v12/core/router"
-	"github.com/kataras/iris/v12/middleware/logger"
-	"github.com/kataras/iris/v12/middleware/recover"
-	"github.com/sirupsen/logrus"
 	"gofi/boot"
 	"gofi/controller"
 	"gofi/db"
@@ -18,6 +10,15 @@ import (
 	"gofi/middleware"
 	"net/http"
 	"strings"
+
+	"github.com/didip/tollbooth/v6"
+	"github.com/iris-contrib/middleware/cors"
+	"github.com/iris-contrib/middleware/tollboothic"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/core/router"
+	"github.com/kataras/iris/v12/middleware/logger"
+	"github.com/kataras/iris/v12/middleware/recover"
+	"github.com/sirupsen/logrus"
 )
 
 //go:embed dist/*
@@ -148,19 +149,4 @@ func api(app *iris.Application) {
 		permission.Get("/guest", controller.GetGuestPermissions)
 		permission.Post("/guest", controller.UpdateGuestPermission)
 	}
-
-	//app.Get("*", indexHtmlEndpointReplaceHandler)
-	//app.WrapRouter(func(w http.ResponseWriter, r *http.Request, router http.HandlerFunc) {
-	//	body := ioutil.NopCloser(r.Response.Body)
-	//	logrus.Println("====================>")
-	//	logrus.Println(strings.Contains(string(body), "VUE_APP_API_BASE_UR"))
-	//	logrus.Println("====================>")
-	//
-	//	bodyString := string(body)
-	//	if strings.Contains(bodyString, ApiIpAddressInFrontend) {
-	//		indexHtml := strings.Replace(bodyString, ApiIpAddressInFrontend, boot.GetArguments().ServerAddress, -1)
-	//		_, _ = w.Write([]byte(indexHtml))
-	//	}
-	//	router(w, r)
-	//})
 }

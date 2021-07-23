@@ -53,13 +53,13 @@ func UpdateConfiguration(ctx iris.Context) {
 	} else {
 		// 判断给定的目录是否存在
 		if !tool.FileExist(path) {
-			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.DirIsNotExist, path)))
+			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 			return
 		}
 
 		// 判断给定的路径是否是目录
 		if !tool.IsDirectory(path) {
-			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotDir, path)))
+			_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotDir, path)).Build())
 			return
 		}
 

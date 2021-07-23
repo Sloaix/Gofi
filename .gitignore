@@ -1,6 +1,6 @@
 .DS_Store
 *output
-.idea
+*.idea
 *gofi.db
 node_modules
 # Ignore Gradle project-specific cache directory

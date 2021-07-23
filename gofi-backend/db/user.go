@@ -31,7 +31,7 @@ type PasswordChangeParam struct {
 	Confirm  string `json:"confirm" validate:"required"`
 }
 
-// 在初始化的时候,录入管理员数据
+// SyncAdmin 在初始化的时候,录入管理员数据
 func SyncAdmin() {
 	if adminExist() {
 		return
@@ -65,7 +65,7 @@ func newAdmin() User {
 	}
 }
 
-// 修改用户密码
+// ChangeUserPassword 修改用户密码
 func ChangeUserPassword(userId int64, password string) error {
 	user := new(User)
 	user.Password = password
@@ -73,7 +73,7 @@ func ChangeUserPassword(userId int64, password string) error {
 	return err
 }
 
-// 通过用户名查询用户
+// QueryUserByUsername 通过用户名查询用户
 func QueryUserByUsername(username string) (*User, error) {
 	user := new(User)
 	has, err := engine.Where("username=?", username).Get(user)
@@ -84,7 +84,7 @@ func QueryUserByUsername(username string) (*User, error) {
 	return user, nil
 }
 
-// 通过用户id查询用户
+// QueryUserById 通过用户id查询用户
 func QueryUserById(userId int64) (*User, error) {
 	user := new(User)
 	has, err := engine.ID(userId).Get(user)

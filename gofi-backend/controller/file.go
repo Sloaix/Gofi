@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"github.com/kataras/iris/v12"
-	"github.com/sirupsen/logrus"
 	"gofi/db"
 	"gofi/i18n"
 	"gofi/tool"
@@ -11,6 +9,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/kataras/iris/v12"
+	"github.com/sirupsen/logrus"
 )
 
 //GetStorageDir 获取当前仓储目录
@@ -113,7 +114,7 @@ func ListFiles(ctx iris.Context) {
 		return
 	}
 
-	var filesOfDir []db.File
+	var filesOfDir = make([]db.File, 0)
 
 	// 将所有文件再次封装成客户端需要的数据格式
 	for _, fileInfo := range fileInfos {

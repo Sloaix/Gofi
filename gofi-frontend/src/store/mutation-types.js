@@ -1,4 +1,0 @@
-export const DEFAULT_THEME = 'DEFAULT_THEME'
-export const DEFAULT_NAV_MODE = 'DEFAULT_NAV_MODE'
-export const DEFAULT_LANGUAGE = 'DEFAULT_LANGUAGE'
-export const TOKEN = 'TOKEN'

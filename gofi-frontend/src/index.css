@@ -1,0 +1,37 @@
+@import 'tailwindcss/base';
+
+@import 'tailwindcss/components';
+
+@import 'tailwindcss/utilities';
+
+body,
+html,
+#root {
+    width: 100vw;
+    height: 100vh;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+[type='checkbox']:checked {
+    background-image: url('./assets/checkbox.svg');
+}
+
+[type='radio']:checked {
+    background-image: url('./assets/radio.svg');
+}
+
+/* style react-toastify start*/
+
+.Toastify__toast--info {
+    @apply bg-indigo-500 !important;
+}
+
+@layer components {
+    .card {
+        @apply rounded-md shadow-2xl bg-white border border-gray-300;
+    }
+}
+
+/* style react-toastify end */

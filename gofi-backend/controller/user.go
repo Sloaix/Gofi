@@ -2,15 +2,17 @@ package controller
 
 import (
 	"fmt"
-	jwt2 "github.com/dgrijalva/jwt-go"
-	"github.com/iris-contrib/middleware/jwt"
-	"github.com/kataras/iris/v12"
-	"github.com/sirupsen/logrus"
 	"gofi/db"
+	"gofi/env"
 	"gofi/i18n"
 	"gofi/tool"
 	"strconv"
 	"time"
+
+	jwt2 "github.com/dgrijalva/jwt-go"
+	"github.com/iris-contrib/middleware/jwt"
+	"github.com/kataras/iris/v12"
+	"github.com/sirupsen/logrus"
 )
 
 func GetUser(ctx iris.Context) {
@@ -32,6 +34,11 @@ func GetUser(ctx iris.Context) {
 }
 
 func ChangePassword(ctx iris.Context) {
+	if env.IsPreview() {
+		_, _ = ctx.JSON(NewResource().Fail().Message("Currently in preview mode, operation not allowed").Build())
+		return
+	}
+
 	var passwordChangeParam = new(db.PasswordChangeParam)
 
 	// 避免Body为空的时候ReadJson报错,导致后续不能默认初始化，这里用ContentLength做下判断
@@ -59,7 +66,7 @@ func ChangePassword(ctx iris.Context) {
 	_, _ = ctx.JSON(NewResource().Success().Build())
 }
 
-// 登录成功会生成一个jwt返回给请求者
+// Login 登录成功会生成一个jwt返回给请求者
 func Login(ctx iris.Context) {
 	var loginBody = new(db.LoginParam)
 
@@ -95,7 +102,7 @@ func Login(ctx iris.Context) {
 	_, _ = ctx.JSON(NewResource().Payload(tokenString).Build())
 }
 
-// 让jwt过期
+// Logout 让jwt过期
 func Logout(ctx iris.Context) {
 	_, _ = ctx.JSON(NewResource().Message("logout success").Build())
 }

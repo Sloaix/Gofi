@@ -1,6 +1,9 @@
 #!/bin/bash
 build_dir=$(pwd)
-server_dir=$(pwd)/gofi-backend
+backend_dir=$(pwd)/gofi-backend
+frontend_dir=$(pwd)/gofi-frontend
 
-cd $server_dir
+cd $backend_dir
 go test -test.v ./test
+cd $frontend_dir
+yarn && yarn test

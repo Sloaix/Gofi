@@ -16,7 +16,7 @@ Gofi (gəʊfi:) 是一个用于构建个人云盘的应用.
 
 [查看Gofi的预览站点](http://gofi.sloaix.com)
 
-![preview](./preview/preview.jpg)
+![preview](./preview/preview.png)
 
 ## 安装
 

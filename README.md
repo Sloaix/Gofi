@@ -16,7 +16,7 @@ Gofi (gəʊfi:) is a application for building personal cloud disk.
 
 [Gofi preview](http://gofi.sloaix.com)
 
-![preview](./preview/preview.jpg)
+![preview](./preview/preview.png)
 
 ## Installation
 

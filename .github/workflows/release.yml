@@ -1,4 +1,4 @@
-name: Gofi Release
+name: Release
 
 on: [push]
 
@@ -6,11 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 配置Golang环境
       - name: Set up golang
         uses: actions/setup-go@v2
         with:
-          go-version: '^1.16.5'
+          go-version: "^1.16.5"
       - run: go env -w GO111MODULE=on
+
+      # 配置Node环境
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+      - run: node -v
+      - run: yarn -v
 
       # 检出代码
       - name: Checkout Trigger Branch
@@ -18,20 +26,13 @@ jobs:
 
       # 执行构建脚本
       - name: Excute Build Script
-        run: ./gradlew
-        
+        run: yarn && yarn build
+
       # 列出产物
       - name: List output
-        run: du -ah ./output      
-        
-      # # 压缩产物
-      # - name: Compress
-      #   uses: docker://gact/upx:latest
-      #   with:
-      #     dir: './output'
-      #     upx_args: '-9'
+        run: du -ah ./output
 
-      # 检查push操作触发的是否是master分之,只在master执行后续的release操作
+      # 检查push操作触发的是否是master分支,只在master执行后续的release操作
       - name: Only release in the main branch
         if: github.ref != 'refs/heads/master'
         run: |
@@ -45,26 +46,54 @@ jobs:
           pattern: '^chore: release v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$'
           error: '只有 "chore: release v1.0.2" 这种格式的commit才会触发发布流程,注意冒号和release后面的空格'
 
-      # 创建新的发布
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag.outputs.VERSION }}
-          release_name: Release ${{ steps.tag.outputs.VERSION }}
-          draft: false
-          prerelease: false
+      # 获取到当前的version,使用bash的#操作符截取version
+      - name: Get the version
+        id: get-version
+        run: |
+          version='${{github.event.head_commit.message}}'
+          version=${version#chore:*release}
+          echo ::set-output name=VERSION::${version}
+
+      # 打印Version
+      - name: Print version
+        run: echo ${{ steps.get-version.outputs.VERSION }}
 
       # 上传构建产物到发布
-      - name: Upload Build Outputs
+      - name: Create release and upload build outputs
         uses: softprops/action-gh-release@v1
         with:
+          name: Release ${{ steps.get-version.outputs.VERSION }}
+          tag_name: ${{ steps.get-version.outputs.VERSION }}
           files: |
             ./output/gofi-darwin-10.12-amd64
+            ./output/gofi-darwin-10.12-arm64
             ./output/gofi-linux-amd64
             ./output/gofi-linux-arm-5
             ./output/gofi-windows-4.0-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      # 登录到Docker hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+
+      # 配置Buildx
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v1
+
+      # 构建镜像并且推送到hub
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/gofi:${{ steps.get-version.outputs.VERSION }}
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}

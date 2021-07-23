@@ -17,7 +17,7 @@ type ResourceBuilder struct {
 	resource *Resource
 }
 
-// success default is true, code default is 200
+// NewResource success default is true, code default is 200
 func NewResource() ResourceBuilder {
 	return ResourceBuilder{resource: &Resource{Success: true, Code: StatusOk, Message: nil, Data: nil}}
 }
