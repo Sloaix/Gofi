@@ -3,5 +3,4 @@
 FROM alpine:3.14
 COPY ./output/gofi-linux-amd64 /usr/local/bin/gofi
 WORKDIR /app
-CMD [ "gofi","-p=8080","-ip=127.0.0.1" ]
-EXPOSE 8080
+ENTRYPOINT [ "gofi"]
