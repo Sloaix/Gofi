@@ -93,7 +93,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/gofi:${{ steps.get-version.outputs.VERSION }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/gofi:latest,${{ secrets.DOCKER_USERNAME }}/gofi:${{ steps.get-version.outputs.VERSION }}
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
