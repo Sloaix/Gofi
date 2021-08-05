@@ -1,5 +1,5 @@
 {
-  "name": "vite-react-tailwind-starter",
+  "name": "gofi-frontend",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
