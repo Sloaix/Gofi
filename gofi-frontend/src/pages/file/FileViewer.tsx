@@ -2,6 +2,7 @@ import { RiRefreshLine, RiUploadFill } from '@hacknug/react-icons/ri'
 import { navigate, RouteComponentProps, useLocation } from '@reach/router'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import repo, { FileInfo } from '../../api/repository'
 import NotFoundImage from '../../assets/404.svg'
 import Button from '../../components/Button'
@@ -29,6 +30,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
     const [uploadProgress, setUploadProgress] = useState<number>(0)
     const [uploadModalMessage, setUploadModalMessage] = useState<React.ReactNode>(null)
     const uploadRef = useRef<HTMLInputElement>(null)
+    const { t } = useTranslation()
 
     const pathQuery = () => {
         let searchParams = new URLSearchParams(location.search)
@@ -150,13 +152,10 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
 
     return (
         <MainLayout>
-            <PageHeader title="所有文件" />
+            <PageHeader title={t('pages.file-viewer.title')} />
             {EnvUtil.isPreviewMode ? (
                 <div className="pb-4">
-                    <Tip
-                        type="warning"
-                        message="当前处于预览模式，在该模式下，文件仓库的路径无法被更改，但是您可以上传和下载文件。每过5分钟,文件仓库会自动恢复到默认状态。"
-                    />
+                    <Tip type="warning" message={t('app.tip.preview-mode')} />
                 </div>
             ) : null}
             <Toolbar
@@ -168,7 +167,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
                 onHomeClick={navigateToRootDirectory}
                 onBackClick={navigateToParentDirectory}
             >
-                <Tooltip title="上传">
+                <Tooltip title={t('tooltip.upload')}>
                     <Upload onFileSelected={onUploadFiles} ref={uploadRef}>
                         <Button
                             icon={<RiUploadFill />}
@@ -178,7 +177,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
                         />
                     </Upload>
                 </Tooltip>
-                <Tooltip title="刷新">
+                <Tooltip title={t('tooltip.refresh')}>
                     <Button icon={<RiRefreshLine />} onClick={refresh} />
                 </Tooltip>
             </Toolbar>

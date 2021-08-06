@@ -3,6 +3,7 @@ import { RiFolder3Line, RiLoader2Line } from '@hacknug/react-icons/ri'
 import _ from 'lodash'
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import repo, { FileInfo } from '../api/repository'
 import { FormatUtil } from '../utils/format.util'
 import MimeTypeUtil from '../utils/mimetype.util'
@@ -24,6 +25,7 @@ const defualtProps: IProps = {
 }
 
 const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView }) => {
+    const { t } = useTranslation()
     const pageStore = useLocalObservable(() => ({
         orginalItems: [] as FileInfo[],
         pageItems: [] as FileInfo[][],
@@ -104,7 +106,7 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView })
                                 href={repo.getFileDownloadUrl(item.path)}
                                 className="transition-all text-gray-500 hover:text-gray-900"
                             >
-                                <Tooltip title="下载">
+                                <Tooltip title={t('tooltip.download')}>
                                     <MdFileDownload />
                                 </Tooltip>
                             </a>
@@ -126,19 +128,19 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView })
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                    文件名
+                    {t('list.file-name')}
                 </th>
                 <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                    大小
+                    {t('list.file-size')}
                 </th>
                 <th
                     scope="col"
                     className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                 >
-                    最后修改时间
+                    {t('list.last-modified-time')}
                 </th>
                 <th scope="col" className="relative px-6 py-3">
                     <span className="sr-only">Edit</span>

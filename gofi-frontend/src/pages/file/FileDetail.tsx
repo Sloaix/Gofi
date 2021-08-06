@@ -3,6 +3,7 @@ import { RiLoader2Line } from '@hacknug/react-icons/ri'
 import { RouteComponentProps, useLocation, useNavigate } from '@reach/router'
 import classNames from 'classnames'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import repo, { FileInfo } from '../../api/repository'
 import previewIsNotSupport from '../../assets/no-data.svg'
 import Button from '../../components/Button'
@@ -26,6 +27,7 @@ const FileDetail: React.FC<RouteComponentProps> = (props) => {
     const [previewUrl, setPreviewUrl] = useState<string>()
     const [fileInfo, setFileInfo] = useState<FileInfo>()
     const [previewableFileType, setPreviewableFileType] = useState<PreviewableFileType | null>()
+    const { t } = useTranslation()
 
     const pathQuery = () => {
         let searchParams = new URLSearchParams(location.search)
@@ -48,7 +50,7 @@ const FileDetail: React.FC<RouteComponentProps> = (props) => {
     return (
         <MainLayout>
             <div className={classNames('w-full', { 'h-full flex flex-col flex-grow': 'pdf' === previewableFileType })}>
-                <PageHeader title="文件详情" />
+                <PageHeader title={t('pages.file-detail.title')} />
                 <Toolbar
                     filePath={fileInfo?.path}
                     downloadIcon={true}
@@ -66,7 +68,7 @@ const FileDetail: React.FC<RouteComponentProps> = (props) => {
                     {(() => {
                         if (previewableFileType as PreviewableFileType) {
                             return (
-                                <Tooltip title="在新标签中打开文件">
+                                <Tooltip title={t('tooltip.open-file-with-new-tab')}>
                                     <Button
                                         icon={<MdOpenInNew />}
                                         onClick={() => {

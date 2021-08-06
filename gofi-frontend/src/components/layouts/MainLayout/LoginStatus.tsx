@@ -3,6 +3,7 @@ import { RiLogoutBoxRLine, RiLoginBoxLine } from '@hacknug/react-icons/ri'
 import { Link } from '@reach/router'
 import { useStore } from '../../../stores'
 import { observer } from 'mobx-react-lite'
+import { useTranslation } from 'react-i18next'
 
 interface IProps {}
 
@@ -12,6 +13,7 @@ const textClass = 'px-2 text-sm hidden sm:block'
 
 const LoginStatus: React.FC<IProps> = () => {
     const { userStore } = useStore()
+    const { t } = useTranslation()
 
     return (
         <div className="flex h-full">
@@ -23,12 +25,12 @@ const LoginStatus: React.FC<IProps> = () => {
                     }}
                 >
                     <RiLogoutBoxRLine />
-                    <span className={textClass}>退出</span>
+                    <span className={textClass}>{t('menu.logout')}</span>
                 </div>
             ) : (
                 <Link to="/auth/login" className={buttonClass}>
                     <RiLoginBoxLine />
-                    <div className={textClass}>登录</div>
+                    <div className={textClass}>{t('menu.login')}</div>
                 </Link>
             )}
         </div>

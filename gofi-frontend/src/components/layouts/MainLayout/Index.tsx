@@ -4,8 +4,13 @@ import LangSelect from './LangSelect'
 import Logo from './Logo'
 import NavMenu from './NavMenu'
 import LoginStatus from './LoginStatus'
+import { useTranslation } from 'react-i18next'
+import { useStore } from '../../../stores'
+import { observer } from 'mobx-react-lite'
 
 const MainLayout: React.FC = (props) => {
+    const { appStore } = useStore()
+
     return (
         <div className="bg-gray-100 h-full w-full flex flex-col overflow-x-hidden">
             <nav className="bg-white h-12 w-screen shadow">
@@ -15,7 +20,12 @@ const MainLayout: React.FC = (props) => {
                         <NavMenu />
                     </div>
                     <LoginStatus />
-                    <LangSelect />
+                    <LangSelect
+                        selectLang={appStore.lang}
+                        onSelect={(lang: string) => {
+                            appStore.changeLanguage(lang)
+                        }}
+                    />
                 </div>
             </nav>
             <div className="flex-grow w-full max-w-5xl mx-auto py-4 p-4 sm:p-0">{props.children}</div>
@@ -24,4 +34,4 @@ const MainLayout: React.FC = (props) => {
     )
 }
 
-export default MainLayout
+export default observer(MainLayout)

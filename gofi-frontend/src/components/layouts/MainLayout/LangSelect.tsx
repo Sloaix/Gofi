@@ -1,17 +1,16 @@
-import React from 'react'
 import { RiTranslate2 } from '@hacknug/react-icons/ri'
-import zhCN from '../../../assets/zh-CN.svg'
-import enUS from '../../../assets/en-US.svg'
 import classNames from 'classnames'
+import { observer } from 'mobx-react-lite'
+import React from 'react'
+import enUS from '../../../assets/en-US.svg'
+import zhCN from '../../../assets/zh-CN.svg'
 
 interface IProps {
     selectLang?: string
     onSelect?: (lang: string) => void
 }
 
-const defualtProps: IProps = {
-    selectLang: 'zh-CN',
-}
+const defualtProps: IProps = {}
 
 const LangSelect: React.FC<IProps> = (props) => {
     const [visible, setVisible] = React.useState<boolean>(false)
@@ -27,12 +26,12 @@ const LangSelect: React.FC<IProps> = (props) => {
         if (visible) {
             const languages = [
                 {
-                    lang: 'zh-CN',
+                    lang: 'zh',
                     flag: zhCN,
                     label: '简体中文',
                 },
                 {
-                    lang: 'en-US',
+                    lang: 'en',
                     flag: enUS,
                     label: 'English',
                 },
@@ -87,4 +86,4 @@ const LangSelect: React.FC<IProps> = (props) => {
 
 LangSelect.defaultProps = defualtProps
 
-export default LangSelect
+export default observer(LangSelect)

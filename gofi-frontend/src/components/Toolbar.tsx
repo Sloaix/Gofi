@@ -1,6 +1,7 @@
 import { RiArrowLeftLine, RiDownload2Line, RiFolder3Line, RiHome4Line, RiUploadFill } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import Button from './Button'
 import Tooltip from './Tooltip'
 import Upload from './Upload'
@@ -25,13 +26,14 @@ const defualtProps: IProps = {
 }
 
 const Toolbar: React.FC<IProps> = (props) => {
+    const { t } = useTranslation()
     const dashBorderClass =
         'h-8 flex items-center leading-none px-2 border-dashed border border-gra-300 text-sm font-medium rounded text-gray-500 bg-white'
     return (
         <div className="flex space-x-2">
             {/* home icon */}
             {props.homeIcon ? (
-                <Tooltip title="根目录">
+                <Tooltip title={t('tooltip.home')}>
                     <Button
                         icon={<RiHome4Line />}
                         onClick={() => {
@@ -43,7 +45,7 @@ const Toolbar: React.FC<IProps> = (props) => {
 
             {/* arrow right icon */}
             {props.backIcon ? (
-                <Tooltip title="上级目录">
+                <Tooltip title={t('tooltip.back')}>
                     <Button
                         icon={<RiArrowLeftLine />}
                         onClick={() => {
@@ -54,7 +56,11 @@ const Toolbar: React.FC<IProps> = (props) => {
             ) : null}
 
             {/* file size */}
-            {props.fileSizeText ? <div className={dashBorderClass}>文件大小:{props.fileSizeText}</div> : null}
+            {props.fileSizeText ? (
+                <div className={dashBorderClass}>
+                    {t('toolbar.file-size')}:{props.fileSizeText}
+                </div>
+            ) : null}
 
             {/* file path */}
             {props.filePathVisible ? (
@@ -69,7 +75,7 @@ const Toolbar: React.FC<IProps> = (props) => {
 
             {/* download icon  */}
             {props.downloadIcon ? (
-                <Tooltip title="下载">
+                <Tooltip title={t('tooltip.download')}>
                     <Button
                         icon={<RiDownload2Line />}
                         onClick={() => {
