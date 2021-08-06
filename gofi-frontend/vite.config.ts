@@ -6,6 +6,14 @@ import reactSvgPlugin from 'vite-plugin-react-svg'
 export default defineConfig({
     plugins: [reactRefresh(), reactSvgPlugin()],
     build: {
-        sourcemap: 'inline',
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    lodash: ['lodash'],
+                    rxjs: ['rxjs'],
+                    'react-syntax-highlighter': ['react-syntax-highlighter'],
+                },
+            },
+        },
     },
 })

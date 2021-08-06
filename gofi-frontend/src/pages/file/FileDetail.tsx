@@ -2,7 +2,7 @@ import { MdOpenInNew } from '@hacknug/react-icons/md'
 import { RiLoader2Line } from '@hacknug/react-icons/ri'
 import { RouteComponentProps, useLocation, useNavigate } from '@reach/router'
 import classNames from 'classnames'
-import React, { useEffect, useState } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import repo, { FileInfo } from '../../api/repository'
 import previewIsNotSupport from '../../assets/no-data.svg'
@@ -12,13 +12,14 @@ import MainLayout from '../../components/layouts/MainLayout/Index'
 import PageHeader from '../../components/PageHeader'
 import Toolbar from '../../components/Toolbar'
 import Tooltip from '../../components/Tooltip'
-import AudioViewer from '../../components/viewer/AudioViewer'
-import ImageViewer from '../../components/viewer/ImageViewer'
-import PdfViewer from '../../components/viewer/PdfViewer'
-import TextViewer from '../../components/viewer/TextViewer'
-import VideoViewer from '../../components/viewer/VideoViewer'
 import { FormatUtil } from '../../utils/format.util'
 import MimeTypeUtil, { PreviewableFileType } from '../../utils/mimetype.util'
+
+const TextViewer = lazy(() => import('../../components/viewer/TextViewer'))
+const AudioViewer = lazy(() => import('../../components/viewer/AudioViewer'))
+const ImageViewer = lazy(() => import('../../components/viewer/ImageViewer'))
+const PdfViewer = lazy(() => import('../../components/viewer/PdfViewer'))
+const VideoViewer = lazy(() => import('../../components/viewer/VideoViewer'))
 
 const FileDetail: React.FC<RouteComponentProps> = (props) => {
     const navigate = useNavigate()

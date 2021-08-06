@@ -1,17 +1,17 @@
 import { navigate, Redirect, RouteComponentProps, Router } from '@reach/router'
 import { observer } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React, { lazy, Suspense, useEffect, useState } from 'react'
 import Loading from '../components/Loading'
-import Setting from '../pages/admin/Setting'
-import UnAuthorized from '../pages/exception/403'
-import NotFound from '../pages/exception/404'
-import ServerError from '../pages/exception/500'
-import FileDetail from '../pages/file/FileDetail'
-import FileViewer from '../pages/file/FileViewer'
-import Login from '../pages/Login'
-import Preview from '../pages/Preview'
-import Setup from '../pages/Setup'
 import { useStore } from '../stores'
+
+const NotFound = lazy(() => import('../pages/exception/404'))
+const UnAuthorized = lazy(() => import('../pages/exception/403'))
+const ServerError = lazy(() => import('../pages/exception/500'))
+const Setting = lazy(() => import('../pages/admin/Setting'))
+const FileDetail = lazy(() => import('../pages/file/FileDetail'))
+const FileViewer = lazy(() => import('../pages/file/FileViewer'))
+const Login = lazy(() => import('../pages/Login'))
+const Setup = lazy(() => import('../pages/Setup'))
 
 declare global {
     interface Window {
@@ -59,7 +59,6 @@ const GofiRouter: React.FC<IProps> = (props) => {
                     <FileViewer path="/file/viewer" />
                     <FileDetail path="/file/detail" />
                     {protectRoutes()}
-                    <Preview path="/preview" />
                     <NotFound path="/404" />
                     <UnAuthorized path="/403" />
                     <ServerError path="/500" />
@@ -79,7 +78,11 @@ const GofiRouter: React.FC<IProps> = (props) => {
         }
     }, [config, config?.initialized, userStore.isLogin])
 
-    return <Router className="h-full w-full">{routes}</Router>
+    return (
+        <Suspense fallback={Loading}>
+            <Router className="h-full w-full">{routes}</Router>
+        </Suspense>
+    )
 }
 
 GofiRouter.defaultProps = defualtProps
