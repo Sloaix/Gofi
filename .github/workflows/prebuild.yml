@@ -31,3 +31,10 @@ jobs:
       # 列出产物
       - name: List output
         run: du -ah ./output
+
+      # 上传构建产物
+      - uses: actions/upload-artifact@v2
+        with:
+          name: outputs
+          path: ./output/*
+          retention-days: 7
