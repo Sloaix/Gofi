@@ -1,4 +1,4 @@
-import { navigate, Redirect, RouteComponentProps, Router } from '@reach/router'
+import { navigate, Redirect, Router } from '@reach/router'
 import { observer } from 'mobx-react-lite'
 import React, { lazy, Suspense, useEffect, useState } from 'react'
 import Loading from '../components/Loading'
@@ -79,7 +79,7 @@ const GofiRouter: React.FC<IProps> = (props) => {
     }, [config, config?.initialized, userStore.isLogin])
 
     return (
-        <Suspense fallback={Loading}>
+        <Suspense fallback={<Loading />}>
             <Router className="h-full w-full">{routes}</Router>
         </Suspense>
     )
