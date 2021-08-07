@@ -75,6 +75,22 @@ class AppStore {
         }
     }
 
+    /**
+     * 更新文件仓库地址
+     * @param path new storage path
+     * @returns true, if update success
+     */
+    async updateStoragePath(path: string): Promise<boolean> {
+        try {
+            const config = await repo.updateStoragePath(path)
+            this.setConfig(config)
+            return true
+        } catch (err) {
+            console.log(err)
+            return false
+        }
+    }
+
     setConfig(config: ConfigurationResult) {
         this.config = config
     }

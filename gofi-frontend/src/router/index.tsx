@@ -7,7 +7,7 @@ import { useStore } from '../stores'
 const NotFound = lazy(() => import('../pages/exception/404'))
 const UnAuthorized = lazy(() => import('../pages/exception/403'))
 const ServerError = lazy(() => import('../pages/exception/500'))
-const Setting = lazy(() => import('../pages/admin/Setting'))
+const Setting = lazy(() => import('../pages/admin/setting/Index'))
 const FileDetail = lazy(() => import('../pages/file/FileDetail'))
 const FileViewer = lazy(() => import('../pages/file/FileViewer'))
 const Login = lazy(() => import('../pages/Login'))

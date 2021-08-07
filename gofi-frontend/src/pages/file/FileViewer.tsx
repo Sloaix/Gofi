@@ -95,7 +95,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
      */
     const navigateToRootDirectory = () => {
         if (!hasParentDirectory()) {
-            Toast.i('已经是根目录了')
+            Toast.i(t('toast.already-root-dir'))
             return
         }
         navigate(location.pathname)
@@ -106,7 +106,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
      */
     const navigateToParentDirectory = () => {
         if (!hasParentDirectory()) {
-            Toast.i('已经是根目录了')
+            Toast.i(t('toast.already-root-dir'))
             return
         }
 
@@ -143,7 +143,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
             })
             setShowProgressModel(false)
             refresh()
-            Toast.s('文件上传成功')
+            Toast.s(t('toast.upload-success'))
         } catch (error) {
             setShowProgressModel(false)
             console.log(error)

@@ -1,6 +1,7 @@
 import component from './zh/component'
 import menu from './zh/menu'
 import pages from './zh/pages'
+import toast from './zh/toast'
 import tooltip from './zh/tooltip'
 
 export default {
@@ -9,4 +10,5 @@ export default {
     ...pages,
     ...tooltip,
     ...component,
+    ...toast
 }

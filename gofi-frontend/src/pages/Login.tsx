@@ -2,6 +2,7 @@ import { RiLoginBoxLine } from '@hacknug/react-icons/ri'
 import { navigate, RouteComponentProps } from '@reach/router'
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import backgroundImage from '../assets/login.svg'
 import logo from '../assets/logo.svg'
 import Button from '../components/Button'
@@ -19,7 +20,7 @@ const defualtProps: IProps = {}
 
 const Login: React.FC<IProps> = (props) => {
     const { userStore } = useStore()
-
+    const {t} = useTranslation()
     if (userStore.isLogin) {
         navigate('/')
     }
@@ -65,7 +66,7 @@ const Login: React.FC<IProps> = (props) => {
                     )
                     this.submiting = false
                     if (logined) {
-                        Toast.s('登录成功')
+                        Toast.s(t('toast.login-success'))
                         navigate('/', { replace: true })
                     }
                 }, 1000)

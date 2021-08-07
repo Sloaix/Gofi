@@ -3,8 +3,10 @@ import { action, makeObservable, observable } from 'mobx'
 import repo, { LoginParam } from '../api/repository'
 import { UserResult } from '../api/result'
 import { TOKEN } from '../constants/storage'
+import i18n from '../i18n'
 import TextUtil from '../utils/text.util'
 import Toast from '../utils/toast.util'
+
 class UserStore {
     token: string = ''
     user: UserResult | undefined = undefined
@@ -69,7 +71,7 @@ class UserStore {
 
     logout() {
         this.clearToken()
-        Toast.i('您已退出')
+        Toast.i(i18n.t('toast.logout-success'))
         navigate('/', {
             replace: true,
         })

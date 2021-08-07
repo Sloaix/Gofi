@@ -2,6 +2,7 @@ import menu from './en/menu'
 import pages from './en/pages'
 import tooltip from './en/tooltip'
 import component from './en/component'
+import toast from './en/toast'
 
 export default {
     'app.tip.preview-mode':
@@ -10,4 +11,5 @@ export default {
     ...pages,
     ...tooltip,
     ...component,
+    ...toast
 }

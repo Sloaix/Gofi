@@ -38,7 +38,7 @@ async function fetchConfiguration(): Promise<ConfigurationResult> {
  * 更新gofi的设置项
  * @returns {AxiosPromise}
  */
-async function updateConfiguration(config: ConfigurationParam) {
+async function updateConfiguration(config: ConfigurationParam): Promise<ConfigurationResult> {
     return http.post('configuration', config)
 }
 
@@ -46,7 +46,7 @@ async function updateConfiguration(config: ConfigurationParam) {
  * 更新gofi的文件仓库路径
  * @returns {AxiosPromise}
  */
-async function updateStoragePath(storagePath: string) {
+async function updateStoragePath(storagePath: string): Promise<ConfigurationResult> {
     return updateConfiguration({ customStoragePath: storagePath })
 }
 
@@ -149,6 +149,7 @@ const repo = {
     fetchUser,
     changePassword,
     uploadFiles,
+    updateStoragePath,
 }
 
 export default repo
