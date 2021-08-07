@@ -26,7 +26,10 @@ const Footer: React.FC = () => {
                     <span>version {appStore.config?.version}</span>
                     <span>©</span>
                     <span>2019-present</span>
-                    <a href="https://gofi.calmlyfish.com" className="transition-all hover:text-indigo-500 hover:underline">
+                    <a
+                        href="https://gofi.calmlyfish.com"
+                        className="transition-all hover:text-indigo-500 hover:underline"
+                    >
                         gofi.calmlyfish.com
                     </a>
                 </div>

@@ -3,6 +3,4 @@ enum UserType {
     USER,
 }
 
-
-
 export { UserType }
