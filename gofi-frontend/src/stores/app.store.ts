@@ -4,11 +4,11 @@ import repo from '../api/repository'
 import { ConfigurationResult } from '../api/result'
 import { LANGUAGE } from '../constants/storage'
 import i18n from '../i18n'
-import TextUtil from '../utils/text.util'
+import LangUtil from '../utils/lang.util'
 const APP_CONFIG = 'APP_CONFIG'
 class AppStore {
     config: ConfigurationResult | undefined = undefined
-    lang = localStorage.getItem(LANGUAGE) ?? 'en'
+    lang = LangUtil.getDefaultLang()
 
     constructor() {
         makeObservable(this, {
@@ -18,14 +18,16 @@ class AppStore {
             setConfig: action,
             changeLanguage: action,
         })
-
-        i18n.changeLanguage(this.lang)
+        this.changeLanguage(this.lang)
 
         // 首次进入就开始请求config
         // 延迟1000ms让loading动画有时间显示
         this.fetchConfig(1000, true)
     }
 
+    /**
+     * 改变当前语言
+     */
     changeLanguage(lang: string) {
         i18n.changeLanguage(lang)
         localStorage.setItem(LANGUAGE, lang)
