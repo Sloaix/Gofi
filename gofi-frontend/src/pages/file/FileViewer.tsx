@@ -183,6 +183,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
             </Toolbar>
             <List
                 items={fileStore.fileInfos}
+                loading={fileStore.fileInfos ? false : true}
                 onFileNameClick={onFileNameClick}
                 emptyView={
                     <div className="p-6">

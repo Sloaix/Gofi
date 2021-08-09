@@ -14,29 +14,29 @@ interface IProps {
     items: FileInfo[] | undefined
     onFileNameClick?: (fileinfo: FileInfo) => void
     pageSize?: number //
+    loading?: boolean
     emptyView: React.ReactNode
 }
 
 const defualtProps: IProps = {
     pageSize: 10,
+    loading: false,
     items: [],
     emptyView: <></>,
     onFileNameClick: (fileinfo: FileInfo) => {},
 }
 
-const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView }) => {
+const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, loading }) => {
     const { t } = useTranslation()
     const pageStore = useLocalObservable(() => ({
         orginalItems: [] as FileInfo[],
         pageItems: [] as FileInfo[][],
         curPageIndex: 0,
-        isLoading: true,
         onFileNameClick: (fileinfo: FileInfo) => {},
         init(orginalItems: FileInfo[] | undefined, pageSize: number, onFileNameClick: (fileinfo: FileInfo) => void) {
             if (!orginalItems) {
                 return
             }
-            this.isLoading = false
             this.orginalItems = orginalItems
             this.pageItems = _.chunk(orginalItems, pageSize)
             this.onFileNameClick = onFileNameClick
@@ -155,7 +155,7 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView })
                 <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                     <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                         <div className="transition-all bg-white shadow-sm overflow-hidden border border-gray-200 rounded-lg hover:shadow-md">
-                            {!pageStore.isLoading ? (
+                            {!loading ? (
                                 pageStore.totalCount > 0 ? (
                                     <>
                                         <table className="min-w-full divide-y divide-gray-200">
