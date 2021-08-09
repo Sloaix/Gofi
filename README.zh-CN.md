@@ -6,7 +6,7 @@
 
 [English](./README.md) | 简体中文
 
-Gofi (gəʊfi:) 是一个用于建立个人云盘的应用程序。
+Gofi（gəʊfi:）是一个由 golang 编写的 Web 文件浏览器。
 
 ## [文档](https://gofi.calmlyfish.com) | [演示站点](http://gofi-demo.calmlyfish.com)
 
