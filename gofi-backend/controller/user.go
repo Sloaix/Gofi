@@ -35,7 +35,7 @@ func GetUser(ctx iris.Context) {
 
 func ChangePassword(ctx iris.Context) {
 	if env.IsPreview() {
-		_, _ = ctx.JSON(NewResource().Fail().Message("Currently in preview mode, operation not allowed").Build())
+		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
 		return
 	}
 
