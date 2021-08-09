@@ -20,7 +20,7 @@ const defualtProps: IProps = {}
 
 const Login: React.FC<IProps> = (props) => {
     const { userStore } = useStore()
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     if (userStore.isLogin) {
         navigate('/')
     }
@@ -91,7 +91,11 @@ const Login: React.FC<IProps> = (props) => {
                     {/* <input type='hidden' name='remember' value={true} /> */}
                     <div className="flex flex-col w-full space-y-4">
                         <Input
-                            placeholder={EnvUtil.isPreviewMode ? '用户名:admin' : '用户名'}
+                            placeholder={
+                                EnvUtil.isPreviewMode
+                                    ? `${t('pages.login.form.input.placeholder.username')}: admin`
+                                    : t('pages.login.form.input.placeholder.username')
+                            }
                             fullWidth={true}
                             value={loginStore.username}
                             onChange={(e) => {
@@ -99,7 +103,11 @@ const Login: React.FC<IProps> = (props) => {
                             }}
                         />
                         <Input
-                            placeholder={EnvUtil.isPreviewMode ? '密码:password' : '密码'}
+                            placeholder={
+                                EnvUtil.isPreviewMode
+                                    ? `${t('pages.login.form.input.placeholder.password')}: password`
+                                    : t('pages.login.form.input.placeholder.password')
+                            }
                             fullWidth={true}
                             type="password"
                             value={loginStore.password}
@@ -118,17 +126,17 @@ const Login: React.FC<IProps> = (props) => {
                                 }}
                             />
                             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                记住我
+                                {t('pages.login.form.checkbox.rememberme')}
                             </label>
                         </div>
 
-                        <div className="text-sm">
+                        {/* <div className="text-sm">
                             <Tooltip title="请联系管理员">
                                 <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                    忘记密码?
+                                    {t('pages.login.label.forget-password')}
                                 </a>
                             </Tooltip>
-                        </div>
+                        </div> */}
                     </div>
 
                     <Button
@@ -139,7 +147,7 @@ const Login: React.FC<IProps> = (props) => {
                         onClick={loginStore.onSubmit}
                         disabled={loginStore.isInValid}
                     >
-                        登录
+                        {t('pages.login.form.button.signin')}
                     </Button>
                 </form>
                 {/* <!-- login form end --> */}

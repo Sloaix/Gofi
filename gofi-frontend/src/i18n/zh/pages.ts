@@ -1,6 +1,11 @@
 export default {
     'pages.file-viewer.title': '所有文件',
     'pages.file-detail.title': '文件详情',
+    'pages.login.label.forget-password': '忘记密码?',
+    'pages.login.form.button.signin': '登录',
+    'pages.login.form.checkbox.rememberme': '记住我',
+    'pages.login.form.input.placeholder.username': '用户名',
+    'pages.login.form.input.placeholder.password': '密码',
     'pages.admin.setting.title': '设置',
     'pages.admin.setting.sub-title': 'Gofi相关配置',
     'pages.admin.setting.label.storage-path': '文件仓库',
