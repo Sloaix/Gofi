@@ -58,21 +58,6 @@ jobs:
       - name: Print version
         run: echo ${{ steps.get-version.outputs.VERSION }}
 
-      # 上传构建产物到发布
-      - name: Upload Build Outputs
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ steps.get-version.outputs.VERSION }}
-          name: Release ${{ steps.get-version.outputs.VERSION }}
-          files: |
-            ./output/gofi-darwin-10.12-amd64
-            ./output/gofi-darwin-10.12-arm64
-            ./output/gofi-linux-amd64
-            ./output/gofi-linux-arm-5
-            ./output/gofi-windows-4.0-amd64.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       # 登录到Docker hub
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -97,3 +82,18 @@ jobs:
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
+
+      # 上传构建产物到发布
+      - name: Upload Build Outputs
+        uses: softprops/action-gh-release@v0.1.7
+        with:
+          tag_name: ${{ steps.get-version.outputs.VERSION }}
+          name: Release ${{ steps.get-version.outputs.VERSION }}
+          files: |
+            ./output/gofi-darwin-10.12-amd64
+            ./output/gofi-darwin-10.12-arm64
+            ./output/gofi-linux-amd64
+            ./output/gofi-linux-arm-5
+            ./output/gofi-windows-4.0-amd64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

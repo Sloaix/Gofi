@@ -6,7 +6,7 @@
 
 English | [简体中文](./README.zh-CN.md)
 
-Gofi (gəʊfi:) is a application for building personal cloud disk.
+Gofi (gəʊfi:) is a web file indexer written by golang.
 
 ## [Documentation](https://gofi.calmlyfish.com) | [Demo](http://gofi-demo.calmlyfish.com)
 
