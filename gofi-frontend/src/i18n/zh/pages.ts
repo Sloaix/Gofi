@@ -14,4 +14,5 @@ export default {
     'pages.admin.setting.label.username': '用户名',
     'pages.admin.setting.label.password': '密码',
     'pages.admin.setting.form.input.password.placeholder': '请输入新密码',
+    'pages.loading.title': 'Gofi 正在加载中...',
 }

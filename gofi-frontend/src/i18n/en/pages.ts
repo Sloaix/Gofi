@@ -14,4 +14,5 @@ export default {
     'pages.admin.setting.label.username': 'Username',
     'pages.admin.setting.label.password': 'Password',
     'pages.admin.setting.form.input.password.placeholder': 'Input new password',
+    'pages.loading.title': 'Gofi is loading...',
 }
