@@ -45,6 +45,7 @@ const InputField: React.FC<IProps> = (props) => {
                         // 编辑按钮
                         return (
                             <Button
+                                type="secondary"
                                 icon={<MdEdit />}
                                 disabled={TextUtil.isEmpty(props.value) ? true : false || props.submiting}
                                 onClick={() => {
@@ -53,7 +54,7 @@ const InputField: React.FC<IProps> = (props) => {
                                         props.onEdit()
                                     }
                                 }}
-                            ></Button>
+                            />
                         )
                     case 'edit':
                         return (

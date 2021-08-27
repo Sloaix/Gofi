@@ -29,7 +29,7 @@ const defualtProps: IProps = {
 const Pagination: React.FC<IProps> = (props) => {
     return (
         <div className={classNames('flex space-x-2 p-2', props.className)}>
-            <Button type="text">
+            <Button type="secondary">
                 {props.curPageNumber}/{props.totalPage}
             </Button>
             <Button icon={<BiChevronLeft />} disabled={props.previousDisable} onClick={props.onPrevious} />

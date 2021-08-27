@@ -71,6 +71,7 @@ const FileDetail: React.FC<RouteComponentProps> = (props) => {
                             return (
                                 <Tooltip title={t('tooltip.open-file-with-new-tab')}>
                                     <Button
+                                        type="secondary"
                                         icon={<MdOpenInNew />}
                                         onClick={() => {
                                             window.open(previewUrl, '_blank')

@@ -155,13 +155,14 @@ const Setting: React.FC<IProps> = (props) => {
                             <dd className={itemFieldClasses}>{appStore.config?.version}</dd>
                         </div>
                         {/* 用户名 */}
-                        <div className={itemClasses}>
+                        {/* fixme:用户名偶发性的不显示 */}
+                        {/* <div className={itemClasses}>
                             <dt className={itemTitleClasses}>
                                 <RiShieldUserLine />
                                 <span>{t('pages.admin.setting.label.username')}</span>
                             </dt>
                             <dd className={itemFieldClasses}>{userStore.user?.username}</dd>
-                        </div>
+                        </div> */}
                         {/* 密码 */}
                         <div className={itemClasses}>
                             <dt className={itemTitleClasses}>

@@ -170,6 +170,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
                 <Tooltip title={t('tooltip.upload')}>
                     <Upload onFileSelected={onUploadFiles} ref={uploadRef}>
                         <Button
+                            type="secondary"
                             icon={<RiUploadFill />}
                             onClick={() => {
                                 uploadRef.current?.click()
@@ -178,7 +179,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
                     </Upload>
                 </Tooltip>
                 <Tooltip title={t('tooltip.refresh')}>
-                    <Button icon={<RiRefreshLine />} onClick={refresh} />
+                    <Button type="secondary" icon={<RiRefreshLine />} onClick={refresh} />
                 </Tooltip>
             </Toolbar>
             <List

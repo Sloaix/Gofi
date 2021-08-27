@@ -140,7 +140,6 @@ const Login: React.FC<IProps> = (props) => {
                     </div>
 
                     <Button
-                        type="primary"
                         fullWidth={true}
                         icon={<RiLoginBoxLine />}
                         loading={loginStore.submiting}

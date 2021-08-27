@@ -1,7 +1,8 @@
+import { RiLoader2Fill } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
 import React from 'react'
 
-type ButtonType = 'default' | 'primary' | 'danger' | 'text'
+type ButtonType = 'primary' | 'secondary' | 'danger'
 
 interface IProps {
     type?: ButtonType // 按钮默认类型
@@ -9,13 +10,14 @@ interface IProps {
     disabled?: boolean // 是否不可用
     loading?: boolean // 是否加载状态
     icon?: React.ReactNode // 渲染的icon
+    ghost?: boolean
+    circle?: boolean
     onClick?: () => void
-    showBorder?: boolean // 是否渲染border
 }
 
 // 默认值
 const defaultProps: IProps = {
-    type: 'default',
+    type: 'primary',
     fullWidth: false,
     disabled: false,
     loading: false,
@@ -23,47 +25,43 @@ const defaultProps: IProps = {
 }
 
 const Button: React.FC<IProps> = (props) => {
-    const ButtonTypeClasses = {
-        default:
-            'cursor-pointer text-gray-600 bg-white  hover:text-indigo-400 active:text-indigo-700 hover:border-indigo-400 active:border-indigo-600',
-        primary: 'cursor-pointer text-white bg-indigo-500 hover:opacity-90 active:bg-indigo-600',
-        danger: 'cursor-pointer text-white bg-red-500 hover:opacity-90 active:bg-red-600',
-        text: 'cursor-pointer text-gray-600 ',
-    }
-
     const onlyHasIcon = !props.children && (props.loading || props.icon)
 
-    const basicClass = classNames(
-        { 'w-8': onlyHasIcon },
-        { 'px-4 py-2': !onlyHasIcon },
-        'h-8 select-none whitespace-nowrap space-x-2 transition-all flex items-center justify-center  font-medium text-base rounded-md',
-        { 'shadow hover:shadow-md border border-gray-300': props.type !== 'text' },
-    )
-
-    const disableClass = 'cursor-not-allowed text-gray-300 bg-gray-100 shadow-none hover:shadow-none'
+    const buttonClass = {
+        base: classNames(
+            'h-8 select-none whitespace-nowrap space-x-2 transition-all flex items-center justify-center text-base',
+            onlyHasIcon || props.circle ? 'w-8' : 'px-4 py2',
+            props.circle ? 'rounded-full' : 'rounded-sm',
+            props.disabled ? 'cursor-not-allowed' : 'cursor-pointer',
+            props.ghost ? null : classNames('shadow', props.disabled ? null : 'hover:shadow-lg'),
+        ),
+        primary: classNames(
+            'active:bg-gray-200',
+            props.ghost
+                ? 'text-indigo-500 bg-white hover:bg-gray-100'
+                : 'text-white bg-indigo-500 border border-indigo-500 hover:bg-white hover:text-indigo-500',
+        ),
+        secondary: classNames(
+            'active:bg-gray-200',
+            props.ghost
+                ? 'text-gray-500 bg-white hover:bg-gray-100'
+                : 'text-indigo-500 bg-white border border-gary-200 hover:border-indigo-500',
+        ),
+        danger: classNames(
+            props.ghost
+                ? 'text-red-500 bg-white hover:bg-red-100 active:bg-red-200'
+                : 'text-white bg-red-500 border border-red-500 hover:bg-white hover:text-red-500 active:bg-gray-200',
+        ),
+        disable: classNames(
+            'text-gray-300',
+            props.ghost ? 'hover:bg-gray-100' : 'bg-gray-white border border-gray-200',
+        ),
+    }
 
     // 渲染加载动画圆圈
     const icon = (() => {
         if (props.loading) {
-            return (
-                <svg
-                    className={classNames(
-                        'animate-spin h-4 w-4',
-                        { 'text-white': props.type !== 'default' && !props.disabled },
-                        { 'text-indigo-500': props.type === 'default' || props.disabled },
-                    )}
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={4} />
-                    <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                </svg>
-            )
+            return <RiLoader2Fill className="animate-spin-slow" />
         } else if (props.icon) {
             return props.icon
         } else {
@@ -82,7 +80,12 @@ const Button: React.FC<IProps> = (props) => {
         // 按钮样式
         <div className={classNames({ 'w-full': props.fullWidth })} onClick={props.disabled ? undefined : props.onClick}>
             {/* 为了修复宽度不正确的BUG，这里用div包一下 */}
-            <div className={classNames(basicClass, props.disabled ? disableClass : ButtonTypeClasses[props.type!])}>
+            <div
+                className={classNames(
+                    buttonClass.base,
+                    props.disabled ? buttonClass.disable : buttonClass[props.type!],
+                )}
+            >
                 {/* 渲染icon */}
                 {icon}
                 {/* 渲染button文字 */}

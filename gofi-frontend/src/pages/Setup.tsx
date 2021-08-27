@@ -160,7 +160,6 @@ const Setup: React.FC<IProps> = ({ defaultStoragePath }) => {
                             </div>
                             {/* next step */}
                             <Button
-                                type="primary"
                                 fullWidth={true}
                                 disabled={submitStore.processing || inputStore.isEmpty}
                                 onClick={onSubmitClick}

@@ -35,6 +35,7 @@ const Toolbar: React.FC<IProps> = (props) => {
             {props.homeIcon ? (
                 <Tooltip title={t('tooltip.home')}>
                     <Button
+                        type="secondary"
                         icon={<RiHome4Line />}
                         onClick={() => {
                             props.onHomeClick!()
@@ -47,6 +48,7 @@ const Toolbar: React.FC<IProps> = (props) => {
             {props.backIcon ? (
                 <Tooltip title={t('tooltip.back')}>
                     <Button
+                        type="secondary"
                         icon={<RiArrowLeftLine />}
                         onClick={() => {
                             props.onBackClick!()
@@ -77,6 +79,7 @@ const Toolbar: React.FC<IProps> = (props) => {
             {props.downloadIcon ? (
                 <Tooltip title={t('tooltip.download')}>
                     <Button
+                        type="secondary"
                         icon={<RiDownload2Line />}
                         onClick={() => {
                             props.onDownloadClick!()

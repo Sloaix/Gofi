@@ -43,7 +43,9 @@ jobs:
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v1
         with:
-          checkAllCommitMessages: "false"
+          checkAllCommitMessages: false
+          excludeTitle: true
+          excludeDescription: true
           pattern: '^chore: release v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$'
           error: '只有 "chore: release v1.0.2" 这种格式的commit才会触发发布流程,注意冒号和release后面的空格'
 

@@ -1,6 +1,6 @@
 {
   "name": "gofi",
-  "version": "1.0.0.beta.4",
+  "version": "1.0.0.beta.5",
   "main": "index.js",
   "repository": "git@github.com:Sloaix/Gofi.git",
   "author": "Sloaix <faith.epiphone@qq.com>",
