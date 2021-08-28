@@ -40,6 +40,7 @@ jobs:
           exit 1
 
       # 检查本次commit的类型是否是release commit
+      # fixme:这个action插件存在BUG,如果一次push有多个commit,会逐一检查,会导致一个release commit失败.
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v1
         with:
