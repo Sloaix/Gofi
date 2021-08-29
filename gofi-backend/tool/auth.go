@@ -4,23 +4,23 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/kataras/iris/v12"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 	"strconv"
 	"strings"
 )
 
 const JWTSecret = "Gofi"
 
-// 生成32位MD5
+// MD5 生成32位MD5
 func MD5(text string) string {
 	ctx := md5.New()
 	ctx.Write([]byte(text))
 	return hex.EncodeToString(ctx.Sum(nil))
 }
 
-// 从Header中获取JWT
-func ParseJWTFromHeader(ctx iris.Context) (*jwt.Token, error) {
+// ParseJWTFromHeader 从Header中获取JWT
+func ParseJWTFromHeader(ctx *gin.Context) (*jwt.Token, error) {
 	tokenString := strings.Replace(ctx.GetHeader("Authorization"), "bearer ", "", -1)
 
 	if tokenString == "" {
@@ -47,8 +47,8 @@ func ParseJWTFromHeader(ctx iris.Context) (*jwt.Token, error) {
 	}
 }
 
-// 从JWT中获取用户Id
-func ParseUserIdFromJWT(ctx iris.Context) (int64, error) {
+// ParseUserIdFromJWT 从JWT中获取用户Id
+func ParseUserIdFromJWT(ctx *gin.Context) (int64, error) {
 	token, err := ParseJWTFromHeader(ctx)
 	if err != nil {
 		return -1, err
@@ -58,8 +58,8 @@ func ParseUserIdFromJWT(ctx iris.Context) (int64, error) {
 	return int64(id), err
 }
 
-// 从JWT中获取用户的Role
-func ParseRoleTypeFromJWT(ctx iris.Context) (int, error) {
+// ParseRoleTypeFromJWT 从JWT中获取用户的Role
+func ParseRoleTypeFromJWT(ctx *gin.Context) (int, error) {
 	token, err := ParseJWTFromHeader(ctx)
 	if err != nil {
 		return -1, err

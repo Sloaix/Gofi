@@ -8,7 +8,6 @@ import (
 	"os"
 )
 
-
 const (
 	//DefaultPort default port to listen Gofi监听的默认端口号
 	DefaultPort = "8080"
@@ -16,7 +15,7 @@ const (
 	ipUsage     = "server side ip for web client to request,default is lan ip"
 )
 
-//BootArgument 上下文对象
+// Argument BootArgument 上下文对象
 type Argument struct {
 	Port          string
 	ServerAddress string
@@ -55,13 +54,13 @@ func CheckIP(ip string) bool {
 	return net.ParseIP(ip) != nil
 }
 
-//GetDB 返回当前Context实例
+// GetArguments GetDB 返回当前Context实例
 func GetArguments() *Argument {
 	return argument
 }
 
 //GetLanIP 返回本地ip
-func  GetLanIP() string {
+func GetLanIP() string {
 	addresses, err := net.InterfaceAddrs()
 
 	if err != nil {

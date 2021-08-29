@@ -1,17 +1,22 @@
 package controller
 
 import (
+	"github.com/gin-gonic/gin"
 	"gofi/db"
 	"gofi/i18n"
 	"gofi/tool"
 	"io/ioutil"
 	"mime"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
-	"github.com/kataras/iris/v12"
 	"github.com/sirupsen/logrus"
+)
+
+const (
+	defaultMemory = 32 << 20
 )
 
 //GetStorageDir 获取当前仓储目录
@@ -23,9 +28,9 @@ func GetStorageDir() string {
 	return configuration.CustomStoragePath
 }
 
-func FileDetail(ctx iris.Context) {
+func FileDetail(ctx *gin.Context) {
 	// 需要列出文件的文件夹地址相对路径
-	relativePath := ctx.URLParamDefault("path", "")
+	relativePath := ctx.DefaultQuery("path", "")
 
 	storagePath := GetStorageDir()
 
@@ -35,12 +40,12 @@ func FileDetail(ctx iris.Context) {
 
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storagePath) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
 		return
 	}
 
 	if !tool.FileExist(path) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 		return
 	}
 
@@ -49,7 +54,7 @@ func FileDetail(ctx iris.Context) {
 
 	// 读取失败
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message(err.Error()).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(err.Error()).Build())
 		return
 	}
 
@@ -73,15 +78,15 @@ func FileDetail(ctx iris.Context) {
 		Content:      content,
 	}
 
-	_, _ = ctx.JSON(NewResource().Payload(file).Build())
+	ctx.JSON(http.StatusOK, NewResource().Payload(file).Build())
 
 	return
 }
 
 //ListFiles 返回给定路径文件夹的一级子节点文件
-func ListFiles(ctx iris.Context) {
+func ListFiles(ctx *gin.Context) {
 	// 需要列出文件的文件夹地址相对路径
-	relativePath := ctx.URLParamDefault("path", "")
+	relativePath := ctx.DefaultQuery("path", "")
 
 	storageDir := GetStorageDir()
 
@@ -91,17 +96,17 @@ func ListFiles(ctx iris.Context) {
 
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storageDir) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist)).Build())
 		return
 	}
 
 	if !tool.FileExist(path) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.DirIsNotExist, path)).Build())
 		return
 	}
 
 	if !tool.IsDirectory(path) {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.IsNotDir, path)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.IsNotDir, path)).Build())
 		return
 	}
 
@@ -110,7 +115,7 @@ func ListFiles(ctx iris.Context) {
 
 	// 读取失败
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message(err.Error()).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(err.Error()).Build())
 		return
 	}
 
@@ -139,15 +144,15 @@ func ListFiles(ctx iris.Context) {
 		filesOfDir = append(filesOfDir, file)
 	}
 
-	_, _ = ctx.JSON(NewResource().Payload(filesOfDir).Build())
+	ctx.JSON(http.StatusOK, NewResource().Payload(filesOfDir).Build())
 
 	return
 }
 
 //Upload 上传文件
-func Upload(ctx iris.Context) {
+func Upload(ctx *gin.Context) {
 	// 需要列出文件的文件夹地址相对路径
-	relativePath := ctx.URLParamDefault("path", "")
+	relativePath := ctx.DefaultQuery("path", "")
 
 	logrus.Infof("relativePath path is %v \n", relativePath)
 
@@ -161,29 +166,29 @@ func Upload(ctx iris.Context) {
 
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(destDirectory, storageDir) {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 		return
 	}
+	err := ctx.Request.ParseMultipartForm(defaultMemory)
 
-	err := ctx.Request().ParseMultipartForm(ctx.Application().ConfigurationReadOnly().GetPostMaxMemory())
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 		return
 	}
 
-	if ctx.Request().MultipartForm != nil {
-		if fileHeaders := ctx.Request().MultipartForm.File; fileHeaders != nil {
+	if ctx.Request.MultipartForm != nil {
+		if fileHeaders := ctx.Request.MultipartForm.File; fileHeaders != nil {
 			for _, files := range fileHeaders {
 				for _, file := range files {
 
 					if tool.FileExist(filepath.Join(destDirectory, file.Filename)) {
-						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)).Build())
+						ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.CanNotOverlayExistFile, file.Filename)).Build())
 						return
 					}
 
 					_, err := tool.UploadFileTo(file, destDirectory)
 					if err != nil {
-						_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
+						ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.UploadFailed)).Build())
 						return
 					}
 				}
@@ -191,15 +196,15 @@ func Upload(ctx iris.Context) {
 		}
 	}
 
-	_, _ = ctx.JSON(NewResource().Build())
+	ctx.JSON(http.StatusOK, NewResource().Build())
 	return
 }
 
 //Download 下载文件
-func Download(ctx iris.Context) {
+func Download(ctx *gin.Context) {
 	// 需要列出文件的文件夹地址相对路径
-	relativePath := ctx.URLParamDefault("path", "")
-	raw := ctx.URLParamExists("raw") && ctx.URLParam("raw") == "true"
+	relativePath := ctx.DefaultQuery("path", "")
+	raw := ctx.Query("raw") == "true"
 
 	storageDir := GetStorageDir()
 
@@ -207,27 +212,27 @@ func Download(ctx iris.Context) {
 
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storageDir) {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist)).Build())
 		return
 	}
 
 	if !tool.FileExist(path) {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
 		return
 	}
 
 	if tool.IsDirectory(path) {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.IsNotFile)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.IsNotFile)).Build())
 		return
 	}
 
 	filename := filepath.Base(path)
 	contentType := tool.ParseFileContentType(filename)
-	ctx.ContentType(contentType)
+	ctx.Header("content-type", contentType)
 
 	if !raw {
 		ctx.Header("Content-Disposition", "attachment;filename="+filename)
 	}
 
-	_ = ctx.ServeFile(path)
+	ctx.File(path)
 }

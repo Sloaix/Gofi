@@ -2,23 +2,22 @@ package controller
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
+	"github.com/sirupsen/logrus"
 	"gofi/db"
 	"gofi/env"
 	"gofi/i18n"
 	"gofi/tool"
+	"net/http"
 	"strconv"
 	"time"
-
-	jwt2 "github.com/dgrijalva/jwt-go"
-	"github.com/iris-contrib/middleware/jwt"
-	"github.com/kataras/iris/v12"
-	"github.com/sirupsen/logrus"
 )
 
-func GetUser(ctx iris.Context) {
+func GetUser(ctx *gin.Context) {
 	userId, err := tool.ParseUserIdFromJWT(ctx)
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message("token parse failed").Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message("token parse failed").Build())
 		return
 	}
 
@@ -26,32 +25,32 @@ func GetUser(ctx iris.Context) {
 	user, err := db.QueryUserById(userId)
 
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message("user not exist").Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message("user not exist").Build())
 		return
 	}
 
-	_, _ = ctx.JSON(NewResource().Payload(user).Build())
+	ctx.JSON(http.StatusOK, NewResource().Payload(user).Build())
 }
 
-func ChangePassword(ctx iris.Context) {
+func ChangePassword(ctx *gin.Context) {
 	if env.IsPreview() {
-		_, _ = ctx.JSON(NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Code(StatusNotFound).Message(i18n.Translate(i18n.OperationNotAllowedInPreviewMode)).Build())
 		return
 	}
 
 	var passwordChangeParam = new(db.PasswordChangeParam)
 
 	// 避免Body为空的时候ReadJson报错,导致后续不能默认初始化，这里用ContentLength做下判断
-	if err := ctx.ReadJSON(passwordChangeParam); ctx.GetContentLength() != 0 && err != nil {
+	if err := ctx.BindJSON(passwordChangeParam); ctx.Request.ContentLength != 0 && err != nil {
 		logrus.Error(err)
-		_, _ = ctx.JSON(NewResource().Fail().Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Build())
 	}
 
 	// todo password and confirm validate
 
 	userId, err := tool.ParseUserIdFromJWT(ctx)
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message("token parse failed").Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message("token parse failed").Build())
 		return
 	}
 
@@ -59,34 +58,35 @@ func ChangePassword(ctx iris.Context) {
 	err = db.ChangeUserPassword(userId, tool.MD5(passwordChangeParam.Confirm))
 
 	if err != nil {
-		_, _ = ctx.JSON(NewResource().Fail().Message("user not exist").Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message("user not exist").Build())
 		return
 	}
 
-	_, _ = ctx.JSON(NewResource().Success().Build())
+	ctx.JSON(http.StatusOK, NewResource().Success().Build())
 }
 
 // Login 登录成功会生成一个jwt返回给请求者
-func Login(ctx iris.Context) {
+func Login(ctx *gin.Context) {
 	var loginBody = new(db.LoginParam)
 
 	// 避免Body为空的时候ReadJson报错,导致后续不能默认初始化，这里用ContentLength做下判断
-	if err := ctx.ReadJSON(loginBody); ctx.GetContentLength() != 0 && err != nil {
+	if err := ctx.BindJSON(loginBody); ctx.Request.ContentLength != 0 && err != nil {
 		logrus.Error(err)
-		_, _ = ctx.JSON(NewResource().Fail().Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Build())
+		return
 	}
 
 	// todo validate
 	user, err := db.QueryUserByUsername(loginBody.Username)
 	if err != nil || tool.MD5(loginBody.Password) != user.Password {
-		_, _ = ctx.JSON(NewResource().Fail().Message(i18n.Translate(i18n.UsernameOrPasswordIsWrong)).Build())
+		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.UsernameOrPasswordIsWrong)).Build())
 		return
 	}
 
 	fmt.Println(user)
 
 	// 生成jwt
-	token := jwt.NewTokenWithClaims(jwt.SigningMethodHS256, jwt2.StandardClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Audience:  "Gofi",
 		Issuer:    strconv.Itoa(int(user.RoleType)), // 用户角色
 		Subject:   "Gofi",
@@ -99,10 +99,10 @@ func Login(ctx iris.Context) {
 	// 使用密码签名,返回字符串
 	tokenString, _ := token.SignedString([]byte(tool.JWTSecret))
 
-	_, _ = ctx.JSON(NewResource().Payload(tokenString).Build())
+	ctx.JSON(http.StatusOK, NewResource().Payload(tokenString).Build())
 }
 
 // Logout 让jwt过期
-func Logout(ctx iris.Context) {
-	_, _ = ctx.JSON(NewResource().Message("logout success").Build())
+func Logout(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, NewResource().Message("logout success").Build())
 }
