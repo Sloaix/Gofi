@@ -1,4 +1,4 @@
-import http from './http'
+import http, { BASE_URL } from './http'
 import { ConfigurationResult, UserResult } from './result'
 
 export interface ConfigurationParam {
@@ -107,11 +107,11 @@ async function fetchFileDetail(filePath: string): Promise<FileInfo> {
  * @returns
  */
 function getFileDownloadUrl(filePath: string) {
-    return `${window.GOFI_MANIFEST.API_BASE_URL}download?path=${encodeURIComponent(filePath)}`
+    return `${BASE_URL}download?path=${encodeURIComponent(filePath)}`
 }
 
 function getFilePreviewUrl(filePath: string) {
-    return `${window.GOFI_MANIFEST.API_BASE_URL}download?path=${encodeURIComponent(filePath)}&raw=true`
+    return `${BASE_URL}download?path=${encodeURIComponent(filePath)}&raw=true`
 }
 
 /**

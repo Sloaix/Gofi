@@ -23,7 +23,7 @@ func init() {
 }
 
 func main() {
-	logrus.Infof("Gofi is running on %v，current environment is %s,version is %s\n", boot.GetArguments().ServerAddress, env.Current(), db.ObtainConfiguration().Version)
+	logrus.Infof("Gofi is running on %v，current environment is %s,version is %s\n", boot.GetArguments().Port, env.Current(), db.ObtainConfiguration().Version)
 
 	app := gin.Default()
 
@@ -33,7 +33,6 @@ func main() {
 	}
 
 	app.Use(middleware.CORS)
-	app.Use(middleware.EndpointReplacer)
 	app.Use(middleware.StaticFS("/", "dist", embedStaticAssets))
 
 	app.NoRoute(func(context *gin.Context) {

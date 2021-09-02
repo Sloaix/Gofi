@@ -1,19 +1,16 @@
 import axios from 'axios'
 import { LANGUAGE, TOKEN } from '../constants/storage'
+import EnvUtil from '../utils/env.util'
 import Toast from '../utils/toast.util'
 import RepsonseWrapper from './result'
 
-declare global {
-    interface Window {
-        GOFI_MANIFEST: {
-            API_BASE_URL: string
-        }
-    }
-}
+// 开发环境下,由于前端服务是vite启动的,需要指定后端服务地址
+// 但是在生产环境下,默认是Go提供http服务,所以使用相对url作为api即可
+export const BASE_URL = EnvUtil.isDev ? 'http://localhost:8080/api/' : '/api/'
 
 // 创建axios实例
 const http = axios.create({
-    baseURL: window.GOFI_MANIFEST.API_BASE_URL, // api的base_url
+    baseURL: BASE_URL, // api的base_url
     headers: {
         'content-type': 'application/json',
     },
