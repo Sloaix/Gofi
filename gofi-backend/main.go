@@ -53,6 +53,7 @@ func main() {
 		api.GET("/files", controller.ListFiles)
 		api.GET("/file", controller.FileDetail)
 		api.GET("/download", controller.Download)
+		api.HEAD("download", controller.Download)
 		api.POST("/upload", middleware.AuthChecker, controller.Upload)
 	}
 

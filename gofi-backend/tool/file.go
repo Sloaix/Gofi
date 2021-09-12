@@ -1,6 +1,8 @@
 package tool
 
 import (
+	"crypto/sha1"
+	"encoding/hex"
 	"github.com/gabriel-vasile/mimetype"
 	"golang.org/x/tools/godoc/util"
 	"io"
@@ -110,4 +112,17 @@ func ParseFileContentType(file *os.File) string {
 	}
 
 	return contentType
+}
+
+// Hash 文件摘要算法
+func Hash(file *os.File) (hash string, err error) {
+	if err != nil {
+		return hash, err
+	}
+	md5hash := sha1.New()
+	if _, err := io.Copy(md5hash, file); err != nil {
+		return hash, err
+	}
+	hash = hex.EncodeToString(md5hash.Sum(nil))
+	return hash, nil
 }

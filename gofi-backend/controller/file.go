@@ -1,18 +1,22 @@
 package controller
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"gofi/db"
 	"gofi/i18n"
 	"gofi/tool"
+	"io"
 	"io/ioutil"
+	"log"
 	"mime"
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
 
 const (
@@ -204,35 +208,112 @@ func Upload(ctx *gin.Context) {
 func Download(ctx *gin.Context) {
 	// 需要列出文件的文件夹地址相对路径
 	relativePath := ctx.DefaultQuery("path", "")
+	// raw 在浏览器中显示原始文件,但并不下载
 	raw := ctx.Query("raw") == "true"
 
 	storageDir := GetStorageDir()
 
 	path := filepath.Join(storageDir, relativePath)
 
+	isHeadRequest := ctx.Request.Method == "HEAD"
+
 	// 确保该路径只是文件仓库的子路径
 	if !strings.Contains(path, storageDir) {
-		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist)).Build())
+		_ = ctx.AbortWithError(http.StatusNotFound, errors.New(i18n.Translate(i18n.FileIsNotExist)))
 		return
 	}
 
 	if !tool.FileExist(path) {
-		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.FileIsNotExist, path)).Build())
+		_ = ctx.AbortWithError(http.StatusNotFound, errors.New(i18n.Translate(i18n.FileIsNotExist)))
 		return
 	}
 
 	if tool.IsDirectory(path) {
-		ctx.AbortWithStatusJSON(http.StatusOK, NewResource().Fail().Message(i18n.Translate(i18n.IsNotFile)).Build())
+		_ = ctx.AbortWithError(http.StatusNotFound, errors.New(i18n.Translate(i18n.IsNotFile)))
 		return
 	}
 
 	filename := filepath.Base(path)
-	contentType := tool.ParseFileContentType(filename)
-	ctx.Header("content-type", contentType)
+	file, err := os.Open(path)
+	defer file.Close()
+
+	if err != nil {
+		_ = ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	fileInfo, err := file.Stat()
+	if err != nil {
+		_ = ctx.AbortWithError(http.StatusInternalServerError, err)
+		return
+	}
+
+	// 格式化上次修改时间
+	lastModified := fileInfo.ModTime().UTC().Format(http.TimeFormat)
+
+	ifRangeHeaderValue := ctx.GetHeader("If-Range")
+
+	// 文件长度，单位是字节
+	fileSize := fileInfo.Size()
+
+	rangeHeaderValue := ctx.GetHeader("Range")
+	var start, end int64
+	_, _ = fmt.Sscanf(rangeHeaderValue, "bytes=%d-%d", &start, &end)
+	// 校验start end参数
+	if start < 0 || start >= fileSize || end < 0 || end >= fileSize {
+		// 参数非法，直接返回响应
+		_ = ctx.AbortWithError(http.StatusRequestedRangeNotSatisfiable, errors.New(fmt.Sprintf("out of range, length %d", fileSize)))
+		return
+	}
+
+	// 返回的格式,<start>-<end-1>/length
+	if end == 0 {
+		end = fileSize - 1
+	}
 
 	if !raw {
+		// 当浏览器发现 Accept-Ranges 头时，可以尝试继续中断了的下载，而不是重新开始。see https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Ranges
+		ctx.Header("Accept-Ranges", "bytes")
+		// attachment 意味着消息体应该被下载到本地；大多数浏览器会呈现一个“保存为”的对话框，将 filename 的值预填为下载后的文件名，假如它存在的话。see https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Disposition
 		ctx.Header("Content-Disposition", "attachment;filename="+filename)
 	}
 
-	ctx.File(path)
+	ctx.Header("Content-Type", tool.ParseFileContentType(file))
+	ctx.Header("Content-Length", strconv.Itoa(int(fileSize)))
+	ctx.Header("Last-Modified", lastModified)
+
+	if rangeHeaderValue != "" {
+		// 如果ifRange存在，但是匹配不上，直接返回完整文件
+		if ifRangeHeaderValue != "" && ifRangeHeaderValue != lastModified {
+			ctx.Status(http.StatusOK)
+			ctx.File(path)
+			return
+		} else {
+			ctx.Header("Content-Range", fmt.Sprintf("bytes %d-%d/%d",
+				start,
+				end-1,
+				fileSize,
+			))
+			ctx.Status(http.StatusPartialContent)
+		}
+	}
+
+	// head 请求，无需返回body
+	if !isHeadRequest {
+		_, err = file.Seek(start, 0)
+
+		if err != nil {
+			logrus.Println(err.Error())
+			_ = ctx.AbortWithError(http.StatusInternalServerError, errors.New("file seek error"))
+			return
+		}
+
+		// 写入数据
+		_, err = io.CopyN(ctx.Writer, file, end-start+1)
+
+		if err != nil {
+			log.Println(err.Error())
+			return
+		}
+	}
 }
