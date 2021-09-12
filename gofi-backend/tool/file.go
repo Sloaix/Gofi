@@ -1,10 +1,11 @@
 package tool
 
 import (
+	"github.com/gabriel-vasile/mimetype"
 	"golang.org/x/tools/godoc/util"
 	"io"
-	"mime"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,7 +27,6 @@ func IsDirectory(filename string) bool {
 	return info.IsDir()
 }
 
-
 func IsHiddenFile(name string) bool {
 	if strings.TrimSpace(name) == "" {
 		return false
@@ -43,14 +43,14 @@ func IsFile(filename string) bool {
 	return !info.IsDir()
 }
 
-// 创建文件夹如果不存在
+// MkdirIfNotExist 创建文件夹如果不存在
 func MkdirIfNotExist(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		_ = os.Mkdir(path, os.ModePerm)
 	}
 }
 
-// 创建文件如果不存在
+// MkFileIfNotExist 创建文件如果不存在
 func MkFileIfNotExist(path string) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		_, _ = os.Create(path)
@@ -90,11 +90,24 @@ func IsTextFile(filepath string) bool {
 	return util.IsText(buf[0:n])
 }
 
-// 根据扩展名解析文件的类型,默认将文本类型都转换为纯文本,不需要浏览器对其作出解析
-func ParseFileContentType(fileName string) string {
-	contentType := mime.TypeByExtension(filepath.Ext(fileName))
-	if strings.HasPrefix(contentType, "text/") {
-		contentType = "text/plain"
+// ParseFileContentType 根据扩展名解析文件的类型
+func ParseFileContentType(file *os.File) string {
+	// 一般用前512字节来识别文件头
+	buffer := make([]byte, 512)
+
+	_, err := file.Read(buffer)
+	if err != nil {
+		return ""
 	}
+
+	// 如果无法识别有效的文件类型,会直接返回 "application/octet-stream"
+	contentType := http.DetectContentType(buffer)
+
+	// 使用mimetype库进行二次识别
+	if contentType == "application/octet-stream" {
+		mimeType := mimetype.Detect(buffer)
+		contentType = mimeType.String()
+	}
+
 	return contentType
 }
