@@ -4,7 +4,7 @@ go 1.16
 
 require (
 	github.com/aviddiviner/gin-limit v0.0.0-20170918012823-43b5f79762c1
-	github.com/gabriel-vasile/mimetype v1.3.1 // indirect
+	github.com/gabriel-vasile/mimetype v1.3.1
 	github.com/gin-gonic/gin v1.7.4
 	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/go-xorm/xorm v0.7.9

@@ -30,6 +30,10 @@ func main() {
 	// 预览模式下,限制请求频率
 	if env.IsPreview() {
 		app.Use(limit.MaxAllowed(100))
+	} else if env.IsProduct() {
+		gin.SetMode(gin.ReleaseMode)
+	} else if env.IsDevelop() {
+		gin.SetMode(gin.DebugMode)
 	}
 
 	app.Use(middleware.CORS)
