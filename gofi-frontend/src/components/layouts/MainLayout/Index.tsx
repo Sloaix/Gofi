@@ -1,12 +1,11 @@
+import { observer } from 'mobx-react-lite'
 import React from 'react'
+import { useStore } from '../../../stores'
 import Footer from '../../Footer'
 import LangSelect from './LangSelect'
+import LoginStatus from './LoginStatus'
 import Logo from './Logo'
 import NavMenu from './NavMenu'
-import LoginStatus from './LoginStatus'
-import { useTranslation } from 'react-i18next'
-import { useStore } from '../../../stores'
-import { observer } from 'mobx-react-lite'
 
 const MainLayout: React.FC = (props) => {
     const { appStore } = useStore()

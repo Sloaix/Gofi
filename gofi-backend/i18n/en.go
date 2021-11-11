@@ -1,6 +1,6 @@
 package i18n
 
-var EnUS = map[MessageKey]string{
+var En = map[MessageKey]string{
 	IsNotDir:                         "%s is not a folder",
 	IsNotFile:                        "%s is not a file",
 	IsNotTextFile:                    "%s is not a  text file",

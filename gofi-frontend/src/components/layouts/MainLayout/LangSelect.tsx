@@ -2,8 +2,6 @@ import { RiTranslate2 } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
-import enUS from '../../../assets/en-US.svg'
-import zhCN from '../../../assets/zh-CN.svg'
 
 interface IProps {
     selectLang?: string
@@ -17,8 +15,7 @@ const LangSelect: React.FC<IProps> = (props) => {
 
     const renderDropdownMenu = () => {
         const menuItemClass =
-            'flex items-center transition-all block p-2 text-sm leading-none hover:text-indigo-500 hover:bg-gray-200 active:bg-gray-300 active:text-indigo-900'
-        const flagClass = 'v-5 h-5 mb-[0.15rem]'
+            'flex h-10 items-center transition-all block p-2 text-sm leading-none hover:text-indigo-500 hover:bg-gray-200 active:bg-gray-300 active:text-indigo-900'
         const menuContainerClass =
             'divide-y divide-gray-200 z-10 cursor-pointer animate-fadein origin-top-right absolute right-0 w-36 rounded shadow-lg bg-white border border-gray-200'
         const menuItemSelectClass = 'bg-gray-200 text-indigo-500 font-bold'
@@ -26,15 +23,25 @@ const LangSelect: React.FC<IProps> = (props) => {
         if (visible) {
             const languages = [
                 {
-                    lang: 'zh',
-                    flag: zhCN,
+                    lang: 'zh-hans',
                     label: '简体中文',
                 },
+                // {
+                //     lang: 'zh-hant',
+                //     label: '繁體中文',
+                // },
+                // {
+                //     lang: 'ja',
+                //     label: '日本語',
+                // },
                 {
                     lang: 'en',
-                    flag: enUS,
                     label: 'English',
                 },
+                // {
+                //     lang: 'fr',
+                //     label: 'Français',
+                // },
             ]
             const menus = languages.map((item, index) => {
                 return (
@@ -51,7 +58,6 @@ const LangSelect: React.FC<IProps> = (props) => {
                             }
                         }}
                     >
-                        <img src={item.flag} className={flagClass} />
                         <span className="ml-3">{item.label}</span>
                     </div>
                 )

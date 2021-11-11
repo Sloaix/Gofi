@@ -48,8 +48,8 @@ func (messageKey MessageKey) String() string {
 
 func init() {
 	for _, key := range TranslateKeys {
-		_ = message.SetString(language.Chinese, key.String(), ZhCN[key])
-		_ = message.SetString(language.English, key.String(), EnUS[key])
+		_ = message.SetString(language.SimplifiedChinese, key.String(), ZhHans[key])
+		_ = message.SetString(language.English, key.String(), En[key])
 	}
 	printer = message.NewPrinter(language.Chinese)
 }

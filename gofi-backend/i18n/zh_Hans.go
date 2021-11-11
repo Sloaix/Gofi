@@ -1,6 +1,6 @@
 package i18n
 
-var ZhCN = map[MessageKey]string{
+var ZhHans = map[MessageKey]string{
 	IsNotDir:                         "%s 不是文件夹",
 	IsNotFile:                        "%s 不是文件",
 	IsNotTextFile:                    "%s 不是文本文件",
