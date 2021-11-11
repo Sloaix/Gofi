@@ -67,7 +67,7 @@ gulp.task("build-backend", (done) => {
   // if xgo not exist
   if (!xgoExist) {
     console.log("xgo not exist, try to get");
-    shell.exec("go get -v src.techknowlogick.com/xgo");
+    shell.exec("go install -v src.techknowlogick.com/xgo@latest");
   }
 
   // get all dependencies

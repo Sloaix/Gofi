@@ -3,4 +3,12 @@
 FROM alpine:3.14
 COPY ./output/gofi-linux-amd64 /usr/local/bin/gofi
 WORKDIR /app
+#定义时区环境变量
+ENV  TIME_ZONE Asia/Shanghai
+# 添加edge软件源
+RUN apk update \
+    # 安装最新版本的软件
+    && apk --no-cache add tzdata \
+    # 配置时区
+    && echo "${TIME_ZONE}" > /etc/timezone && ln -sf /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime && date
 ENTRYPOINT [ "gofi"]
