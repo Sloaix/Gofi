@@ -1,8 +1,8 @@
 import { RiRefreshLine, RiUploadFill } from '@hacknug/react-icons/ri'
-import { navigate, RouteComponentProps, useLocation } from '@reach/router'
 import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 import repo, { FileInfo } from '../../api/repository'
 import NotFoundImage from '../../assets/404.svg'
 import Button from '../../components/Button'
@@ -22,7 +22,7 @@ import TextUtil from '../../utils/text.util'
 import Toast from '../../utils/toast.util'
 import UrlUtil from '../../utils/url.util'
 
-const FileViewer: React.FC<RouteComponentProps> = (props) => {
+const FileViewer: React.FC = (props) => {
     const { fileStore } = useStore()
     const location = useLocation()
     const [currentPath, setCurrentPath] = useState('')
@@ -31,6 +31,7 @@ const FileViewer: React.FC<RouteComponentProps> = (props) => {
     const [uploadModalMessage, setUploadModalMessage] = useState<React.ReactNode>(null)
     const uploadRef = useRef<HTMLInputElement>(null)
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const pathQuery = () => {
         let searchParams = new URLSearchParams(location.search)

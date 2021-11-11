@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 import { RiLogoutBoxRLine, RiLoginBoxLine } from '@hacknug/react-icons/ri'
-import { Link } from '@reach/router'
 import { useStore } from '../../../stores'
 import { observer } from 'mobx-react-lite'
 import { useTranslation } from 'react-i18next'
+import { Link, useNavigate } from 'react-router-dom'
 
 interface IProps {}
 
@@ -14,6 +14,7 @@ const textClass = 'px-2 text-sm hidden sm:block'
 const LoginStatus: React.FC<IProps> = () => {
     const { userStore } = useStore()
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     return (
         <div className="flex h-full">
@@ -22,6 +23,7 @@ const LoginStatus: React.FC<IProps> = () => {
                     className={buttonClass}
                     onClick={() => {
                         userStore.logout()
+                        navigate('/')
                     }}
                 >
                     <RiLogoutBoxRLine />

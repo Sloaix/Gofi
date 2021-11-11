@@ -1,29 +1,27 @@
 import { RiLoginBoxLine } from '@hacknug/react-icons/ri'
-import { navigate, RouteComponentProps } from '@reach/router'
+import { replace } from 'lodash'
 import { observer, useLocalObservable } from 'mobx-react-lite'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import backgroundImage from '../assets/login.svg'
 import logo from '../assets/logo.svg'
 import Button from '../components/Button'
 import Checkbox from '../components/form/Checkbox'
 import Input from '../components/form/Input'
 import PureLayout from '../components/layouts/PureLayout'
-import Tooltip from '../components/Tooltip'
 import { useStore } from '../stores'
 import EnvUtil from '../utils/env.util'
 import Toast from '../utils/toast.util'
 
-interface IProps extends RouteComponentProps {}
+interface IProps {}
 
 const defualtProps: IProps = {}
 
 const Login: React.FC<IProps> = (props) => {
     const { userStore } = useStore()
+    const navigate = useNavigate()
     const { t } = useTranslation()
-    if (userStore.isLogin) {
-        navigate('/')
-    }
 
     const loginStore = useLocalObservable(() => ({
         rememberme: true,

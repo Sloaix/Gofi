@@ -1,4 +1,3 @@
-import { navigate } from '@reach/router'
 import { action, makeObservable, observable } from 'mobx'
 import repo, { LoginParam } from '../api/repository'
 import { UserResult } from '../api/result'
@@ -72,9 +71,6 @@ class UserStore {
     logout() {
         this.clearToken()
         Toast.i(i18n.t('toast.logout-success'))
-        navigate('/', {
-            replace: true,
-        })
     }
 }
 export default UserStore

@@ -1,9 +1,9 @@
 import { MdOpenInNew } from '@hacknug/react-icons/md'
 import { RiLoader2Line } from '@hacknug/react-icons/ri'
-import { RouteComponentProps, useLocation, useNavigate } from '@reach/router'
 import classNames from 'classnames'
 import React, { lazy, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation, useNavigate } from 'react-router-dom'
 import repo, { FileInfo } from '../../api/repository'
 import previewIsNotSupport from '../../assets/no-data.svg'
 import Button from '../../components/Button'
@@ -21,7 +21,7 @@ const ImageViewer = lazy(() => import('../../components/viewer/ImageViewer'))
 const PdfViewer = lazy(() => import('../../components/viewer/PdfViewer'))
 const VideoViewer = lazy(() => import('../../components/viewer/VideoViewer'))
 
-const FileDetail: React.FC<RouteComponentProps> = (props) => {
+const FileDetail: React.FC = (props) => {
     const navigate = useNavigate()
     const location = useLocation()
     const [downloadUrl, setDownloadUrl] = useState<string>()

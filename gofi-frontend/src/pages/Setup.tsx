@@ -1,7 +1,6 @@
 import { RiArrowGoBackFill } from '@hacknug/react-icons/ri'
-import { RouteComponentProps } from '@reach/router'
 import { observer, useLocalObservable } from 'mobx-react-lite'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { interval, take } from 'rxjs'
 import logo from '../assets/logo.svg'
 import backgroundImage from '../assets/setup.svg'
@@ -14,7 +13,7 @@ import Tooltip from '../components/Tooltip'
 import { useStore } from '../stores'
 import TextUtil from '../utils/text.util'
 
-interface IProps extends RouteComponentProps {
+interface IProps {
     defaultStoragePath?: string
 }
 

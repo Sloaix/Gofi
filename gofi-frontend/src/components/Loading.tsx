@@ -1,10 +1,9 @@
 import { RiLoader2Line } from '@hacknug/react-icons/ri'
-import { RouteComponentProps } from '@reach/router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import logo from '../assets/logo.svg'
 
-interface IProps extends RouteComponentProps {}
+interface IProps {}
 
 const defualtProps: IProps = {}
 

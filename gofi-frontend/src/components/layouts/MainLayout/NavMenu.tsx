@@ -1,9 +1,9 @@
 import React from 'react'
 import { RiGithubFill, RiFolder3Line, RiSettings2Line, RiBook2Line } from '@hacknug/react-icons/ri'
-import { Link, useLocation } from '@reach/router'
 import EnvUtil from '../../../utils/env.util'
 import classNames from 'classnames'
 import { useTranslation } from 'react-i18next'
+import { Link, useLocation } from 'react-router-dom'
 
 const menuItemUnderLineClass =
     'transition-all box-content h-full px-4 cursor-pointer flex items-center border-b-2 text-gray-600 hover:border-indigo-500 hover:text-indigo-500'

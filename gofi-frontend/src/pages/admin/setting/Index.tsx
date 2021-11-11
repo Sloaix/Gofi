@@ -1,11 +1,4 @@
-import {
-    RiComputerLine,
-    RiDatabase2Line,
-    RiDoorLockLine,
-    RiSettings2Line,
-    RiShieldUserLine,
-} from '@hacknug/react-icons/ri'
-import { RouteComponentProps } from '@reach/router'
+import { RiComputerLine, RiDatabase2Line, RiDoorLockLine, RiSettings2Line } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
@@ -18,7 +11,7 @@ import { useStore } from '../../../stores'
 import Toast from '../../../utils/toast.util'
 import InputField from './InputField'
 
-interface IProps extends RouteComponentProps {}
+interface IProps {}
 
 const defualtProps: IProps = {}
 

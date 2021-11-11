@@ -1,4 +1,4 @@
-import { RiFolder2Line, RiFolder3Line } from '@hacknug/react-icons/ri'
+import { RiFolder3Line } from '@hacknug/react-icons/ri'
 import React from 'react'
 
 interface IProps {
