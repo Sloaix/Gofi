@@ -1,7 +1,6 @@
 package main
 
 import (
-	"embed"
 	"github.com/aviddiviner/gin-limit"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -13,9 +12,6 @@ import (
 	"gofi/middleware"
 	"net/http"
 )
-
-//go:embed dist/*
-var embedStaticAssets embed.FS
 
 func init() {
 	extension.BindAdditionalType()
@@ -37,16 +33,19 @@ func main() {
 	}
 
 	app.Use(middleware.CORS)
-	app.Use(middleware.StaticFS("/", "dist", embedStaticAssets))
 
-	app.NoRoute(func(context *gin.Context) {
-		indexBytes, err := embedStaticAssets.ReadFile("dist/index.html")
-		if err != nil {
-			logrus.Fatal(err)
-		}
-		context.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
-		context.String(http.StatusOK, string(indexBytes))
-	})
+	if !env.IsDevelop() {
+		app.Use(middleware.StaticFS("/", "dist", env.EmbedStaticAssets))
+
+		app.NoRoute(func(context *gin.Context) {
+			indexBytes, err := env.EmbedStaticAssets.ReadFile("dist/index.html")
+			if err != nil {
+				logrus.Fatal(err)
+			}
+			context.Writer.Header().Set("Content-Type", "text/html; charset=utf-8")
+			context.String(http.StatusOK, string(indexBytes))
+		})
+	}
 
 	api := app.Group("/api")
 	app.Use(middleware.Language)
