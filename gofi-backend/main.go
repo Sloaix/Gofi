@@ -33,6 +33,7 @@ func main() {
 	}
 
 	app.Use(middleware.CORS)
+	app.Use(middleware.Language)
 
 	if !env.IsDevelop() {
 		app.Use(middleware.StaticFS("/", "dist", env.EmbedStaticAssets))
@@ -48,7 +49,6 @@ func main() {
 	}
 
 	api := app.Group("/api")
-	app.Use(middleware.Language)
 	{
 		api.GET("/configuration", controller.GetConfiguration)
 		api.POST("/configuration", middleware.AuthChecker, controller.UpdateConfiguration)

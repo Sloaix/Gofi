@@ -6,7 +6,7 @@ interface IProps {
     prefix?: React.ReactNode | string
     suffix?: React.ReactNode | string
     fullWidth?: boolean
-    value?: string // 初始值
+    value?: string | null // 初始值
     name?: string
     loading?: boolean
     disable?: boolean
@@ -79,7 +79,7 @@ const Input: React.FC<IProps> = (props) => {
             {props.prefix ? <div className={prefixElementClass}>{props.prefix}</div> : null}
             <input
                 name={props.name}
-                value={props.value}
+                value={props.value === null || props.value == undefined ? '' : props.value}
                 type={props.type}
                 onKeyPress={(e) => {
                     if (e.code === 'Enter' && props.onEnterPress) {

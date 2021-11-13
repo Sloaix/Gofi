@@ -51,7 +51,7 @@ func init() {
 		_ = message.SetString(language.SimplifiedChinese, key.String(), ZhHans[key])
 		_ = message.SetString(language.English, key.String(), En[key])
 	}
-	printer = message.NewPrinter(language.Chinese)
+	printer = message.NewPrinter(language.SimplifiedChinese)
 }
 
 func SwitchLanguageByTag(tag language.Tag) {

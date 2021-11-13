@@ -7,7 +7,7 @@ interface IProps {}
 
 const defualtProps: IProps = {}
 
-const Loading: React.FC<IProps> = (props) => {
+const PageLoading: React.FC<IProps> = (props) => {
     const { t } = useTranslation()
     return (
         <>
@@ -20,6 +20,6 @@ const Loading: React.FC<IProps> = (props) => {
     )
 }
 
-Loading.defaultProps = defualtProps
+PageLoading.defaultProps = defualtProps
 
-export default Loading
+export default PageLoading

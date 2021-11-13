@@ -1,7 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import Loading from '../components/Loading'
+import useSWR from 'swr'
+import { fetchConfiguration } from '../api/repository'
+import PageLoading from '../components/PageLoading'
+import QueryKey from '../constants/swr'
 import { useStore } from '../stores'
 
 const NotFound = lazy(() => import('../pages/exception/404'))
@@ -25,13 +28,17 @@ const defualtProps: IProps = {}
 
 const GofiRouter: React.FC<IProps> = (props) => {
     const { appStore, userStore } = useStore()
-    const { config } = appStore
+    const { data: config, error } = useSWR(QueryKey.CONFIG, () => fetchConfiguration())
+
+    if (!config && !error) {
+        return <PageLoading />
+    }
 
     const renderRoutes = () => {
         if (!config) {
             console.log('is fetching config ...')
             // is fetching config ...
-            return <Route path="*" element={<Loading />} />
+            return <Route path="*" element={<PageLoading />} />
         } else if (config.initialized) {
             console.log('gofi is initialized,redirect to /')
             return (
@@ -52,15 +59,15 @@ const GofiRouter: React.FC<IProps> = (props) => {
             // gofi need setup, redirect to setup
             return (
                 <>
-                    <Route path="*" element={<Navigate to="/" replace={true} />} />
-                    <Route path="/" element={<Setup defaultStoragePath={config.defaultStoragePath} />} />
+                    <Route path="*" element={<Navigate to="/setup" replace={true} />} />
+                    <Route path="/setup" element={<Setup />} />
                 </>
             )
         }
     }
 
     return (
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<PageLoading />}>
             <BrowserRouter>
                 <Routes>{renderRoutes()}</Routes>
             </BrowserRouter>

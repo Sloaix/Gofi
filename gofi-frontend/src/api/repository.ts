@@ -30,7 +30,7 @@ export interface FileInfo {
  * 获取gofi的设置项
  * @returns {AxiosPromise}
  */
-async function fetchConfiguration(): Promise<ConfigurationResult> {
+export async function fetchConfiguration(): Promise<ConfigurationResult> {
     return http.get('configuration')
 }
 
@@ -38,7 +38,7 @@ async function fetchConfiguration(): Promise<ConfigurationResult> {
  * 更新gofi的设置项
  * @returns {AxiosPromise}
  */
-async function updateConfiguration(config: ConfigurationParam): Promise<ConfigurationResult> {
+export async function updateConfiguration(config: ConfigurationParam): Promise<ConfigurationResult> {
     return http.post('configuration', config)
 }
 
@@ -46,7 +46,7 @@ async function updateConfiguration(config: ConfigurationParam): Promise<Configur
  * 更新gofi的文件仓库路径
  * @returns {AxiosPromise}
  */
-async function updateStoragePath(storagePath: string): Promise<ConfigurationResult> {
+export async function updateStoragePath(storagePath: string): Promise<ConfigurationResult> {
     return updateConfiguration({ customStoragePath: storagePath })
 }
 
@@ -55,7 +55,7 @@ async function updateStoragePath(storagePath: string): Promise<ConfigurationResu
  * @param configuration
  * @returns {Promise<AxiosResponse<T>>}
  */
-async function setup(config: ConfigurationParam): Promise<ConfigurationResult> {
+export async function setup(config: ConfigurationParam): Promise<ConfigurationResult> {
     return http.post('setup', config)
 }
 
@@ -64,7 +64,7 @@ async function setup(config: ConfigurationParam): Promise<ConfigurationResult> {
  * @param loginParam LoginParam
  * @returns token
  */
-async function login(loginParam: LoginParam): Promise<string> {
+export async function login(loginParam: LoginParam): Promise<string> {
     return http.post('user/login', loginParam)
 }
 
@@ -72,14 +72,14 @@ async function login(loginParam: LoginParam): Promise<string> {
  * 请求用户信息
  * @returns
  */
-async function fetchUser(): Promise<UserResult> {
+export async function fetchUser(): Promise<UserResult> {
     return http.get('user')
 }
 
 /**
  * 修改密码
  */
-async function changePassword(param: ChangePasswordParam): Promise<void> {
+export async function changePassword(param: ChangePasswordParam): Promise<void> {
     return http.post('user/changePassword', param)
 }
 
@@ -88,7 +88,7 @@ async function changePassword(param: ChangePasswordParam): Promise<void> {
  * @param dirPath 文件夹路径
  * @returns Observable<FileType[]>
  */
-async function fetchFileList(dirPath: string): Promise<Array<FileInfo>> {
+export async function fetchFileList(dirPath: string): Promise<Array<FileInfo>> {
     return http.get('files', { params: { path: dirPath } })
 }
 
@@ -97,7 +97,7 @@ async function fetchFileList(dirPath: string): Promise<Array<FileInfo>> {
  * @param filePath
  * @returns
  */
-async function fetchFileDetail(filePath: string): Promise<FileInfo> {
+export async function fetchFileDetail(filePath: string): Promise<FileInfo> {
     return http.get('file', { params: { path: filePath } })
 }
 
@@ -106,11 +106,11 @@ async function fetchFileDetail(filePath: string): Promise<FileInfo> {
  * @param filePath
  * @returns
  */
-function getFileDownloadUrl(filePath: string) {
+export function getFileDownloadUrl(filePath: string) {
     return `${BASE_URL}download?path=${encodeURIComponent(filePath)}`
 }
 
-function getFilePreviewUrl(filePath: string) {
+export function getFilePreviewUrl(filePath: string) {
     return `${BASE_URL}download?path=${encodeURIComponent(filePath)}&raw=true`
 }
 
@@ -119,7 +119,7 @@ function getFilePreviewUrl(filePath: string) {
  * @dirPath string 目标文件夹路径
  * @param file File
  */
-async function uploadFiles(
+export async function uploadFiles(
     dirPath: string,
     files: File[],
     onProgress: (progress: number, total: number) => void,

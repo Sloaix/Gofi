@@ -8,17 +8,16 @@ import (
 )
 
 var matcher = language.NewMatcher([]language.Tag{
-	language.English, language.Chinese,
+	language.English, language.SimplifiedChinese, language.TraditionalChinese, language.Japanese, language.French,
 })
 
 func Language(c *gin.Context) {
 	// 浏览器的language
-	browserLang := c.GetHeader("Accept-Language")
-	// Gofi指定的language
-	gofiLang := c.GetHeader("Accept-Language")
-	tag, _ := language.MatchStrings(matcher, gofiLang, browserLang)
+	acceptLanguageFromClient := c.GetHeader("Accept-Language")
+	tag, _ := language.MatchStrings(matcher, acceptLanguageFromClient)
 
-	logrus.Println("User language:", tag)
+	logrus.Infof("acceptLanguageFromClient: %s", acceptLanguageFromClient)
+	logrus.Infof("language tag is : %s", tag)
 	i18n.SwitchLanguageByTag(tag)
 	c.Next()
 }
