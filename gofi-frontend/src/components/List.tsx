@@ -195,4 +195,4 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, l
 
 List.defaultProps = defualtProps
 
-export default observer(List)
+export default List

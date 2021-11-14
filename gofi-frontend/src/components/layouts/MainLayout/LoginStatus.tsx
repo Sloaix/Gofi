@@ -50,4 +50,4 @@ const LoginStatus: React.FC<IProps> = () => {
     )
 }
 
-export default observer(LoginStatus)
+export default (LoginStatus)

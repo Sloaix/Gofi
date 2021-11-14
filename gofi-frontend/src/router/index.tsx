@@ -77,4 +77,4 @@ const GofiRouter: React.FC<IProps> = (props) => {
 
 GofiRouter.defaultProps = defualtProps
 
-export default observer(GofiRouter)
+export default (GofiRouter)

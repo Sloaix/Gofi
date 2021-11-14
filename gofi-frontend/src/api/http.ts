@@ -34,7 +34,7 @@ const err = (error: { response: { data: any; status: number } }) => {
 
 // request interceptor for language
 http.interceptors.request.use((request) => {
-    const language = sessionStorage.getItem(LANGUAGE)
+    const language = localStorage.getItem(LANGUAGE)
     if (language && request.headers) {
         request.headers['Accept-Language'] = language
     }

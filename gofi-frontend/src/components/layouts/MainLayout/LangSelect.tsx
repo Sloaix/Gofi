@@ -1,6 +1,5 @@
 import { RiTranslate2 } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
-import { observer } from 'mobx-react-lite'
 import React from 'react'
 
 interface IProps {
@@ -23,11 +22,11 @@ const LangSelect: React.FC<IProps> = (props) => {
         if (visible) {
             const languages = [
                 {
-                    lang: 'zh-hans',
+                    lang: 'zh-Hans',
                     label: '简体中文',
                 },
                 // {
-                //     lang: 'zh-hant',
+                //     lang: 'zh-Hant',
                 //     label: '繁體中文',
                 // },
                 // {
@@ -92,4 +91,4 @@ const LangSelect: React.FC<IProps> = (props) => {
 
 LangSelect.defaultProps = defualtProps
 
-export default observer(LangSelect)
+export default LangSelect

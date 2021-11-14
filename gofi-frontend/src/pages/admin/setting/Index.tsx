@@ -6,15 +6,16 @@ import {
     RiShieldUserLine,
 } from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
-import { observer, useLocalObservable } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import _ from 'lodash'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import repo from '../../../api/repository'
+import useSWR, { useSWRConfig } from 'swr'
+import { changePassword, fetchConfiguration, updateStoragePath } from '../../../api/repository'
 import logo from '../../../assets/logo.svg'
 import MainLayout from '../../../components/layouts/MainLayout/Index'
 import PageHeader from '../../../components/PageHeader'
+import QueryKey from '../../../constants/swr'
 import { useCurrentUser } from '../../../hook/user'
-import { useStore } from '../../../stores'
 import Toast from '../../../utils/toast.util'
 import InputField from './InputField'
 
@@ -23,84 +24,66 @@ interface IProps {}
 const defualtProps: IProps = {}
 
 const Setting: React.FC<IProps> = (props) => {
-    const { appStore } = useStore()
+    const [processing, setProcessing] = useState(false)
+    const [storagePathInput, setStoragePathInput] = useState<string>()
+    const [currentStoragePath, setCurrentStoragePath] = useState<string>()
+    const [passwordInput, setPasswordInput] = useState<string>('******')
     const { t } = useTranslation()
     const { user } = useCurrentUser()
-
-    // 存储storage input相关的状态
-    const storageStore = useLocalObservable(() => ({
-        defaultValue: '',
-        inputValue: '',
-        submitting: false,
-        setDefaultValue(value: string) {
-            this.defaultValue = value
-        },
-        setInputValue(value: string) {
-            this.inputValue = value
-        },
-        setSubmitting(value: boolean) {
-            this.submitting = value
-        },
-        async changeStorage(resetState: () => void) {
-            try {
-                // 显示loading
-                this.setSubmitting(true)
-                // 延迟1秒，让loading动画更流畅
-                setTimeout(async () => {
-                    const success = await appStore.updateStoragePath(this.inputValue)
-                    // 关闭loading
-                    this.setSubmitting(false)
-                    if (success) {
-                        // 重置input的状态为默认状态
-                        resetState()
-
-                        Toast.s(t('toast.storage-change-success'))
-                    }
-                }, 1000)
-            } catch (error) {
-                this.setSubmitting(false)
-            }
-        },
-    }))
-
-    // 存储password 表单的状态
-    const passwordStore = useLocalObservable(() => ({
-        inputValue: '******',
-        submitting: false,
-        setInputValue(value: string) {
-            this.inputValue = value
-        },
-        setSubmitting(value: boolean) {
-            this.submitting = value
-        },
-        async changePassword(resetState: () => void) {
-            try {
-                // 显示loading
-                this.setSubmitting(true)
-                //延迟1秒，让loading动画更流畅
-                setTimeout(async () => {
-                    await repo.changePassword({ password: this.inputValue, confirm: this.inputValue })
-                    // 关闭loading
-                    this.setSubmitting(false)
-                    // 重置input的状态为默认状态
-                    resetState()
-                    // 显示脱敏的密码
-                    passwordStore.setInputValue('******')
-                    Toast.s(t('toast.password-change-success'))
-                }, 1000)
-            } catch (error) {
-                this.setSubmitting(false)
-            }
-        },
-    }))
+    const { data: config } = useSWR(QueryKey.CONFIG, () => fetchConfiguration())
 
     useEffect(() => {
-        const storage = appStore.config?.customStoragePath
-            ? appStore.config?.customStoragePath
-            : appStore.config?.defaultStoragePath ?? ''
-        storageStore.setDefaultValue(storage)
-        storageStore.setInputValue(storage)
-    }, [appStore.config])
+        if (config) {
+            if (_.isEmpty(config.customStoragePath)) {
+                setCurrentStoragePath(config.defaultStoragePath)
+            } else {
+                setCurrentStoragePath(config.customStoragePath)
+            }
+        }
+    }, [config])
+
+    useEffect(() => {
+        if (currentStoragePath) {
+            setStoragePathInput(currentStoragePath)
+        }
+    }, [currentStoragePath])
+
+    const { mutate } = useSWRConfig()
+
+    // 修改文件仓库路径
+    const mutateStoragePath = async (resetState: () => void) => {
+        if (!storagePathInput) {
+            Toast.e(t('storage.path.empty'))
+            return
+        }
+
+        try {
+            setProcessing(true)
+
+            await updateStoragePath(storagePathInput)
+            mutate(QueryKey.CONFIG)
+            // 重置input的状态为默认状态
+            resetState()
+            Toast.s(t('toast.storage-change-success'))
+        } finally {
+            setProcessing(false)
+        }
+    }
+
+    // 修改密码
+    const mutatePassword = async (resetState: () => void) => {
+        try {
+            setProcessing(true)
+            await changePassword({ password: passwordInput, confirm: passwordInput })
+            // 重置input的状态为默认状态
+            resetState()
+            // 显示脱敏的密码
+            setPasswordInput('******')
+            Toast.s(t('toast.password-change-success'))
+        } finally {
+            setProcessing(false)
+        }
+    }
 
     const itemClasses = 'bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6'
     const itemTitleClasses = 'text-sm font-medium text-gray-500 flex items-center space-x-1'
@@ -124,16 +107,16 @@ const Setting: React.FC<IProps> = (props) => {
                             </dt>
                             <dd className={classNames(itemFieldClasses, 'flex space-x-2')}>
                                 <InputField
-                                    value={storageStore.inputValue}
-                                    defaultValue={storageStore.defaultValue}
-                                    submiting={storageStore.submitting}
-                                    onSubmit={storageStore.changeStorage}
+                                    value={storagePathInput}
+                                    defaultValue={currentStoragePath}
+                                    processing={processing}
+                                    onSubmit={mutateStoragePath}
                                     onChange={(value: string) => {
-                                        storageStore.setInputValue(value)
+                                        setStoragePathInput(value)
                                     }}
                                     onClose={() => {
                                         // 还原为默认值
-                                        storageStore.setInputValue(storageStore.defaultValue)
+                                        setStoragePathInput(currentStoragePath)
                                     }}
                                 />
                             </dd>
@@ -145,7 +128,7 @@ const Setting: React.FC<IProps> = (props) => {
                                 <RiComputerLine />
                                 <span> {t('pages.admin.setting.label.gofi-workdir')}</span>
                             </dt>
-                            <dd className={itemFieldClasses}>{appStore.config?.appPath}</dd>
+                            <dd className={itemFieldClasses}>{config?.appPath}</dd>
                         </div>
                         {/* 版本 */}
                         <div className={itemClasses}>
@@ -153,7 +136,7 @@ const Setting: React.FC<IProps> = (props) => {
                                 <img src={logo} className="h-3" />
                                 <span>{t('pages.admin.setting.label.version')}</span>
                             </dt>
-                            <dd className={itemFieldClasses}>{appStore.config?.version}</dd>
+                            <dd className={itemFieldClasses}>{config?.version}</dd>
                         </div>
                         {/* 用户名 */}
                         <div className={itemClasses}>
@@ -172,20 +155,20 @@ const Setting: React.FC<IProps> = (props) => {
 
                             <dd className={classNames(itemFieldClasses, 'flex space-x-2')}>
                                 <InputField
-                                    value={passwordStore.inputValue}
+                                    value={passwordInput}
                                     defaultValue=""
-                                    submiting={passwordStore.submitting}
+                                    processing={processing}
                                     placeholder={t('pages.admin.setting.form.input.password.placeholder')}
-                                    onSubmit={passwordStore.changePassword}
+                                    onSubmit={mutatePassword}
                                     onChange={(value: string) => {
-                                        passwordStore.setInputValue(value)
+                                        setPasswordInput(value)
                                     }}
                                     onEdit={() => {
-                                        passwordStore.setInputValue('')
+                                        setPasswordInput('')
                                     }}
                                     onClose={() => {
                                         // 还原为默认值
-                                        passwordStore.setInputValue('******')
+                                        setPasswordInput('******')
                                     }}
                                 />
                             </dd>
@@ -199,4 +182,4 @@ const Setting: React.FC<IProps> = (props) => {
 
 Setting.defaultProps = defualtProps
 
-export default observer(Setting)
+export default Setting

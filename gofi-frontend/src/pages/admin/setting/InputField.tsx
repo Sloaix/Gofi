@@ -13,12 +13,12 @@ interface IProps {
     onSubmit?: (resetState: () => void) => void
     onValidate?: () => boolean
     onClose?: () => void
-    submiting?: boolean
+    processing?: boolean
     placeholder?: string
 }
 
 const defualtProps: IProps = {
-    submiting: false,
+    processing: false,
     onValidate: () => true,
 }
 
@@ -30,7 +30,7 @@ const InputField: React.FC<IProps> = (props) => {
         <>
             <Input
                 value={props.value}
-                disable={intpuState === 'default' || props.submiting}
+                disable={intpuState === 'default' || props.processing}
                 fullWidth={true}
                 placeholder={props.placeholder}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +47,7 @@ const InputField: React.FC<IProps> = (props) => {
                             <Button
                                 type="secondary"
                                 icon={<MdEdit />}
-                                disabled={TextUtil.isEmpty(props.value) ? true : false || props.submiting}
+                                disabled={TextUtil.isEmpty(props.value) ? true : false || props.processing}
                                 onClick={() => {
                                     setInputState('edit')
                                     if (props.onEdit) {
@@ -60,7 +60,7 @@ const InputField: React.FC<IProps> = (props) => {
                         return (
                             <>
                                 {/* 关闭按钮 */}
-                                {props.submiting ? null : (
+                                {props.processing ? null : (
                                     <Button
                                         icon={<MdClose />}
                                         onClick={() => {
@@ -74,7 +74,7 @@ const InputField: React.FC<IProps> = (props) => {
                                 {/* 提交按钮 */}
                                 <Button
                                     icon={<MdCheck />}
-                                    loading={props.submiting}
+                                    loading={props.processing}
                                     onClick={() => {
                                         if (props.onValidate && props.onValidate() && props.onSubmit) {
                                             props.onSubmit(() => {
@@ -86,7 +86,7 @@ const InputField: React.FC<IProps> = (props) => {
                                     disabled={
                                         TextUtil.isEmpty(props.value)
                                             ? true
-                                            : false || props.submiting || props.defaultValue === props.value
+                                            : false || props.processing || props.defaultValue === props.value
                                     }
                                 />
                             </>
@@ -99,4 +99,4 @@ const InputField: React.FC<IProps> = (props) => {
 
 InputField.defaultProps = defualtProps
 
-export default observer(InputField)
+export default InputField

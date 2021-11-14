@@ -40,4 +40,4 @@ const Pagination: React.FC<IProps> = (props) => {
 
 Pagination.defaultProps = defualtProps
 
-export default observer(Pagination)
+export default (Pagination)

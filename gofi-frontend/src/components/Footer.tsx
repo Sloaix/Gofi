@@ -1,8 +1,10 @@
 import React from 'react'
-import { useStore } from '../stores'
+import useSWR from 'swr'
+import { fetchConfiguration } from '../api/repository'
+import QueryKey from '../constants/swr'
 
 const Footer: React.FC = () => {
-    const { appStore } = useStore()
+    const { data: config } = useSWR(QueryKey.CONFIG, () => fetchConfiguration())
 
     return (
         <>
@@ -23,7 +25,7 @@ const Footer: React.FC = () => {
                     </li>
                 </ul>
                 <div className="text-gray-500 text-sm p-2 flex space-x-2">
-                    <span>version {appStore.config?.version}</span>
+                    <span>version {config?.version}</span>
                     <span>©</span>
                     <span>2019-present</span>
                     <a

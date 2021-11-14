@@ -1,6 +1,6 @@
-import { observer } from 'mobx-react-lite'
 import React from 'react'
-import { useStore } from '../../../stores'
+import { useRecoilState } from 'recoil'
+import { languageState } from '../../../states/common.state'
 import Footer from '../../Footer'
 import LangSelect from './LangSelect'
 import LoginStatus from './LoginStatus'
@@ -8,7 +8,7 @@ import Logo from './Logo'
 import NavMenu from './NavMenu'
 
 const MainLayout: React.FC = (props) => {
-    const { appStore } = useStore()
+    const [language, setLanguage] = useRecoilState(languageState)
 
     return (
         <div className="bg-gray-100 h-full w-full flex flex-col overflow-x-hidden">
@@ -20,9 +20,9 @@ const MainLayout: React.FC = (props) => {
                     </div>
                     <LoginStatus />
                     <LangSelect
-                        selectLang={appStore.lang}
+                        selectLang={language}
                         onSelect={(lang: string) => {
-                            appStore.changeLanguage(lang)
+                            setLanguage(lang)
                         }}
                     />
                 </div>
@@ -33,4 +33,4 @@ const MainLayout: React.FC = (props) => {
     )
 }
 
-export default observer(MainLayout)
+export default MainLayout
