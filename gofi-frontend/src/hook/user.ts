@@ -1,5 +1,6 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import useSWR from 'swr'
+import { fetchUser } from '../api/repository'
 import { TOKEN } from '../constants/storage'
 import QueryKey from '../constants/swr'
 import { tokenState } from '../states/common.state'
@@ -22,8 +23,4 @@ export function useCurrentUser() {
 
     // isIdle代表函数还未准备好,需要等待token有值后才能继续加载
     return { user, isIdle: !token, isLoading: !user && !error && token, error, mutate }
-}
-
-function fetchUser() {
-    throw new Error('Function not implemented.')
 }

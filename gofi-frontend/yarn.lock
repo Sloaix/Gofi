@@ -966,6 +966,18 @@
   resolved "https://registry.npmmirror.com/@hacknug/react-icons/download/@hacknug/react-icons-4.2.1.tgz#c5dcc5788a5bc13eb88100eda0d9106427ef4c36"
   integrity sha1-xdzFeIpbwT64gQDtoNkQZCfvTDY=
 
+"@hapi/hoek@^9.0.0":
+  version "9.2.1"
+  resolved "https://registry.npmmirror.com/@hapi/hoek/download/@hapi/hoek-9.2.1.tgz#9551142a1980503752536b5050fd99f4a7f13b17"
+  integrity sha1-lVEUKhmAUDdSU2tQUP2Z9KfxOxc=
+
+"@hapi/topo@^5.0.0":
+  version "5.1.0"
+  resolved "https://registry.nlark.com/@hapi/topo/download/@hapi/topo-5.1.0.tgz#dc448e332c6c6e37a4dc02fd84ba8d44b9afb012"
+  integrity sha1-3ESOMyxsbjek3AL9hLqNRLmvsBI=
+  dependencies:
+    "@hapi/hoek" "^9.0.0"
+
 "@humanwhocodes/config-array@^0.6.0":
   version "0.6.0"
   resolved "https://registry.npmmirror.com/@humanwhocodes/config-array/download/@humanwhocodes/config-array-0.6.0.tgz#b5621fdb3b32309d2d16575456cbc277fa8f021a"
@@ -1194,6 +1206,23 @@
     estree-walker "^2.0.1"
     picomatch "^2.2.2"
 
+"@sideway/address@^4.1.0":
+  version "4.1.2"
+  resolved "https://registry.nlark.com/@sideway/address/download/@sideway/address-4.1.2.tgz#811b84333a335739d3969cfc434736268170cad1"
+  integrity sha1-gRuEMzozVznTlpz8Q0c2JoFwytE=
+  dependencies:
+    "@hapi/hoek" "^9.0.0"
+
+"@sideway/formula@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/@sideway/formula/download/@sideway/formula-3.0.0.tgz?cache=0&sync_timestamp=1603525579815&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40sideway%2Fformula%2Fdownload%2F%40sideway%2Fformula-3.0.0.tgz#fe158aee32e6bd5de85044be615bc08478a0a13c"
+  integrity sha1-/hWK7jLmvV3oUES+YVvAhHigoTw=
+
+"@sideway/pinpoint@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/@sideway/pinpoint/download/@sideway/pinpoint-2.0.0.tgz#cff8ffadc372ad29fd3f78277aeb29e632cc70df"
+  integrity sha1-z/j/rcNyrSn9P3gneusp5jLMcN8=
+
 "@sinonjs/commons@^1.7.0":
   version "1.8.3"
   resolved "https://registry.npmmirror.com/@sinonjs/commons/download/@sinonjs/commons-1.8.3.tgz#3802ddd21a50a949b6721ddd72da36e67e7f1b2d"
@@ -1313,6 +1342,13 @@
   dependencies:
     jest-diff "^27.0.0"
     pretty-format "^27.0.0"
+
+"@types/joi@^17.2.3":
+  version "17.2.3"
+  resolved "https://registry.npm.taobao.org/@types/joi/download/@types/joi-17.2.3.tgz#b7768ed9d84f1ebd393328b9f97c1cf3d2b94798"
+  integrity sha1-t3aO2dhPHr05Myi5+Xwc89K5R5g=
+  dependencies:
+    joi "*"
 
 "@types/json-schema@^7.0.9":
   version "7.0.9"
@@ -3685,6 +3721,17 @@ jest@^27.3.1:
     "@jest/core" "^27.3.1"
     import-local "^3.0.2"
     jest-cli "^27.3.1"
+
+joi@*, joi@^17.4.2:
+  version "17.4.2"
+  resolved "https://registry.nlark.com/joi/download/joi-17.4.2.tgz#02f4eb5cf88e515e614830239379dcbbe28ce7f7"
+  integrity sha1-AvTrXPiOUV5hSDAjk3ncu+KM5/c=
+  dependencies:
+    "@hapi/hoek" "^9.0.0"
+    "@hapi/topo" "^5.0.0"
+    "@sideway/address" "^4.1.0"
+    "@sideway/formula" "^3.0.0"
+    "@sideway/pinpoint" "^2.0.0"
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

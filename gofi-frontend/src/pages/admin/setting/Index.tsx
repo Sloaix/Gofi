@@ -1,4 +1,10 @@
-import { RiComputerLine, RiDatabase2Line, RiDoorLockLine, RiSettings2Line } from '@hacknug/react-icons/ri'
+import {
+    RiComputerLine,
+    RiDatabase2Line,
+    RiDoorLockLine,
+    RiSettings2Line,
+    RiShieldUserLine,
+} from '@hacknug/react-icons/ri'
 import classNames from 'classnames'
 import { observer, useLocalObservable } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
@@ -7,6 +13,7 @@ import repo from '../../../api/repository'
 import logo from '../../../assets/logo.svg'
 import MainLayout from '../../../components/layouts/MainLayout/Index'
 import PageHeader from '../../../components/PageHeader'
+import { useCurrentUser } from '../../../hook/user'
 import { useStore } from '../../../stores'
 import Toast from '../../../utils/toast.util'
 import InputField from './InputField'
@@ -16,8 +23,9 @@ interface IProps {}
 const defualtProps: IProps = {}
 
 const Setting: React.FC<IProps> = (props) => {
-    const { appStore, userStore } = useStore()
+    const { appStore } = useStore()
     const { t } = useTranslation()
+    const { user } = useCurrentUser()
 
     // 存储storage input相关的状态
     const storageStore = useLocalObservable(() => ({
@@ -148,14 +156,13 @@ const Setting: React.FC<IProps> = (props) => {
                             <dd className={itemFieldClasses}>{appStore.config?.version}</dd>
                         </div>
                         {/* 用户名 */}
-                        {/* fixme:用户名偶发性的不显示 */}
-                        {/* <div className={itemClasses}>
+                        <div className={itemClasses}>
                             <dt className={itemTitleClasses}>
                                 <RiShieldUserLine />
                                 <span>{t('pages.admin.setting.label.username')}</span>
                             </dt>
-                            <dd className={itemFieldClasses}>{userStore.user?.username}</dd>
-                        </div> */}
+                            <dd className={itemFieldClasses}>{user?.username}</dd>
+                        </div>
                         {/* 密码 */}
                         <div className={itemClasses}>
                             <dt className={itemTitleClasses}>

@@ -1,16 +1,17 @@
 import { RiLoginBoxLine } from '@hacknug/react-icons/ri'
-import { replace } from 'lodash'
-import { observer, useLocalObservable } from 'mobx-react-lite'
-import React, { useEffect } from 'react'
+import Joi from 'joi'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
+import { useSetRecoilState } from 'recoil'
+import { login } from '../api/repository'
 import backgroundImage from '../assets/login.svg'
 import logo from '../assets/logo.svg'
 import Button from '../components/Button'
-import Checkbox from '../components/form/Checkbox'
 import Input from '../components/form/Input'
 import PureLayout from '../components/layouts/PureLayout'
-import { useStore } from '../stores'
+import { TOKEN } from '../constants/storage'
+import { tokenState } from '../states/common.state'
 import EnvUtil from '../utils/env.util'
 import Toast from '../utils/toast.util'
 
@@ -18,61 +19,69 @@ interface IProps {}
 
 const defualtProps: IProps = {}
 
+const formValidator = Joi.object({
+    username: Joi.string().required().messages({
+        'any.required': `用户名不能为空`,
+        'string.empty': `用户名不能为空`,
+    }),
+    password: Joi.string().required().messages({
+        'any.required': `密码不能为空`,
+        'string.empty': `密码不能为空`,
+    }),
+})
+
 const Login: React.FC<IProps> = (props) => {
-    const { userStore } = useStore()
     const navigate = useNavigate()
     const { t } = useTranslation()
+    const [username, setUsername] = useState<string>('')
+    const [password, setPassword] = useState<string>('')
+    const [processing, setProcessing] = useState(false)
+    const [error, setError] = useState('')
 
-    const loginStore = useLocalObservable(() => ({
-        rememberme: true,
-        username: '',
-        password: '',
-        submiting: false,
-        setRememberme(value: boolean) {
-            this.rememberme = value
-        },
-        setUsername(value: string) {
-            this.username = value
-        },
-        setPassword(value: string) {
-            this.password = value
-        },
-        setSubmiting(value: boolean) {
-            this.submiting = value
-        },
-        get isReady() {
-            if (this.username && this.password) {
-                return true
-            } else {
-                return false
+    const setToken = useSetRecoilState(tokenState)
+
+    // 校验表单
+    const valiteForm = (): boolean => {
+        const formFields = {
+            username,
+            password,
+        }
+
+        const result = formValidator.validate(formFields)
+
+        console.log(result)
+
+        if (result.error) {
+            Toast.e(`${result.error.message}`)
+            setError(result.error.message)
+            return false
+        }
+
+        return true
+    }
+
+    const trySubmit = async () => {
+        if (!valiteForm()) {
+            return
+        }
+
+        try {
+            setProcessing(true)
+            const token = await login({ username: username, password: password })
+
+            if (token) {
+                // save state
+                setToken(token)
+                sessionStorage.setItem(TOKEN, token)
+
+                Toast.s(t('toast.login-success'))
+                navigate('/', { replace: true })
             }
-        },
-        get isInValid() {
-            return !this.isReady
-        },
-        async onSubmit() {
-            if (loginStore.isInValid) {
-                return
-            }
-            try {
-                this.submiting = true
-                // 延迟1秒,让动画柔和
-                setTimeout(async () => {
-                    const logined = await userStore.login(
-                        { username: this.username, password: this.password },
-                        this.rememberme,
-                    )
-                    this.submiting = false
-                    if (logined) {
-                        Toast.s(t('toast.login-success'))
-                        navigate('/', { replace: true })
-                    }
-                }, 1000)
-            } catch (error) {
-                this.submiting = false
-            }
-        },
-    }))
+        } catch (error) {
+        } finally {
+            setProcessing(false)
+        }
+    }
 
     return (
         <PureLayout>
@@ -95,9 +104,9 @@ const Login: React.FC<IProps> = (props) => {
                                     : t('pages.login.form.input.placeholder.username')
                             }
                             fullWidth={true}
-                            value={loginStore.username}
+                            value={username}
                             onChange={(e) => {
-                                loginStore.setUsername(e.target.value)
+                                setUsername(e.target.value)
                             }}
                         />
                         <Input
@@ -108,41 +117,19 @@ const Login: React.FC<IProps> = (props) => {
                             }
                             fullWidth={true}
                             type="password"
-                            value={loginStore.password}
-                            onEnterPress={loginStore.onSubmit}
+                            value={password}
+                            onEnterPress={trySubmit}
                             onChange={(e) => {
-                                loginStore.setPassword(e.target.value)
+                                setPassword(e.target.value)
                             }}
                         />
                     </div>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                            <Checkbox
-                                checked={loginStore.rememberme}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    loginStore.setRememberme(e.target.checked)
-                                }}
-                            />
-                            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                                {t('pages.login.form.checkbox.rememberme')}
-                            </label>
-                        </div>
-
-                        {/* <div className="text-sm">
-                            <Tooltip title="请联系管理员">
-                                <a href="#" className="font-medium text-indigo-600 hover:text-indigo-500">
-                                    {t('pages.login.label.forget-password')}
-                                </a>
-                            </Tooltip>
-                        </div> */}
-                    </div>
-
                     <Button
                         fullWidth={true}
                         icon={<RiLoginBoxLine />}
-                        loading={loginStore.submiting}
-                        onClick={loginStore.onSubmit}
-                        disabled={loginStore.isInValid}
+                        loading={processing}
+                        onClick={trySubmit}
+                        disabled={processing}
                     >
                         {t('pages.login.form.button.signin')}
                     </Button>
@@ -164,4 +151,4 @@ const Login: React.FC<IProps> = (props) => {
 
 Login.defaultProps = defualtProps
 
-export default observer(Login)
+export default Login

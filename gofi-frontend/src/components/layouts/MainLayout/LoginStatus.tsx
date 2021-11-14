@@ -3,8 +3,15 @@ import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
-import { useStore } from '../../../stores'
-
+import { useSetRecoilState } from 'recoil'
+import { mutate } from 'swr'
+import { TOKEN } from '../../../constants/storage'
+import { useCurrentUser } from '../../../hook/user'
+import i18n from '../../../i18n'
+import { tokenState } from '../../../states/common.state'
+import Toast from '../../../utils/toast.util'
+import useSWR, { useSWRConfig } from 'swr'
+import QueryKey from '../../../constants/swr'
 interface IProps {}
 
 const buttonClass =
@@ -12,17 +19,21 @@ const buttonClass =
 const textClass = 'px-2 text-sm hidden sm:block'
 
 const LoginStatus: React.FC<IProps> = () => {
-    const { userStore } = useStore()
     const { t } = useTranslation()
     const navigate = useNavigate()
-
+    const { user } = useCurrentUser()
+    const setToken = useSetRecoilState(tokenState)
+    const { mutate } = useSWRConfig()
     return (
         <div className="flex h-full">
-            {userStore.isLogin ? (
+            {user ? (
                 <div
                     className={buttonClass}
                     onClick={() => {
-                        userStore.logout()
+                        setToken(null)
+                        sessionStorage.removeItem(TOKEN)
+                        Toast.i(i18n.t('toast.logout-success'))
+                        mutate(QueryKey.CURRENT_USER)
                         navigate('/')
                     }}
                 >

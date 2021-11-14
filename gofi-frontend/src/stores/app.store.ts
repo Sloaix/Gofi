@@ -30,7 +30,7 @@ class AppStore {
      */
     changeLanguage(lang: string) {
         i18n.changeLanguage(lang)
-        localStorage.setItem(LANGUAGE, lang)
+        sessionStorage.setItem(LANGUAGE, lang)
         this.lang = lang
     }
 

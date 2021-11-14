@@ -34,7 +34,7 @@ const err = (error: { response: { data: any; status: number } }) => {
 
 // request interceptor for language
 http.interceptors.request.use((request) => {
-    const language = localStorage.getItem(LANGUAGE)
+    const language = sessionStorage.getItem(LANGUAGE)
     if (language && request.headers) {
         request.headers['Accept-Language'] = language
     }
@@ -43,7 +43,7 @@ http.interceptors.request.use((request) => {
 
 // attach token to header
 http.interceptors.request.use((request) => {
-    const token = localStorage.getItem(TOKEN)
+    const token = sessionStorage.getItem(TOKEN)
     if (token && request.headers) {
         request.headers['Authorization'] = `bearer ${token}` // 让每个请求携带自定义 token
     }

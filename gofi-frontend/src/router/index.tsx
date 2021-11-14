@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import { fetchConfiguration } from '../api/repository'
 import PageLoading from '../components/PageLoading'
 import QueryKey from '../constants/swr'
-import { useStore } from '../stores'
+import { useCurrentUser } from '../hook/user'
 
 const NotFound = lazy(() => import('../pages/exception/404'))
 const UnAuthorized = lazy(() => import('../pages/exception/403'))
@@ -27,7 +27,7 @@ interface IProps {}
 const defualtProps: IProps = {}
 
 const GofiRouter: React.FC<IProps> = (props) => {
-    const { appStore, userStore } = useStore()
+    const { user } = useCurrentUser()
     const { data: config, error } = useSWR(QueryKey.CONFIG, () => fetchConfiguration())
 
     if (!config && !error) {
@@ -46,8 +46,8 @@ const GofiRouter: React.FC<IProps> = (props) => {
                     <Route path="/" element={<Navigate to="/file/viewer" replace={true} />} />
                     <Route path="/file/viewer" element={<FileViewer />} />
                     <Route path="/file/detail" element={<FileDetail />} />
-                    <Route path="/admin/setting" element={userStore.isLogin ? <Setting /> : <Navigate to="/" />} />
-                    <Route path="/auth/login" element={!userStore.isLogin ? <Login /> : <Navigate to="/" />} />
+                    <Route path="/admin/setting" element={user ? <Setting /> : <Navigate to="/" />} />
+                    <Route path="/auth/login" element={!user ? <Login /> : <Navigate to="/" />} />
                     <Route path="/404" element={<NotFound />} />
                     <Route path="/403" element={<UnAuthorized />} />
                     <Route path="/500" element={<ServerError />} />
