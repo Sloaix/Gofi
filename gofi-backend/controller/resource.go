@@ -7,11 +7,26 @@ type Resource struct {
 	Data    interface{} `json:"data"`
 }
 
-const StatusOk int = 200             // success
-const StatusUnknown int = -1         // fail,reason is unknown
-const StatusNotFound int = 404       // fail,reason is not found
-const StatusTokenMiss int = 10000    // token miss
-const StatusTokenInvalid int = 10001 // token is invalid
+const StatusOk int = 200       // success
+const StatusUnknown int = -1   // fail,reason is unknown
+const StatusNotFound int = 404 // fail,reason is not found
+
+// auth
+const StatusTokenMiss int = 10000                 // token miss
+const StatusTokenInvalid int = 10001              // token is invalid
+const StatusTokenExpired int = 10002              // token is expired
+const StatusUsernameOrPasswordIsWrong int = 10003 // username or password is wrong
+
+// config
+const StatusAlreadyInitialized = 20000   // fail,reason is already initialized
+const StatusNotInitialized = 20001       // fail,reason is not initialized
+const StatusCurrentIsPreviewMode = 20002 // fail,reason is current is preview mode
+
+// file
+const StatusDirNotExist = 30000       // fail,reason is dir not exist
+const StatusFileNotExist = 30001      // fail,reason is file not exist
+const StatusUploadFileFailed = 30002  // fail,reason is upload file failed
+const StatusCantOverwriteFile = 30003 // fail,reason is can't overwrite file
 
 type ResourceBuilder struct {
 	resource *Resource

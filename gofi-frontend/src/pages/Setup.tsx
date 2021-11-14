@@ -1,8 +1,6 @@
 import { RiArrowGoBackFill } from '@hacknug/react-icons/ri'
 import _ from 'lodash'
-import { useLocalObservable } from 'mobx-react-lite'
 import React, { useEffect, useState } from 'react'
-import { count, interval, take } from 'rxjs'
 import useSWR from 'swr'
 import { fetchConfiguration, setup } from '../api/repository'
 import logo from '../assets/logo.svg'

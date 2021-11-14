@@ -21,7 +21,11 @@ export default class UrlUtil {
      * @param parentPath /a/b
      * @returns parentPath if exist,or false if not exist.
      */
-    static parentPath(path: string): string {
+    static parentPath(path: string | null | undefined): string {
+        if (!path) {
+            return ''
+        }
+
         if (TextUtil.isEmpty(path) || path.trim() === '/') {
             return ''
         }

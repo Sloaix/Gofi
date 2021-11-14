@@ -62,11 +62,16 @@ http.interceptors.response.use(
         return responseWrapper.data
     },
     function (error) {
-        // 任何超出2xx范围的状态代码都会触发此函数
-        // 处理响应错误
-        Toast.e(`${error}`)
-        return Promise.reject(error)
+        if (isNetworkError(error)) {
+            error = new Error('Network Error')
+            Toast.e('Network Error')
+        } else {
+            Toast.e(`${error}`)
+        }
     },
 )
+const isNetworkError = (err: any) => {
+    return !!err.isAxiosError && !err.response
+}
 
 export default http

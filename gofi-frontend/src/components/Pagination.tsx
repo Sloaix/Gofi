@@ -1,6 +1,5 @@
 import { BiChevronLeft, BiChevronRight } from '@hacknug/react-icons/bi'
 import classNames from 'classnames'
-import { observer } from 'mobx-react-lite'
 import React from 'react'
 import Button from './Button'
 
@@ -40,4 +39,4 @@ const Pagination: React.FC<IProps> = (props) => {
 
 Pagination.defaultProps = defualtProps
 
-export default (Pagination)
+export default Pagination

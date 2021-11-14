@@ -1,7 +1,8 @@
 import { RiRefreshLine, RiUploadFill } from '@hacknug/react-icons/ri'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import useSWR from 'swr'
 import repo, { fetchFileList, FileInfo } from '../../api/repository'
 import NotFoundImage from '../../assets/404.svg'
 import Button from '../../components/Button'
@@ -14,6 +15,7 @@ import Tip from '../../components/Tip'
 import Toolbar from '../../components/Toolbar'
 import Tooltip from '../../components/Tooltip'
 import Upload from '../../components/Upload'
+import QueryKey from '../../constants/swr'
 import EnvUtil from '../../utils/env.util'
 import MimeTypeUtil from '../../utils/mimetype.util'
 import TextUtil from '../../utils/text.util'
@@ -22,29 +24,29 @@ import UrlUtil from '../../utils/url.util'
 
 const FileViewer: React.FC = (props) => {
     const location = useLocation()
-    const [currentPath, setCurrentPath] = useState('')
+    const { t } = useTranslation()
+    const navigate = useNavigate()
+    const uploadRef = useRef<HTMLInputElement>(null)
+    const [searchParams] = useSearchParams()
+    const [currentPath, setCurrentPath] = useState<string>()
+    const [pathPram, setPathParam] = useState<string>()
     const [showProgressModel, setShowProgressModel] = useState<boolean>(false)
     const [uploadProgress, setUploadProgress] = useState<number>(0)
     const [uploadModalMessage, setUploadModalMessage] = useState<React.ReactNode>(null)
-    const uploadRef = useRef<HTMLInputElement>(null)
-    const [fileInfos, setFileInfos] = useState<FileInfo[]>([])
-    const { t } = useTranslation()
-    const navigate = useNavigate()
+    const {
+        data: fileInfos,
+        error,
+        mutate,
+    } = useSWR(currentPath ? [QueryKey.FILE_LIST, currentPath] : null, (_, dir) => fetchFileList(dir))
 
-    const pathQuery = () => {
-        let searchParams = new URLSearchParams(location.search)
-        if (searchParams.has('path')) {
-            return searchParams.get('path') ?? ''
-        }
-        return ''
-    }
+    const fetching = !fileInfos && !error
 
     // ?path=/a/b/c , parent is  /a/b
     const parentPathOfpathQuery = () => {
-        if (TextUtil.isEmpty(pathQuery())) {
+        if (TextUtil.isEmpty(pathPram)) {
             return ''
         }
-        return UrlUtil.parentPath(pathQuery())
+        return UrlUtil.parentPath(pathPram)
     }
 
     // 是否还有上级目录
@@ -52,24 +54,17 @@ const FileViewer: React.FC = (props) => {
         return TextUtil.isNotEmpty(parentPathOfpathQuery())
     }
 
-    const refresh = async () => {
-        const dirPath = TextUtil.withPrefix(pathQuery(), '/')
-        const newFileInfos = await fetchFileList(dirPath)
-        setFileInfos(newFileInfos)
-    }
-
     useEffect(() => {
-        ;(async () => {
-            const newFileInfos = await fetchFileList(pathQuery())
-            setFileInfos(newFileInfos)
-        })()
-
-        if (TextUtil.isEmpty(pathQuery())) {
-            setCurrentPath('/')
-        } else {
-            setCurrentPath(pathQuery())
+        if (searchParams) {
+            const newPathParam = searchParams.get('path') ?? ''
+            setPathParam(newPathParam)
+            if (TextUtil.isEmpty(newPathParam)) {
+                setCurrentPath('/')
+            } else {
+                setCurrentPath(newPathParam)
+            }
         }
-    }, [location])
+    }, [searchParams])
 
     /**
      * 文件被点击
@@ -126,12 +121,12 @@ const FileViewer: React.FC = (props) => {
      * @param files
      */
     const onUploadFiles = async (files: File[]) => {
-        const dirPath = TextUtil.withPrefix(pathQuery(), '/')
+        const dirPath = TextUtil.withPrefix(pathPram, '/')
         setUploadModalMessage(
             <div>
-                {files.map((file) => {
+                {files.map((file, index) => {
                     return (
-                        <div className="flex items-center space-x-2 text-gray-500 text-sm mb-2">
+                        <div className="flex items-center space-x-2 text-gray-500 text-sm mb-2" key={index}>
                             {MimeTypeUtil.icon(TextUtil.extension(file.name))}
                             <span className="whitespace-nowrap break-words overflow-ellipsis">{file.name}</span>
                         </div>
@@ -144,12 +139,10 @@ const FileViewer: React.FC = (props) => {
             await repo.uploadFiles(dirPath, files, (progress, total) => {
                 setUploadProgress((progress / total) * 100)
             })
-            setShowProgressModel(false)
-            refresh()
+            mutate()
             Toast.s(t('toast.upload-success'))
-        } catch (error) {
+        } finally {
             setShowProgressModel(false)
-            console.log(error)
         }
     }
 
@@ -182,12 +175,12 @@ const FileViewer: React.FC = (props) => {
                     </Upload>
                 </Tooltip>
                 <Tooltip title={t('tooltip.refresh')}>
-                    <Button type="secondary" icon={<RiRefreshLine />} onClick={refresh} />
+                    <Button type="secondary" icon={<RiRefreshLine />} onClick={mutate} />
                 </Tooltip>
             </Toolbar>
             <List
                 items={fileInfos}
-                loading={fileInfos ? false : true}
+                loading={fetching}
                 onFileNameClick={onFileNameClick}
                 emptyView={
                     <div className="p-6">

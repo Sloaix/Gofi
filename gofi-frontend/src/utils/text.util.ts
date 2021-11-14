@@ -22,7 +22,11 @@ export default class TextUtil {
      * @param prefix
      * @returns
      */
-    static withPrefix(value: string, prefix: string) {
+    static withPrefix(value: string | null | undefined, prefix: string) {
+        if (!value) {
+            value = ''
+        }
+
         if (!value.startsWith(prefix)) {
             return `${prefix}${value}`
         }

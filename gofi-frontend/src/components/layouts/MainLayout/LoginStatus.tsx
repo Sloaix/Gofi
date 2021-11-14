@@ -1,17 +1,15 @@
 import { RiLoginBoxLine, RiLogoutBoxRLine } from '@hacknug/react-icons/ri'
-import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSetRecoilState } from 'recoil'
-import { mutate } from 'swr'
+import { useSWRConfig } from 'swr'
 import { TOKEN } from '../../../constants/storage'
+import QueryKey from '../../../constants/swr'
 import { useCurrentUser } from '../../../hook/user'
 import i18n from '../../../i18n'
 import { tokenState } from '../../../states/common.state'
 import Toast from '../../../utils/toast.util'
-import useSWR, { useSWRConfig } from 'swr'
-import QueryKey from '../../../constants/swr'
 interface IProps {}
 
 const buttonClass =
@@ -50,4 +48,4 @@ const LoginStatus: React.FC<IProps> = () => {
     )
 }
 
-export default (LoginStatus)
+export default LoginStatus

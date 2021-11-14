@@ -1,5 +1,4 @@
 import { MdCheck, MdClose, MdEdit } from '@hacknug/react-icons/md'
-import { observer } from 'mobx-react-lite'
 import React, { useState } from 'react'
 import Button from '../../../components/Button'
 import Input from '../../../components/form/Input'

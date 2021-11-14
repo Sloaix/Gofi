@@ -3991,16 +3991,6 @@ minimist@^1.1.1, minimist@^1.2.5:
   resolved "https://registry.npmmirror.com/minimist/download/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha1-Z9ZgFLZqaoqqDAg8X9WN9OTpdgI=
 
-mobx-react-lite@^3.2.2:
-  version "3.2.2"
-  resolved "https://registry.npmmirror.com/mobx-react-lite/download/mobx-react-lite-3.2.2.tgz#cee5f09e6b0e4d2705d87276baf1de74d997fa33"
-  integrity sha1-zuXwnmsOTScF2HJ2uvHedNmX+jM=
-
-mobx@^6.3.6:
-  version "6.3.6"
-  resolved "https://registry.npmmirror.com/mobx/download/mobx-6.3.6.tgz#3192dea21ae8213d04a0df5c98a5ca164ed29ecd"
-  integrity sha1-MZLeohroIT0EoN9cmKXKFk7Sns0=
-
 modern-normalize@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmmirror.com/modern-normalize/download/modern-normalize-1.1.0.tgz#da8e80140d9221426bd4f725c6e11283d34f90b7"

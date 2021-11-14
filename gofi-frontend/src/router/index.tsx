@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react-lite'
 import React, { lazy, Suspense } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import useSWR from 'swr'
@@ -46,7 +45,7 @@ const GofiRouter: React.FC<IProps> = (props) => {
                     <Route path="/" element={<Navigate to="/file/viewer" replace={true} />} />
                     <Route path="/file/viewer" element={<FileViewer />} />
                     <Route path="/file/detail" element={<FileDetail />} />
-                    <Route path="/admin/setting" element={user ? <Setting /> : <Navigate to="/" />} />
+                    <Route path="/admin/setting" element={user ? <Setting /> : <Navigate to="/auth/login" />} />
                     <Route path="/auth/login" element={!user ? <Login /> : <Navigate to="/" />} />
                     <Route path="/404" element={<NotFound />} />
                     <Route path="/403" element={<UnAuthorized />} />
@@ -77,4 +76,4 @@ const GofiRouter: React.FC<IProps> = (props) => {
 
 GofiRouter.defaultProps = defualtProps
 
-export default (GofiRouter)
+export default GofiRouter
