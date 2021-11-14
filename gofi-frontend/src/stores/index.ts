@@ -1,17 +1,13 @@
 import { createContext, useContext } from 'react'
 import AppStore from './app.store'
-import FileStore from './file.store'
 const appStore = new AppStore()
-const fileStore = new FileStore()
 
 export interface Store {
     appStore: AppStore
-    fileStore: FileStore
 }
 
 const store: Store = {
     appStore,
-    fileStore,
 }
 
 export default store

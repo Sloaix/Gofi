@@ -1,9 +1,8 @@
 import { RiRefreshLine, RiUploadFill } from '@hacknug/react-icons/ri'
-import { observer } from 'mobx-react-lite'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useNavigate } from 'react-router-dom'
-import repo, { FileInfo } from '../../api/repository'
+import repo, { fetchFileList, FileInfo } from '../../api/repository'
 import NotFoundImage from '../../assets/404.svg'
 import Button from '../../components/Button'
 import Exception from '../../components/Exception'
@@ -15,7 +14,6 @@ import Tip from '../../components/Tip'
 import Toolbar from '../../components/Toolbar'
 import Tooltip from '../../components/Tooltip'
 import Upload from '../../components/Upload'
-import { useStore } from '../../stores'
 import EnvUtil from '../../utils/env.util'
 import MimeTypeUtil from '../../utils/mimetype.util'
 import TextUtil from '../../utils/text.util'
@@ -23,13 +21,13 @@ import Toast from '../../utils/toast.util'
 import UrlUtil from '../../utils/url.util'
 
 const FileViewer: React.FC = (props) => {
-    const { fileStore } = useStore()
     const location = useLocation()
     const [currentPath, setCurrentPath] = useState('')
     const [showProgressModel, setShowProgressModel] = useState<boolean>(false)
     const [uploadProgress, setUploadProgress] = useState<number>(0)
     const [uploadModalMessage, setUploadModalMessage] = useState<React.ReactNode>(null)
     const uploadRef = useRef<HTMLInputElement>(null)
+    const [fileInfos, setFileInfos] = useState<FileInfo[]>([])
     const { t } = useTranslation()
     const navigate = useNavigate()
 
@@ -54,13 +52,17 @@ const FileViewer: React.FC = (props) => {
         return TextUtil.isNotEmpty(parentPathOfpathQuery())
     }
 
-    const refresh = () => {
+    const refresh = async () => {
         const dirPath = TextUtil.withPrefix(pathQuery(), '/')
-        fileStore.fetchFileList(dirPath)
+        const newFileInfos = await fetchFileList(dirPath)
+        setFileInfos(newFileInfos)
     }
 
     useEffect(() => {
-        fileStore.fetchFileList(pathQuery())
+        ;(async () => {
+            const newFileInfos = await fetchFileList(pathQuery())
+            setFileInfos(newFileInfos)
+        })()
 
         if (TextUtil.isEmpty(pathQuery())) {
             setCurrentPath('/')
@@ -184,8 +186,8 @@ const FileViewer: React.FC = (props) => {
                 </Tooltip>
             </Toolbar>
             <List
-                items={fileStore.fileInfos}
-                loading={fileStore.fileInfos ? false : true}
+                items={fileInfos}
+                loading={fileInfos ? false : true}
                 onFileNameClick={onFileNameClick}
                 emptyView={
                     <div className="p-6">
@@ -212,4 +214,4 @@ const FileViewer: React.FC = (props) => {
     )
 }
 
-export default observer(FileViewer)
+export default FileViewer
