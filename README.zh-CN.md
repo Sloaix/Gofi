@@ -1,3 +1,6 @@
+# **不再维护!**
+由于个人精力有限，不再维护Gofi。
+
 <div align="center">
 <img src="./preview/logo.png">
 </div>
