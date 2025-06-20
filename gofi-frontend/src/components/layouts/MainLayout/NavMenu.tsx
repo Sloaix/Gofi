@@ -1,58 +1,89 @@
 import React from 'react'
-import { RiGithubFill, RiFolder3Line, RiSettings2Line, RiBook2Line } from '@hacknug/react-icons/ri'
-import EnvUtil from '../../../utils/env.util'
-import classNames from 'classnames'
+import { RiGithubFill, RiFolder3Line, RiSettings2Line, RiBook2Line } from 'react-icons/ri'
+import { Folder, FolderOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
+import EnvUtil from '../../../utils/env.util'
+import classNames from 'classnames'
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '../../ui/dropdown-menu'
 
-const menuItemUnderLineClass =
-    'transition-all box-content h-full px-4 cursor-pointer flex items-center border-b-2 text-gray-600 hover:border-indigo-500 hover:text-indigo-500'
-const activeClass = 'border-indigo-500 text-indigo-500'
+const navItems = [
+  { key: 'file', label: 'menu.file', to: '/file' },
+  { key: 'setting', icon: <RiSettings2Line size={20} />, label: 'menu.setting', to: '/admin/setting' },
+]
+
+const moreItems = [
+  { key: 'doc', icon: <RiBook2Line size={20} className="mr-2" />, label: 'menu.doc', href: 'https://gofi.calmlyfish.com', show: EnvUtil.isPreviewMode },
+  { key: 'stars', icon: <RiGithubFill size={20} className="mr-2" />, label: 'menu.stars', href: 'https://github.com/Sloaix/Gofi', show: EnvUtil.isPreviewMode },
+]
+
 const NavMenu: React.FC = () => {
-    const location = useLocation()
-    const { t } = useTranslation()
+  const location = useLocation()
+  const { t } = useTranslation()
+  const isActive = (link: string) => location.pathname === link
 
-    const LINK_TO_FILE_VIEWER = '/file/viewer'
-    const LINK_TO_ADMIN_SETTING = '/admin/setting'
-
-    const isActive = (link: string) => {
-        return location.pathname === link
-    }
-
-    const menuItemClasses = (link: string) => {
-        return classNames(menuItemUnderLineClass, isActive(link) ? activeClass : 'border-transparent')
-    }
-
-    return (
-        <div className="flex h-full">
-            <Link to={LINK_TO_FILE_VIEWER} className={menuItemClasses(LINK_TO_FILE_VIEWER)}>
-                <RiFolder3Line />
-                <span className="px-2 text-sm hidden sm:block">{t('menu.file')}</span>
-            </Link>
-            <Link to={LINK_TO_ADMIN_SETTING} className={menuItemClasses(LINK_TO_ADMIN_SETTING)}>
-                <RiSettings2Line />
-                <span className="px-2 text-sm hidden sm:block">{t('menu.setting')}</span>
-            </Link>
-            {EnvUtil.isPreviewMode ? (
-                <>
-                    <a href="https://gofi.calmlyfish.com" target="_blank" className={menuItemClasses('')}>
-                        <RiBook2Line />
-                        <span className="px-2 text-sm hidden sm:block">{t('menu.doc')}</span>
-                    </a>
-                    <a href="https://github.com/Sloaix/Gofi" target="_blank" className={menuItemClasses('')}>
-                        <RiGithubFill />
-                        <span className="pl-2 pr-1 text-sm">{t('menu.stars')}</span>
-
-                        {/* red dot notice start*/}
-                        <span className="flex h-full w-1 pt-4">
-                            <span className="relative inline-flex rounded-full h-1 w-1 bg-red-500"></span>
-                        </span>
-                        {/* red dot notice end*/}
-                    </a>
-                </>
-            ) : null}
-        </div>
-    )
+  return (
+    <nav className="flex h-full items-center gap-2 px-2">
+      {navItems.map(item => {
+        const active = isActive(item.to)
+        let icon = item.icon
+        if (item.key === 'file') {
+          icon = active
+            ? <FolderOpen size={20} className="text-primary" />
+            : <Folder size={20} className="text-muted-foreground" />
+        }
+        return (
+          <Link
+            key={item.key}
+            to={item.to}
+            className={classNames(
+              'flex items-center gap-2 px-3 py-2 rounded-md transition-colors',
+              active
+                ? 'text-primary font-semibold bg-primary/5'
+                : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
+            )}
+          >
+            {icon}
+            <span className="hidden sm:inline text-sm">{t(item.label)}</span>
+          </Link>
+        )
+      })}
+      {/* 移动端更多菜单 */}
+      <div className="sm:hidden">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2 px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5">
+              <RiBook2Line size={20} />
+              <span className="sr-only">{t('menu.more')}</span>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {moreItems.filter(i => i.show).map(item => (
+              <DropdownMenuItem asChild key={item.key}>
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                  {item.icon}
+                  <span className="text-sm">{t(item.label)}</span>
+                </a>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      {/* 桌面端更多菜单 */}
+      {moreItems.filter(i => i.show).map(item => (
+        <a
+          key={item.key}
+          href={item.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hidden sm:flex items-center gap-2 px-3 py-2 rounded-md text-muted-foreground hover:text-primary hover:bg-primary/5"
+        >
+          {item.icon}
+          <span className="text-sm">{t(item.label)}</span>
+        </a>
+      ))}
+    </nav>
+  )
 }
 
 export default NavMenu

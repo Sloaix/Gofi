@@ -1,27 +1,22 @@
+import { Checkbox as ShadcnCheckbox } from "@/components/ui/checkbox"
 import React from 'react'
 
 interface IProps {
     name?: string
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+    onChange?: (checked: boolean) => void
     checked?: boolean
 }
 
-const defualtProps: IProps = {
-    checked: false,
-}
+const Checkbox: React.FC<IProps> = (props) => {
+    const { name, onChange, checked = false } = props
 
-const Demo: React.FC<IProps> = (props) => {
     return (
-        <input
-            className="appearance-none transition-all cursor-pointer h-4 w-4 border border-gray-300 rounded checked:bg-indigo-500"
-            type="checkbox"
-            name="name"
-            checked={props.checked}
-            onChange={props.onChange}
+        <ShadcnCheckbox
+            name={name}
+            checked={checked}
+            onCheckedChange={onChange}
         />
     )
 }
 
-Demo.defaultProps = defualtProps
-
-export default Demo
+export default Checkbox

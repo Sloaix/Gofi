@@ -1,94 +1,60 @@
-import { RiTranslate2 } from '@hacknug/react-icons/ri'
-import classNames from 'classnames'
+import { RiTranslate2 } from 'react-icons/ri'
+import { cn } from '../../../lib/utils'
 import React from 'react'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '../../ui/dropdown-menu'
 
 interface IProps {
     selectLang?: string
     onSelect?: (lang: string) => void
 }
 
-const defualtProps: IProps = {}
-
 const LangSelect: React.FC<IProps> = (props) => {
-    const [visible, setVisible] = React.useState<boolean>(false)
-
-    const renderDropdownMenu = () => {
-        const menuItemClass =
-            'flex h-10 items-center transition-all block p-2 text-sm leading-none hover:text-indigo-500 hover:bg-gray-200 active:bg-gray-300 active:text-indigo-900'
-        const menuContainerClass =
-            'divide-y divide-gray-200 z-10 cursor-pointer animate-fadein origin-top-right absolute right-0 w-36 rounded shadow-lg bg-white border border-gray-200'
-        const menuItemSelectClass = 'bg-gray-200 text-indigo-500 font-bold'
-
-        if (visible) {
-            const languages = [
-                {
-                    lang: 'zh-Hans',
-                    label: '简体中文',
-                },
-                // {
-                //     lang: 'zh-Hant',
-                //     label: '繁體中文',
-                // },
-                // {
-                //     lang: 'ja',
-                //     label: '日本語',
-                // },
-                {
-                    lang: 'en',
-                    label: 'English',
-                },
-                // {
-                //     lang: 'fr',
-                //     label: 'Français',
-                // },
-            ]
-            const menus = languages.map((item, index) => {
-                return (
-                    <div
-                        key={index}
-                        className={classNames(
-                            menuItemClass,
-                            { 'text-gray-700': props.selectLang !== item.lang },
-                            { [menuItemSelectClass]: props.selectLang === item.lang },
-                        )}
-                        onClick={() => {
-                            if (props.onSelect) {
-                                props.onSelect(item.lang)
-                            }
-                        }}
-                    >
-                        <span className="ml-3">{item.label}</span>
-                    </div>
-                )
-            })
-
-            return <div className={menuContainerClass}>{menus}</div>
-        } else {
-            return null
-        }
-    }
+    const languages = [
+        {
+            lang: 'zh-Hans',
+            label: '简体中文',
+        },
+        {
+            lang: 'en',
+            label: 'English',
+        },
+    ]
 
     return (
-        <>
-            <div
-                onMouseEnter={() => {
-                    setVisible(true)
-                }}
-                onMouseLeave={() => {
-                    setVisible(false)
-                }}
-                className="transition-all relative inline-block text-left h-full text-gray-600 hover:border-indigo-500 hover:text-indigo-500"
-            >
-                <div className="h-full pl-6 text-black-500 cursor-pointer flex items-center">
-                    <RiTranslate2 size={20} />
-                </div>
-
-                {renderDropdownMenu()}
-            </div>
-        </>
+        <div className="flex h-full">
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <button className="transition-all box-content h-full px-2 text-black-500 cursor-pointer flex items-center border-b-2 border-transparent text-gray-600 hover:text-primary dark:text-gray-300 dark:hover:text-primary focus:outline-none">
+                        <RiTranslate2 size={20} />
+                    </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-36">
+                    {languages.map((item, index) => (
+                        <DropdownMenuItem
+                            key={index}
+                            className={cn(
+                                "cursor-pointer flex items-center",
+                                props.selectLang === item.lang && "bg-accent text-accent-foreground font-medium"
+                            )}
+                            onClick={() => {
+                                if (props.onSelect) {
+                                    props.onSelect(item.lang)
+                                }
+                            }}
+                        >
+                            <RiTranslate2 size={20} />
+                            <span className="ml-2">{item.label}</span>
+                        </DropdownMenuItem>
+                    ))}
+                </DropdownMenuContent>
+            </DropdownMenu>
+        </div>
     )
 }
-
-LangSelect.defaultProps = defualtProps
 
 export default LangSelect

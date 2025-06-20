@@ -6,33 +6,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 配置Golang环境
+      # 配置 Golang 环境
       - name: Set up golang
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: "^1.17"
+          go-version: "^1.21"
       - run: |
           go env -w GO111MODULE=on
           go version
 
-      # 配置Node环境
-      - uses: actions/setup-node@v2
+      # 配置 Node.js 环境
+      - uses: actions/setup-node@v4
         with:
-          node-version: "14"
+          node-version: "18"
       - run: node -v
-      - run: yarn -v
+      - run: npm -v
+
+      # 安装 pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - run: pnpm -v
 
       # 检出代码
       - name: Checkout Trigger Branch
-        uses: actions/checkout@v2
-
-      # 执行构建脚本
-      - name: Excute Build Script
-        run: yarn && yarn build
-
-      # 列出产物
-      - name: List output
-        run: ls -lh ./output
+        uses: actions/checkout@v4
 
       # 检查push操作触发的是否是master分支,只在master执行后续的release操作
       - name: Only release in the main branch
@@ -42,7 +41,6 @@ jobs:
           exit 1
 
       # 检查本次commit的类型是否是release commit
-      # fixme:这个action插件存在BUG,如果一次push有多个commit,会逐一检查,会导致一个release commit失败.
       - name: Check Commit Type
         uses: gsactions/commit-message-checker@v1
         with:
@@ -52,21 +50,36 @@ jobs:
           pattern: '^chore: release v([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$'
           error: '只有 "chore: release v1.0.2" 这种格式的commit才会触发发布流程,注意冒号和release后面的空格'
 
-      # 获取到当前的version,使用bash的#操作符截取version
+      # 获取到当前的version
       - name: Get the version
         id: get-version
         run: |
           version='${{github.event.head_commit.message}}'
           version=v${version#chore:*release*v}
-          echo ::set-output name=VERSION::${version}
+          echo "VERSION=${version}" >> $GITHUB_OUTPUT
 
       # 打印Version
       - name: Print version
         run: echo ${{ steps.get-version.outputs.VERSION }}
 
+      # 构建生产模式（多架构交叉编译）
+      - name: Build Production Mode (Cross Architecture)
+        run: make MODE=production cross-build
+
+      # 构建演示模式（多架构交叉编译）
+      - name: Build Preview Mode (Cross Architecture)
+        run: make MODE=preview cross-build
+
+      # 列出产物
+      - name: List output
+        run: |
+          ls -lh ./output/
+          echo "=== SHA256 Checksums ==="
+          ls -la ./output/*.sha256
+
       # 登录到Docker hub
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
@@ -74,12 +87,12 @@ jobs:
       # 配置Buildx
       - name: Set up Docker Buildx
         id: buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v3
 
       # 构建镜像并且推送到hub
       - name: Build and push
         id: docker_build
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: ./
           file: ./Dockerfile
@@ -91,15 +104,18 @@ jobs:
 
       # 上传构建产物到发布
       - name: Upload Build Outputs
-        uses: softprops/action-gh-release@v0.1.7
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ steps.get-version.outputs.VERSION }}
           name: Release ${{ steps.get-version.outputs.VERSION }}
           files: |
-            ./output/gofi-darwin-10.12-amd64
-            ./output/gofi-darwin-10.12-arm64
-            ./output/gofi-linux-amd64
-            ./output/gofi-linux-arm-5
-            ./output/gofi-windows-4.0-amd64.exe
+            ./output/gofi-linux-amd64-production
+            ./output/gofi-linux-amd64-production.sha256
+            ./output/gofi-linux-arm64-production
+            ./output/gofi-linux-arm64-production.sha256
+            ./output/gofi-linux-amd64-preview
+            ./output/gofi-linux-amd64-preview.sha256
+            ./output/gofi-linux-arm64-preview
+            ./output/gofi-linux-arm64-preview.sha256
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

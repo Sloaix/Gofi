@@ -1,32 +1,44 @@
-import _ from 'lodash'
-import { atom } from 'recoil'
-import { LANGUAGE, TOKEN } from '../constants/storage'
+import { atom } from 'jotai'
+import { LANGUAGE, TOKEN, THEME } from '../constants/storage'
 import i18n from '../i18n'
 import LanguageUtil from '../utils/language.util'
 
-export const tokenState = atom<string | null>({
-    key: 'token',
-    default: sessionStorage.getItem(TOKEN),
-})
+export const tokenState = atom<string | null>(sessionStorage.getItem(TOKEN))
 
-export const languageState = atom<string>({
-    key: 'language',
-    default: (() => {
+// 创建基础的语言状态 atom
+const baseLanguageState = atom<string>(
+    (() => {
         const language = localStorage.getItem(LANGUAGE) ?? LanguageUtil.getBrowserLanguage()
 
-        if (_.isEmpty(localStorage.getItem(LANGUAGE))) {
+        if (!localStorage.getItem(LANGUAGE)) {
             localStorage.setItem(LANGUAGE, language)
         }
 
         i18n.changeLanguage(language)
         return language
-    })(),
-    effects_UNSTABLE: [
-        ({ onSet }) => {
-            onSet((language) => {
-                i18n.changeLanguage(language)
-                localStorage.setItem(LANGUAGE, language)
-            })
-        },
-    ],
-})
+    })()
+)
+
+// 创建可写的语言状态 atom
+export const languageState = atom(
+    (get) => get(baseLanguageState),
+    (get, set, newLanguage: string) => {
+        set(baseLanguageState, newLanguage)
+        localStorage.setItem(LANGUAGE, newLanguage)
+        i18n.changeLanguage(newLanguage)
+    }
+)
+
+export type ThemeMode = 'light' | 'dark' | 'system'
+
+export const themeState = atom<ThemeMode>(
+    (() => {
+        const theme = (localStorage.getItem(THEME) as ThemeMode) ?? 'system'
+        
+        if (!localStorage.getItem(THEME)) {
+            localStorage.setItem(THEME, theme)
+        }
+
+        return theme
+    })()
+)

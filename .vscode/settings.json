@@ -1,0 +1,4 @@
+{
+    "makefile.configureOnOpen": false,
+    "cursor.general.disableHttp2": true
+}

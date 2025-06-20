@@ -1,4 +1,5 @@
 const LANGUAGE = 'LANGUAGE'
 const TOKEN = 'TOKEN'
+const THEME = 'THEME'
 
-export { LANGUAGE, TOKEN }
+export { LANGUAGE, TOKEN, THEME }

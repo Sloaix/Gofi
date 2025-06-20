@@ -1,9 +1,11 @@
-import { RiAlarmWarningLine, RiInformationLine, RiShieldKeyholeLine } from '@hacknug/react-icons/ri'
-import classNames from 'classnames'
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { RiAlarmWarningLine, RiInformationLine, RiShieldKeyholeLine } from 'react-icons/ri'
 import React from 'react'
+
 interface IProps {
     message: string
-    type?: string
+    type?: 'default' | 'warning' | 'danger'
+    className?: string
 }
 
 const defualtProps: IProps = {
@@ -11,42 +13,43 @@ const defualtProps: IProps = {
     type: 'default',
 }
 
-const Tip: React.FC<IProps> = (props) => {
-    const basicClass =
-        'flex items-center justify-start w-full leading-5 break-all min-h-[2rem] px-2 py-2 text-sm font-medium rounded-md border'
-    const defaultClass = classNames(basicClass, 'bg-indigo-50 border-indigo-300 text-indigo-600')
-    const dangerClass = classNames(basicClass, 'bg-red-50 border-red-300 text-red-600')
-    const warningClass = classNames(basicClass, 'bg-yellow-50 border-yellow-300 text-yellow-600')
-
-    const tipClass = (() => {
-        switch (props.type) {
+const Tip: React.FC<IProps> = ({ message, type = 'default', className }) => {
+    const getAlertVariant = () => {
+        switch (type) {
             case 'danger':
-                return dangerClass
+                return 'destructive'
             case 'warning':
-                return warningClass
+                return 'default'
             default:
-                return defaultClass
+                return 'default'
         }
-    })()
+    }
 
-    const iconOfTip = (() => {
-        switch (props.type) {
+    const getIcon = () => {
+        switch (type) {
             case 'danger':
-                return <RiShieldKeyholeLine />
+                return <RiShieldKeyholeLine className="h-4 w-4" />
             case 'warning':
-                return <RiAlarmWarningLine />
+                return <RiAlarmWarningLine className="h-4 w-4" />
             default:
-                return <RiInformationLine />
+                return <RiInformationLine className="h-4 w-4" />
         }
-    })()
+    }
+
     return (
-        <div className={tipClass}>
-            <span className="text-2xl mr-2 mb-1">{iconOfTip}</span>
-            {props.message}
+        <div className={className}>
+            <Alert variant={getAlertVariant()}>
+                {getIcon()}
+                <div className="ml-2">
+                    <AlertDescription>
+                        {message}
+                    </AlertDescription>
+                </div>
+            </Alert>
         </div>
     )
 }
 
-Tip.defaultProps = defualtProps
+Tip
 
 export default Tip

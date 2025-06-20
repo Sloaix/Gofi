@@ -3,20 +3,20 @@ name: Test
 on: [push]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-      # 安装go
+      # 配置 Golang 环境
       - name: Setup Golang
-        uses: actions/setup-go@v1
+        uses: actions/setup-go@v4
         with:
-          go-version: 1.16
+          go-version: "^1.21"
 
-      # 检出对应TAG的代码
+      # 检出代码
       - name: Checkout Trigger Branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # 执行构建脚本
-      - name: Excute Unit Test
+      # 执行单元测试
+      - name: Execute Unit Test
         run: ./test.sh

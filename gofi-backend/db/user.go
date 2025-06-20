@@ -2,8 +2,7 @@ package db
 
 import (
 	"errors"
-	"github.com/sirupsen/logrus"
-	"gofi/tool"
+	tool "gofi/tool"
 	"time"
 )
 
@@ -47,7 +46,7 @@ func adminExist() bool {
 	user := new(User)
 	has, err := engine.Where("role_type=?", RoleTypeAdmin).Get(user)
 	if err != nil {
-		logrus.Errorln(err)
+		tool.GetLogger().Error(err)
 		return true
 	}
 

@@ -1,4 +1,4 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { useAtomValue, useSetAtom } from 'jotai'
 import useSWR from 'swr'
 import { fetchUser } from '../api/repository'
 import { TOKEN } from '../constants/storage'
@@ -6,12 +6,13 @@ import QueryKey from '../constants/swr'
 import { tokenState } from '../states/common.state'
 
 export function useCurrentUser() {
-    const setToken = useSetRecoilState(tokenState)
-    const token = useRecoilValue(tokenState)
+    const setToken = useSetAtom(tokenState)
+    const token = useAtomValue(tokenState)
     const {
         data: user,
         error,
         mutate,
+        isLoading,
     } = useSWR(token ? [QueryKey.CURRENT_USER, token] : null, () => fetchUser(), {
         onError: (error: any) => {
             // 清除token状态
@@ -21,6 +22,5 @@ export function useCurrentUser() {
         },
     })
 
-    // isIdle代表函数还未准备好,需要等待token有值后才能继续加载
-    return { user, isIdle: !token, isLoading: !user && !error && token, error, mutate }
+    return { user, isLoading, error, mutate }
 }

@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"gofi/i18n"
+	"gofi/tool"
+
+	"github.com/gin-gonic/gin"
 	"golang.org/x/text/language"
 )
 
@@ -16,8 +17,8 @@ func Language(c *gin.Context) {
 	acceptLanguageFromClient := c.GetHeader("Accept-Language")
 	tag, _ := language.MatchStrings(matcher, acceptLanguageFromClient)
 
-	logrus.Infof("acceptLanguageFromClient: %s", acceptLanguageFromClient)
-	logrus.Infof("language tag is : %s", tag)
-	i18n.SwitchLanguageByTag(tag)
+	tool.GetLogger().Infof("[LANG] Accept-Language: %s, matched tag: %s", acceptLanguageFromClient, tag)
+	tool.GetLogger().Infof("[LANG] Set context lang: %s", tag.String())
+	c.Request = c.Request.WithContext(i18n.WithLang(c.Request.Context(), tag.String()))
 	c.Next()
 }

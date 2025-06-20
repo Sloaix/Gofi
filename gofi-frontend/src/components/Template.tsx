@@ -8,6 +8,6 @@ const Demo: React.FC<IProps> = (props) => {
     return <></>
 }
 
-Demo.defaultProps = defualtProps
+Demo
 
 export default Demo

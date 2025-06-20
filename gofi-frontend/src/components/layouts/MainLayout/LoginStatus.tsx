@@ -1,26 +1,26 @@
-import { RiLoginBoxLine, RiLogoutBoxRLine } from '@hacknug/react-icons/ri'
+import { RiLoginBoxLine, RiLogoutBoxRLine } from 'react-icons/ri'
+import { useSetAtom } from 'jotai'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSetRecoilState } from 'recoil'
+import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 import { TOKEN } from '../../../constants/storage'
 import QueryKey from '../../../constants/swr'
 import { useCurrentUser } from '../../../hook/user'
-import i18n from '../../../i18n'
 import { tokenState } from '../../../states/common.state'
-import Toast from '../../../utils/toast.util'
+
 interface IProps {}
 
 const buttonClass =
     'transition-all box-content h-full px-4 text-black-500 cursor-pointer flex items-center border-b-2 border-transparent text-gray-600 hover:text-indigo-500'
-const textClass = 'px-2 text-sm hidden sm:block'
+const textClass = 'ml-2 text-sm hidden sm:block'
 
 const LoginStatus: React.FC<IProps> = () => {
     const { t } = useTranslation()
     const navigate = useNavigate()
     const { user } = useCurrentUser()
-    const setToken = useSetRecoilState(tokenState)
+    const setToken = useSetAtom(tokenState)
     const { mutate } = useSWRConfig()
     return (
         <div className="flex h-full">
@@ -28,10 +28,24 @@ const LoginStatus: React.FC<IProps> = () => {
                 <div
                     className={buttonClass}
                     onClick={() => {
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Logout button clicked.`)
+                        // Clear token state
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Clearing token state.`)
                         setToken(null)
+                        // Clear session storage
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Clearing session storage.`)
                         sessionStorage.removeItem(TOKEN)
-                        Toast.i(i18n.t('toast.logout-success'))
+                        // Dismiss the "require-login" toast if it's visible
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Dismissing 'require-login' toast.`)
+                        toast.dismiss('require-login')
+                        // Show logout success toast
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Showing 'logout-success' toast.`)
+                        toast.success(t('toast.logout-success'))
+                        // Revalidate SWR cache
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Revalidating user cache.`)
                         mutate(QueryKey.CURRENT_USER)
+                        // Navigate to home page
+                        console.log(`[${new Date().toISOString()}] [LoginStatus] Navigating to home page.`)
                         navigate('/')
                     }}
                 >

@@ -4,66 +4,99 @@ import {
     RiCloseCircleFill,
     RiInformationFill,
     RiLoader5Line,
-} from '@hacknug/react-icons/ri'
+    RiWifiOffLine,
+    RiServerLine,
+    RiTimeLine,
+} from 'react-icons/ri'
 import React from 'react'
-import { toast as ToastLibrary } from 'react-toastify'
+import { toast as SonnerToast } from 'sonner'
 
-type MessageType = 'info' | 'success' | 'error' | 'warn' | 'load'
+type MessageType = 'info' | 'success' | 'error' | 'warn' | 'load' | 'network-error' | 'server-error' | 'timeout-error'
+
 const Toast = {
-    show(message: string | React.ReactNode, autoClose: false | number) {
-        ToastLibrary(message, {
-            autoClose: autoClose,
-            draggable: false,
-            closeButton: false,
-            hideProgressBar: true,
-            position: 'top-center',
+    i(message: string) {
+        SonnerToast.info(message, {
+            duration: 2000,
+            icon: <RiInformationFill className="text-primary" />,
         })
     },
-    i(message: string) {
-        this.show(this.renderMessage(message, 'info'), 2000)
-    },
     s(message: string) {
-        this.show(this.renderMessage(message, 'success'), 2000)
+        SonnerToast.success(message, {
+            duration: 2000,
+            icon: <RiCheckboxCircleFill className="text-green-500" />,
+        })
     },
     e(message: string) {
-        this.show(this.renderMessage(message, 'error'), 2000)
+        SonnerToast.error(message, {
+            duration: 4000,
+            icon: <RiCloseCircleFill className="text-destructive" />,
+        })
     },
     w(message: string) {
-        this.show(this.renderMessage(message, 'warn'), 2000)
+        SonnerToast.warning(message, {
+            duration: 3000,
+            icon: <RiAlarmWarningFill className="text-yellow-500" />,
+        })
     },
     l(message: string) {
-        this.show(this.renderMessage(message, 'load'), 2000)
+        SonnerToast.loading(message, {
+            duration: 2000,
+            icon: <RiLoader5Line className="text-primary animate-spin" />,
+        })
     },
-    renderMessage(message: string, messageType: MessageType): React.ReactNode | string {
-        let icon
-        let iconClass
-        switch (messageType) {
-            case 'info':
-                icon = <RiInformationFill />
-                iconClass = 'text-indigo-500'
-                break
-            case 'success':
-                icon = <RiCheckboxCircleFill />
-                iconClass = 'text-green-500'
-                break
-            case 'error':
-                icon = <RiCloseCircleFill />
-                iconClass = 'text-red-500'
-                break
-            case 'warn':
-                icon = <RiAlarmWarningFill />
-                iconClass = 'text-yellow-500'
-                break
-            case 'load':
-                icon = <RiLoader5Line />
-                iconClass = 'text-blue-500 animate-spin'
-                break
-        }
-        return (
-            <div className="flex items-center space-x-1">
-                <span className={iconClass}>{icon}</span>
-                <span className="text-gray-700">{message}</span>
-            </div>
+    // 网络错误专用方法
+    networkError(message: string, detail?: string) {
+        SonnerToast.error(
+            <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                    <RiWifiOffLine className="flex-shrink-0 text-destructive" />
+                    <span className="text-sm font-medium">{message}</span>
+                </div>
+                {detail && (
+                    <div className="text-xs text-muted-foreground ml-6">
+                        {detail}
+                    </div>
+                )}
+            </div>,
+            {
+                duration: 5000,
+            }
+        )
+    },
+    serverError(message: string, detail?: string) {
+        SonnerToast.error(
+            <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                    <RiServerLine className="flex-shrink-0 text-destructive" />
+                    <span className="text-sm font-medium">{message}</span>
+                </div>
+                {detail && (
+                    <div className="text-xs text-muted-foreground ml-6">
+                        {detail}
+                    </div>
+                )}
+            </div>,
+            {
+                duration: 5000,
+            }
+        )
+    },
+    timeoutError(message: string, detail?: string) {
+        SonnerToast.error(
+            <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                    <RiTimeLine className="flex-shrink-0 text-orange-500" />
+                    <span className="text-sm font-medium">{message}</span>
+                </div>
+                {detail && (
+                    <div className="text-xs text-muted-foreground ml-6">
+                        {detail}
+                    </div>
+                )}
+            </div>,
+            {
+                duration: 4000,
+            }
         )
     },
 }

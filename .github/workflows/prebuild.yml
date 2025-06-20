@@ -6,36 +6,46 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 配置Golang环境
+      # 配置 Golang 环境
       - name: Set up golang
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
-          go-version: "^1.17"
+          go-version: "^1.21"
       - run: |
           go env -w GO111MODULE=on
           go version
 
-      # 配置Node环境
-      - uses: actions/setup-node@v2
+      # 配置 Node.js 环境
+      - uses: actions/setup-node@v4
         with:
-          node-version: "14"
+          node-version: "18"
       - run: node -v
-      - run: yarn -v
+      - run: npm -v
+
+      # 安装 pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - run: pnpm -v
 
       # 检出代码
       - name: Checkout Trigger Branch
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      # 执行构建脚本
-      - name: Excute Build Script
-        run: yarn && yarn build
+      # 执行构建脚本（使用 Makefile）
+      - name: Execute Build Script
+        run: make cross-build
 
       # 列出产物
       - name: List output
-        run: ls -lh ./output
+        run: |
+          ls -lh ./output/
+          echo "=== SHA256 Checksums ==="
+          ls -la ./output/*.sha256
 
       # 上传构建产物
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: outputs
           path: ./output/*

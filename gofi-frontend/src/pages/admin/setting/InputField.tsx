@@ -1,7 +1,7 @@
-import { MdCheck, MdClose, MdEdit } from '@hacknug/react-icons/md'
+import { MdCheck, MdClose, MdEdit } from 'react-icons/md'
 import React, { useState } from 'react'
-import Button from '../../../components/Button'
-import Input from '../../../components/form/Input'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import TextUtil from '../../../utils/text.util'
 
 interface IProps {
@@ -29,8 +29,8 @@ const InputField: React.FC<IProps> = (props) => {
         <>
             <Input
                 value={props.value}
-                disable={intpuState === 'default' || props.processing}
-                fullWidth={true}
+                disabled={intpuState === 'default' || props.processing}
+                className="w-full"
                 placeholder={props.placeholder}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (props.onChange) {
@@ -44,8 +44,8 @@ const InputField: React.FC<IProps> = (props) => {
                         // 编辑按钮
                         return (
                             <Button
-                                type="secondary"
-                                icon={<MdEdit />}
+                                variant="outline"
+                                size="icon"
                                 disabled={TextUtil.isEmpty(props.value) ? true : false || props.processing}
                                 onClick={() => {
                                     setInputState('edit')
@@ -53,7 +53,9 @@ const InputField: React.FC<IProps> = (props) => {
                                         props.onEdit()
                                     }
                                 }}
-                            />
+                            >
+                                <MdEdit className="h-4 w-4" />
+                            </Button>
                         )
                     case 'edit':
                         return (
@@ -61,19 +63,27 @@ const InputField: React.FC<IProps> = (props) => {
                                 {/* 关闭按钮 */}
                                 {props.processing ? null : (
                                     <Button
-                                        icon={<MdClose />}
+                                        variant="outline"
+                                        size="icon"
                                         onClick={() => {
                                             setInputState('default')
                                             if (props.onClose) {
                                                 props.onClose()
                                             }
                                         }}
-                                    />
+                                    >
+                                        <MdClose className="h-4 w-4" />
+                                    </Button>
                                 )}
                                 {/* 提交按钮 */}
                                 <Button
-                                    icon={<MdCheck />}
-                                    loading={props.processing}
+                                    variant="outline"
+                                    size="icon"
+                                    disabled={
+                                        TextUtil.isEmpty(props.value)
+                                            ? true
+                                            : false || props.processing || props.defaultValue === props.value
+                                    }
                                     onClick={() => {
                                         if (props.onValidate && props.onValidate() && props.onSubmit) {
                                             props.onSubmit(() => {
@@ -82,12 +92,9 @@ const InputField: React.FC<IProps> = (props) => {
                                             })
                                         }
                                     }}
-                                    disabled={
-                                        TextUtil.isEmpty(props.value)
-                                            ? true
-                                            : false || props.processing || props.defaultValue === props.value
-                                    }
-                                />
+                                >
+                                    <MdCheck className="h-4 w-4" />
+                                </Button>
                             </>
                         )
                 }
@@ -96,6 +103,6 @@ const InputField: React.FC<IProps> = (props) => {
     )
 }
 
-InputField.defaultProps = defualtProps
+InputField
 
 export default InputField

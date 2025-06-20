@@ -1,25 +1,16 @@
+import { RadioGroupItem } from "@/components/ui/radio-group"
 import React from 'react'
 
 interface IProps {
-    name?: string
-    checked?: boolean
-}
-
-const defualtProps: IProps = {
-    checked: false,
+    value: string
 }
 
 const Radio: React.FC<IProps> = (props) => {
+    const { value } = props
+
     return (
-        <input
-            type="radio"
-            name="name"
-            // checked='checked'
-            className="appearance-none transition-all cursor-pointer h-4 w-4 rounded-full border border-gray-300 checked:bg-indigo-500 checked:border-0"
-        />
+        <RadioGroupItem value={value} />
     )
 }
-
-Radio.defaultProps = defualtProps
 
 export default Radio

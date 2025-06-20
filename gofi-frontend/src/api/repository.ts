@@ -1,5 +1,12 @@
-import http, { BASE_URL } from './http'
+import http from './http'
 import { ConfigurationResult, UserResult } from './result'
+import { AxiosProgressEvent } from 'axios'
+import EnvUtil from '../utils/env.util'
+import PathUtil from '../utils/path.util'
+
+// 开发环境下,由于前端服务是vite启动的,需要指定后端服务地址
+// 但是在生产环境下,默认是Go提供http服务,所以使用相对url作为api即可
+const BASE_URL = EnvUtil.isDev ? 'http://localhost:8080/api/' : '/api/'
 
 export interface ConfigurationParam {
     customStoragePath: string
@@ -24,11 +31,27 @@ export interface FileInfo {
     path: string
     lastModified: number
     content: string
+    fileType: string
+    iconType: string
+}
+
+// 统一响应类型
+export interface FileResponse {
+    type: 'file' | 'directory'
+    data: FileData | DirectoryData
+}
+
+export interface FileData {
+    file: FileInfo
+}
+
+export interface DirectoryData {
+    path: string
+    files: FileInfo[]
 }
 
 /**
  * 获取gofi的设置项
- * @returns {AxiosPromise}
  */
 export async function fetchConfiguration(): Promise<ConfigurationResult> {
     return http.get('configuration')
@@ -36,7 +59,6 @@ export async function fetchConfiguration(): Promise<ConfigurationResult> {
 
 /**
  * 更新gofi的设置项
- * @returns {AxiosPromise}
  */
 export async function updateConfiguration(config: ConfigurationParam): Promise<ConfigurationResult> {
     return http.post('configuration', config)
@@ -44,7 +66,6 @@ export async function updateConfiguration(config: ConfigurationParam): Promise<C
 
 /**
  * 更新gofi的文件仓库路径
- * @returns {AxiosPromise}
  */
 export async function updateStoragePath(storagePath: string): Promise<ConfigurationResult> {
     return updateConfiguration({ customStoragePath: storagePath })
@@ -52,8 +73,6 @@ export async function updateStoragePath(storagePath: string): Promise<Configurat
 
 /**
  * setup 安装gofi,需要进行一些初始化设置
- * @param configuration
- * @returns {Promise<AxiosResponse<T>>}
  */
 export async function setup(config: ConfigurationParam): Promise<ConfigurationResult> {
     return http.post('setup', config)
@@ -61,8 +80,6 @@ export async function setup(config: ConfigurationParam): Promise<ConfigurationRe
 
 /**
  * 登录
- * @param loginParam LoginParam
- * @returns token
  */
 export async function login(loginParam: LoginParam): Promise<string> {
     return http.post('user/login', loginParam)
@@ -70,7 +87,6 @@ export async function login(loginParam: LoginParam): Promise<string> {
 
 /**
  * 请求用户信息
- * @returns
  */
 export async function fetchUser(): Promise<UserResult> {
     return http.get('user')
@@ -84,45 +100,50 @@ export async function changePassword(param: ChangePasswordParam): Promise<void> 
 }
 
 /**
- * 文件列表
- * @param dirPath 文件夹路径
- * @returns Observable<FileType[]>
+ * 统一的文件/目录获取接口
+ * @param path 文件或目录路径
+ * @returns Promise<FileResponse>
  */
-export async function fetchFileList(dirPath: string): Promise<Array<FileInfo>> {
-    return http.get('files', { params: { path: dirPath } })
-}
-
-/**
- * 返回FileDetail的详细信息
- * @param filePath
- * @returns
- */
-export async function fetchFileDetail(filePath: string): Promise<FileInfo> {
-    return http.get('file', { params: { path: filePath } })
+export async function fetchFile(path: string): Promise<FileResponse> {
+    console.log('[fetchFile] 原始路径:', path)
+    
+    // 先解码，再编码，确保网络传输时正确编码
+    const decodedPath = PathUtil.decodePath(path)
+    const encodedPath = PathUtil.encodePath(decodedPath)
+    
+    console.log('[fetchFile] 解码后路径:', decodedPath)
+    console.log('[fetchFile] 编码后路径:', encodedPath)
+    
+    const url = `file?path=${encodedPath}`
+    console.log('[fetchFile] 最终URL:', url)
+    
+    return http.get(url)
 }
 
 /**
  * 文件下载url
- * @param filePath
- * @returns
  */
 export function getFileDownloadUrl(filePath: string) {
-    return `${BASE_URL}download?path=${encodeURIComponent(filePath)}`
+    const encodedPath = PathUtil.encodePath(filePath)
+    return `${BASE_URL}download?path=${encodedPath}`
 }
 
+/**
+ * 文件预览url
+ */
 export function getFilePreviewUrl(filePath: string) {
-    return `${BASE_URL}download?path=${encodeURIComponent(filePath)}&raw=true`
+    const encodedPath = PathUtil.encodePath(filePath)
+    return `${BASE_URL}download?path=${encodedPath}&raw=true`
 }
 
 /**
  * 上传文件
- * @dirPath string 目标文件夹路径
- * @param file File
  */
 export async function uploadFiles(
     dirPath: string,
     files: File[],
-    onProgress: (progress: number, total: number) => void,
+    onProgress: (fileName: string, progress: number) => void,
+    overwrite: boolean = false
 ): Promise<void> {
     const formData = new FormData()
 
@@ -130,26 +151,45 @@ export async function uploadFiles(
         formData.append(file.name, file)
     })
 
-    return http.post('upload', formData, {
-        params: { path: dirPath },
-        onUploadProgress: (event: ProgressEvent) => {
-            onProgress(event.loaded, event.total)
+    // 先解码，再编码，确保网络传输时正确编码
+    const decodedPath = PathUtil.decodePath(dirPath)
+    const encodedPath = PathUtil.encodePath(decodedPath)
+    
+    const url = `upload?path=${encodedPath}${overwrite ? '&overwrite=true' : ''}`
+
+    return http.post(url, formData, {
+        onUploadProgress: (event: AxiosProgressEvent) => {
+            // 只支持单文件时的进度
+            if (files.length === 1) {
+                onProgress(files[0].name, Math.round((event.loaded / (event.total || 1)) * 100))
+            }
         },
     })
+}
+
+/**
+ * 删除文件或文件夹
+ */
+export async function deleteFileOrFolder(path: string): Promise<void> {
+    // 先解码，再编码，确保网络传输时正确编码
+    const decodedPath = PathUtil.decodePath(path)
+    const encodedPath = PathUtil.encodePath(decodedPath)
+    
+    return http.delete(`file?path=${encodedPath}`)
 }
 
 const repo = {
     fetchConfiguration,
     setup,
     login,
-    fetchFileList,
-    fetchFileDetail,
+    fetchFile,
     getFileDownloadUrl,
     getFilePreviewUrl,
     fetchUser,
     changePassword,
     uploadFiles,
     updateStoragePath,
+    deleteFileOrFolder,
 }
 
 export default repo

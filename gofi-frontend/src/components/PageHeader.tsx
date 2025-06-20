@@ -1,26 +1,31 @@
-import { RiFolder3Line } from '@hacknug/react-icons/ri'
 import React from 'react'
 
 interface IProps {
     icon?: React.ReactNode // 渲染的icon
     title?: string
+    description?: string
 }
 
-// 默认值
-const defaultProps: IProps = {
-    icon: <RiFolder3Line />,
-    title: 'Page Header',
-}
-
-const PageHeader: React.FC<IProps> = (props) => {
+const PageHeader: React.FC<IProps> = ({ icon, title, description }) => {
     return (
-        <div className="py-6 flex items-center text-3xl text-gray-600 font-medium">
-            {props.icon}
-            <span className="ml-2 m-0">{props.title}</span>
+        <div className="mb-8">
+            <div className="flex items-center space-x-3 mb-2">
+                {icon && (
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                        {icon}
+                    </div>
+                )}
+                <h1 className="text-3xl font-bold text-foreground">
+                    {title}
+                </h1>
+            </div>
+            {description && (
+                <p className="text-muted-foreground">
+                    {description}
+                </p>
+            )}
         </div>
     )
 }
-
-PageHeader.defaultProps = defaultProps
 
 export default PageHeader

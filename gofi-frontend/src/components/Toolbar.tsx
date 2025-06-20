@@ -1,9 +1,9 @@
-import { RiArrowLeftLine, RiDownload2Line, RiFolder3Line, RiHome4Line, RiUploadFill } from '@hacknug/react-icons/ri'
+import { RiArrowLeftLine, RiDownload2Line, RiFolder3Line, RiHome4Line, RiUploadFill } from 'react-icons/ri'
 import classNames from 'classnames'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import Button from './Button'
-import Tooltip from './Tooltip'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import Upload from './Upload'
 
 interface IProps {
@@ -17,82 +17,113 @@ interface IProps {
     onHomeClick?: () => void
     onBackClick?: () => void
     onDownloadClick?: () => void
+    children?: React.ReactNode
 }
 
-const defualtProps: IProps = {
-    downloadIcon: false,
-    uploadIcon: false,
-    filePathVisible: false,
-}
-
-const Toolbar: React.FC<IProps> = (props) => {
+const Toolbar: React.FC<IProps> = ({
+    downloadIcon = false,
+    uploadIcon = false,
+    homeIcon,
+    backIcon,
+    fileSizeText,
+    filePath,
+    filePathVisible = false,
+    onHomeClick,
+    onBackClick,
+    onDownloadClick,
+    children,
+}) => {
     const { t } = useTranslation()
     const dashBorderClass =
         'h-8 flex items-center leading-none px-2 border-dashed border border-gra-300 text-sm font-medium rounded text-gray-500 bg-white'
     return (
-        <div className="flex space-x-2">
-            {/* home icon */}
-            {props.homeIcon ? (
-                <Tooltip title={t('tooltip.home')}>
-                    <Button
-                        type="secondary"
-                        icon={<RiHome4Line />}
-                        onClick={() => {
-                            props.onHomeClick!()
-                        }}
-                    />
-                </Tooltip>
-            ) : null}
+        <div className="bg-card border-b border-border shadow-sm flex items-center justify-between px-4 py-1.5 w-full">
+            <div className="flex items-center gap-2">
+                {/* home icon */}
+                {homeIcon ? (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => {
+                                        onHomeClick!()
+                                    }}
+                                >
+                                    <RiHome4Line className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{t('tooltip.home')}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                ) : null}
 
-            {/* arrow right icon */}
-            {props.backIcon ? (
-                <Tooltip title={t('tooltip.back')}>
-                    <Button
-                        type="secondary"
-                        icon={<RiArrowLeftLine />}
-                        onClick={() => {
-                            props.onBackClick!()
-                        }}
-                    />
-                </Tooltip>
-            ) : null}
+                {/* arrow right icon */}
+                {backIcon ? (
+                    <TooltipProvider>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => {
+                                        onBackClick!()
+                                    }}
+                                >
+                                    <RiArrowLeftLine className="h-4 w-4" />
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                                <p>{t('tooltip.back')}</p>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                ) : null}
 
-            {/* file size */}
-            {props.fileSizeText ? (
-                <div className={dashBorderClass}>
-                    {t('toolbar.file-size')}:{props.fileSizeText}
-                </div>
-            ) : null}
+                {/* upload icon */}
+                {uploadIcon ? (
+                    <>{children}</>
+                ) : null}
+
+                {/* file size */}
+                {fileSizeText ? (
+                    <div className={dashBorderClass}>
+                        {t('common.file-size')}:{fileSizeText}
+                    </div>
+                ) : null}
+            </div>
 
             {/* file path */}
-            {props.filePathVisible ? (
-                <div className={classNames(dashBorderClass, 'flex-grow')}>
-                    <RiFolder3Line className="mr-2 text-base mb-[0.1rem]" />
-                    {props.filePath}
-                </div>
-            ) : null}
-
-            {/* plcaeholder for right icon */}
-            {!props.filePathVisible ? <div className="flex-grow" /> : null}
+            {filePathVisible && filePath && (
+                <div className="text-xs text-muted-foreground truncate ml-4">{filePath}</div>
+            )}
 
             {/* download icon  */}
-            {props.downloadIcon ? (
-                <Tooltip title={t('tooltip.download')}>
-                    <Button
-                        type="secondary"
-                        icon={<RiDownload2Line />}
-                        onClick={() => {
-                            props.onDownloadClick!()
-                        }}
-                    />
-                </Tooltip>
+            {downloadIcon ? (
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => {
+                                    onDownloadClick!()
+                                }}
+                            >
+                                <RiDownload2Line className="h-4 w-4" />
+                            </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{t('tooltip.download')}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
             ) : null}
-            {/* right icons end */}
-            {props.children}
         </div>
     )
 }
-
-Toolbar.defaultProps = defualtProps
 
 export default Toolbar

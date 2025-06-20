@@ -1,6 +1,8 @@
 package db
 
-import "github.com/sirupsen/logrus"
+import (
+	tool "gofi/tool"
+)
 
 type Category string
 type Name string
@@ -62,7 +64,7 @@ func createGuestPermissions() []Permission {
 func SyncGuestPermissions() {
 	count, err := engine.Where("role_type = ?", RoleTypeGuest).Count(new(Permission))
 	if err != nil {
-		logrus.Errorln(err)
+		tool.GetLogger().Error(err)
 		return
 	}
 

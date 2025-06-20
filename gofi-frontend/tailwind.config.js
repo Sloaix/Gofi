@@ -1,17 +1,10 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
-
-module.exports = {
-    mode: 'jit',
-    important: true,
-    purge: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
     theme: {
         extend: {
-            backgroundColor: ['active', 'checked'],
-            textColor: ['active', 'checked'],
-            borderColor: ['active', 'checked'],
-            fontWeight: ['hover', 'focus'],
             fontFamily: {
-                sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+                sans: ['Inter var', 'ui-sans-serif', 'system-ui', 'sans-serif'],
             },
             keyframes: {
                 fadein: {
@@ -29,6 +22,4 @@ module.exports = {
             },
         },
     },
-    variants: {},
-    plugins: [],
 }

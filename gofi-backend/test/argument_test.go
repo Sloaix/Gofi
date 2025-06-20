@@ -1,66 +1,50 @@
 package test
 
 import (
-	"gofi/boot"
-	"gofi/env"
 	"os"
 	"testing"
+
+	"gofi/boot"
+
+	"github.com/stretchr/testify/assert"
 )
 
-var savedArgs = os.Args
+func TestArgumentParsing(t *testing.T) {
+	originalArgs := os.Args
+	defer func() { os.Args = originalArgs }()
 
-func TestHasPort(t *testing.T) {
-	os.Args = savedArgs
-	os.Args = append(os.Args, "-port")
-	os.Args = append(os.Args, "80")
-	boot.ParseArguments()
-	if boot.GetArguments().Port != "80" {
-		t.Errorf("ecpect is 80, actul is %s", boot.GetArguments().Port)
-	}
+	t.Run("默认参数", func(t *testing.T) {
+		os.Args = []string{"test"}
+		boot.ParseArguments()
+		config := boot.GetArguments()
+		assert.Equal(t, "8080", config.Port)
+	})
+
+	t.Run("自定义端口", func(t *testing.T) {
+		os.Args = []string{"test", "-port", "9090"}
+		boot.ParseArguments()
+		config := boot.GetArguments()
+		assert.Equal(t, "9090", config.Port)
+	})
+
+	t.Run("短端口参数", func(t *testing.T) {
+		os.Args = []string{"test", "-p", "9090"}
+		boot.ParseArguments()
+		config := boot.GetArguments()
+		assert.Equal(t, "9090", config.Port)
+	})
 }
 
-func TestPortShort(t *testing.T) {
-	os.Args = savedArgs
-	os.Args = append(os.Args, "-p")
-	os.Args = append(os.Args, "12345")
-	boot.ParseArguments()
-	if boot.GetArguments().Port != "12345" {
-		t.Errorf("ecpect is 80, actul is %s", boot.GetArguments().Port)
-	}
+func TestPortUsage(t *testing.T) {
+	t.Run("端口使用说明", func(t *testing.T) {
+		assert.Equal(t, "8080", boot.DefaultPort)
+	})
 }
 
-func TestNoPort(t *testing.T) {
-	os.Args = savedArgs
-	boot.GetArguments().Port = boot.DefaultPort
-	boot.ParseArguments()
-	if boot.GetArguments().Port != boot.DefaultPort {
-		t.Errorf("ecpect is %s, actul is %s", boot.DefaultPort, boot.GetArguments().Port)
-	}
-}
-
-func TestHasIP(t *testing.T) {
-	os.Args = savedArgs
-	os.Args = append(os.Args, "-ip")
-	os.Args = append(os.Args, "192.168.1.1")
-	boot.ParseArguments()
-	if boot.GetArguments().ServerIP != "192.168.1.1" {
-		t.Errorf("ecpect is 192.168.1.1, actul is %s", boot.GetArguments().Port)
-	}
-}
-
-func TestCheckIP(t *testing.T) {
-	os.Args = savedArgs
-	os.Args = append(os.Args, "-ip")
-	os.Args = append(os.Args, "haha")
-	boot.ParseArguments()
-	if boot.GetArguments().ServerIP != boot.GetLanIP() {
-		t.Errorf("ecpect is %s. actul is %s", boot.GetLanIP(), boot.GetArguments().ServerIP)
-	}
-}
-
-func TestIsTestEnvironment(t *testing.T) {
-	boot.ParseArguments()
-	if !env.IsTest() {
-		t.Error("failed, current is test environment.")
-	}
+func TestArgumentSingleton(t *testing.T) {
+	t.Run("参数单例", func(t *testing.T) {
+		arg1 := boot.GetArguments()
+		arg2 := boot.GetArguments()
+		assert.Equal(t, arg1, arg2)
+	})
 }

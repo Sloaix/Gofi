@@ -1,6 +1,5 @@
-import { MdFileDownload } from '@hacknug/react-icons/md'
-import { RiFolder3Line, RiLoader2Line } from '@hacknug/react-icons/ri'
-import _ from 'lodash'
+import { MdFileDownload } from 'react-icons/md'
+import { RiFolder3Line, RiLoader2Line } from 'react-icons/ri'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import repo, { FileInfo } from '../api/repository'
@@ -8,7 +7,7 @@ import i18n from '../i18n'
 import { FormatUtil } from '../utils/format.util'
 import MimeTypeUtil from '../utils/mimetype.util'
 import Pagination from './Pagination'
-import Tooltip from './Tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface IProps {
     items: FileInfo[] | undefined
@@ -29,14 +28,14 @@ const defualtProps: IProps = {
 const LIST_HEADER = (
     <thead>
         <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {i18n.t('list.file-name')}
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
+                {i18n.t('common.file-name')}
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {i18n.t('list.file-size')}
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
+                {i18n.t('common.file-size')}
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                {i18n.t('list.last-modified-time')}
+            <th className="px-4 py-3 text-left text-sm font-medium text-muted-foreground">
+                {i18n.t('common.last-modified')}
             </th>
             <th scope="col" className="relative px-6 py-3">
                 <span className="sr-only">Edit</span>
@@ -45,6 +44,14 @@ const LIST_HEADER = (
     </thead>
 )
 
+function chunk<T>(arr: T[], size: number): T[][] {
+    const res: T[][] = [];
+    for (let i = 0; i < arr.length; i += size) {
+        res.push(arr.slice(i, i + size));
+    }
+    return res;
+}
+
 const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, loading }) => {
     const { t } = useTranslation()
     const [curPageIndex, setCurPageIndex] = React.useState(0)
@@ -52,9 +59,9 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, l
 
     useEffect(() => {
         if (items) {
-            setItemsGroupByPage(_.chunk(items, pageSize))
+            setItemsGroupByPage(chunk(items, Number(pageSize)))
         }
-    }, [items])
+    }, [items, pageSize])
 
     const totalCount = () => {
         return items?.length ?? 0
@@ -102,7 +109,7 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, l
                 <tr className="text-sm leading-3 text-gray-600 hover:bg-gray-50 transition-all" key={index}>
                     {/* FileName */}
                     <td
-                        className="transition-all px-6 py-4 cursor-pointer whitespace-nowrap hover:text-indigo-500"
+                        className="transition-all px-6 py-4 cursor-pointer whitespace-nowrap hover:text-primary"
                         onClick={() => {
                             if (onFileNameClick) {
                                 onFileNameClick(item)
@@ -126,9 +133,18 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, l
                             href={repo.getFileDownloadUrl(item.path)}
                             className="transition-all text-gray-500 hover:text-gray-900"
                         >
-                            <Tooltip title={t('tooltip.download')}>
-                                <MdFileDownload />
-                            </Tooltip>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <span>
+                                            <MdFileDownload />
+                                        </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{t('tooltip.download')}</p>
+                                    </TooltipContent>
+                                </Tooltip>
+                            </TooltipProvider>
                         </a>
                     </td>
                 </tr>
@@ -176,6 +192,6 @@ const List: React.FC<IProps> = ({ items, pageSize, onFileNameClick, emptyView, l
     )
 }
 
-List.defaultProps = defualtProps
+List
 
 export default List

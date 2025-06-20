@@ -1,0 +1,19 @@
+{
+  "user.not_found": "User not found",
+  "user.login_required": "Please login first",
+  "file.upload_failed": "Upload failed",
+  "file.not_exist": "File does not exist: %s",
+  "file.not_directory": "Not a directory",
+  "file.not_file": "Not a file",
+  "file.permission_denied": "Permission denied",
+  "file.too_large": "File too large",
+  "file.disk_insufficient": "Insufficient disk space",
+  "success.upload": "Upload completed",
+  "success.delete": "Delete successful",
+  "error.internal": "Internal server error",
+  "error.timeout": "Request timeout",
+  "error.invalid_request": "Invalid request",
+  "user.login_failed_username_or_password": "Invalid username or password",
+  "user.invalid_credentials": "Invalid username or password",
+  "permission.guest_query_failed": "Guest permissions query failed"
+} 

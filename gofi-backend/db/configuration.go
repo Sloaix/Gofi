@@ -1,7 +1,6 @@
 package db
 
 import (
-	"github.com/sirupsen/logrus"
 	"gofi/tool"
 	"time"
 )
@@ -39,7 +38,7 @@ var configurationCache *Configuration
 func UpdateConfiguration(configuration *Configuration) {
 	_, err := engine.UseBool().AllCols().Update(configuration)
 	if err != nil {
-		logrus.Errorln(err)
+		tool.GetLogger().Error(err)
 	} else {
 		// 更新缓存
 		configurationCache = configuration.clone()
@@ -67,7 +66,7 @@ func ObtainConfiguration() *Configuration {
 		}
 
 		if _, err := engine.InsertOne(config); err != nil {
-			logrus.Error(err)
+			tool.GetLogger().Error(err)
 		}
 	}
 

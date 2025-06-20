@@ -33,6 +33,6 @@ const Upload: React.FC<IProps> = React.forwardRef<HTMLInputElement, IProps>((pro
     )
 })
 
-Upload.defaultProps = defualtProps
+Upload
 
 export default Upload
